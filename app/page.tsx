@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import PremiumImageGallery, { type GalleryItem } from "@/components/ui/PremiumImageGallery";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 
@@ -77,37 +78,22 @@ const steps = [
   },
 ];
 
-const fleet = [
+const FLEET_MEDIA: GalleryItem[] = [
   {
-    name: "Momentum 2",
-    spec: "Sleeps 8 \u00B7 42 ft \u00B7 Toy Hauler Garage",
-    img: "https://static.wixstatic.com/media/62f926_b687d2cf0d374773b965a26a2da00832~mv2.webp",
+    type: "video",
+    src: "https://video.wixstatic.com/video/62f926_8ff76b0555c04f32acb69a68ef4633af/480p/mp4/file.mp4",
+    poster: "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp",
   },
-  {
-    name: "Momentum 3",
-    spec: "Sleeps 10 \u00B7 44 ft \u00B7 Dual Living Areas",
-    img: "https://static.wixstatic.com/media/62f926_a4d11de4461f4bdd954c4a308e09f35b~mv2.webp",
-  },
-  {
-    name: "Heartland Gateway",
-    spec: "Sleeps 6 \u00B7 38 ft \u00B7 Full Kitchen",
-    img: "https://static.wixstatic.com/media/62f926_e82ba4137dbb44ecb018eda98ab166b9~mv2.webp",
-  },
-  {
-    name: "Solitude",
-    spec: "Sleeps 4 \u00B7 36 ft \u00B7 King Suite",
-    img: "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp",
-  },
-  {
-    name: "Grand Design",
-    spec: "Sleeps 12 \u00B7 45 ft \u00B7 Super Toy Hauler",
-    img: "https://static.wixstatic.com/media/62f926_e812f045c26741adacfece57f5e53afe~mv2.webp",
-  },
-  {
-    name: "Forest River Impression",
-    spec: "Sleeps 6 \u00B7 32 ft \u00B7 Outdoor Kitchen",
-    img: "https://static.wixstatic.com/media/62f926_d5db01266a174dd6a0d3e4320e6f63ab~mv2.webp",
-  },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_72984415dae543f5a93113defc3976a4~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_6081972934c541bf9b8aaa703b74f585~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_69694ee7940c4fe4985b984e4067343e~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_26b6714d0a0d4937b73e45668ce44bd9~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_d5db0126f18a4cc0884f4308913f9362~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_e4c918f468b243d89371fa40f6424fce~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_b833defbf81b455991760bc1f4c878ff~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_1ba23ff81e904ae2b5feae14ed4754fb~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_cf6fafa3b7184f93b149c98ee96c783f~mv2.webp" },
 ];
 
 const trustPoints = [
@@ -304,7 +290,7 @@ export default function Home() {
 
       {/* ─── SECTION 4: THE FLEET ─── */}
       <section className="bg-[#F7F4F0] py-24 md:py-32 px-6">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <motion.h2
             {...fadeUp}
             className="font-[var(--font-cormorant)] text-3xl md:text-5xl text-[#1A1510] text-center"
@@ -318,40 +304,15 @@ export default function Home() {
             Every unit is cleaned, prepped, and delivered with the same standard &mdash; whether it sleeps 4 or 12.
           </motion.p>
 
-          <div className="mt-16 grid md:grid-cols-2 gap-8">
-            {fleet.map((rv, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, scale: 0.97 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.6, ease, delay: i * 0.08 }}
-                className="bg-white rounded-sm overflow-hidden shadow-sm"
-              >
-                <div className="relative aspect-[4/3]">
-                  <Image
-                    src={rv.img}
-                    alt={rv.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="font-[var(--font-cormorant)] text-xl font-medium text-[#1A1510]">
-                    {rv.name}
-                  </h3>
-                  <p className="text-sm text-[#1A1510]/50 mt-1">{rv.spec}</p>
-                  <a
-                    href="tel:9729656901"
-                    className="inline-block mt-4 text-sm text-[#D4A853] font-medium hover:text-[#b8923e] transition-colors"
-                  >
-                    Ask About This Unit &rarr;
-                  </a>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.7, ease }}
+            className="mt-16"
+          >
+            <PremiumImageGallery items={FLEET_MEDIA} />
+          </motion.div>
 
           <motion.div {...fadeUpDelay(0.2)} className="mt-16 text-center">
             <p className="text-[#1A1510]/60 mb-6">
