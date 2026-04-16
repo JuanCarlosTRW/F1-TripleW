@@ -1,8 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import PremiumImageGallery, { type GalleryItem } from "@/components/ui/PremiumImageGallery";
+import IntroAnimation from "@/components/ui/IntroAnimation";
+
+const Hyperspeed = dynamic(() => import("@/components/ui/Hyperspeed"), { ssr: false });
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 
@@ -119,6 +123,7 @@ const trustPoints = [
 
 export default function Home() {
   return (
+    <IntroAnimation>
     <main className="font-[var(--font-outfit)]">
       {/* ─── NAVBAR ─── */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-4 bg-[#0D0B09]/90 backdrop-blur-md">
@@ -134,8 +139,51 @@ export default function Home() {
       </nav>
 
       {/* ─── SECTION 1: HERO ─── */}
-      <section className="relative min-h-screen flex items-center justify-center bg-[#0D0B09] px-6 text-center">
-        <div className="max-w-3xl mx-auto pt-20">
+      <section className="relative min-h-screen flex items-center justify-center bg-[#0D0B09] px-6 text-center overflow-hidden">
+        {/* Hyperspeed racing lights background */}
+        <div className="absolute inset-0 z-0 opacity-40">
+          <Hyperspeed
+            effectOptions={{
+              distortion: "turbulentDistortion",
+              length: 400,
+              roadWidth: 10,
+              islandWidth: 2,
+              lanesPerRoad: 3,
+              fov: 90,
+              fovSpeedUp: 150,
+              speedUp: 2,
+              carLightsFade: 0.4,
+              totalSideLightSticks: 20,
+              lightPairsPerRoadWay: 40,
+              shoulderLinesWidthPercentage: 0.05,
+              brokenLinesWidthPercentage: 0.1,
+              brokenLinesLengthPercentage: 0.5,
+              lightStickWidth: [0.12, 0.5],
+              lightStickHeight: [1.3, 1.7],
+              movingAwaySpeed: [60, 80],
+              movingCloserSpeed: [-120, -160],
+              carLightsLength: [12, 80],
+              carLightsRadius: [0.05, 0.14],
+              carWidthPercentage: [0.3, 0.5],
+              carShiftX: [-0.8, 0.8],
+              carFloorSeparation: [0, 5],
+              colors: {
+                roadColor: 0x080808,
+                islandColor: 0x0a0a0a,
+                background: 0x000000,
+                shoulderLines: 0x131313,
+                brokenLines: 0x131313,
+                leftCars: [0xd4a853, 0xb8923e, 0xe0b964],
+                rightCars: [0x03b3c3, 0x0e5ea5, 0x324555],
+                sticks: 0xd4a853,
+              },
+            }}
+          />
+        </div>
+        {/* Gradient overlay to keep text readable */}
+        <div className="absolute inset-0 z-[1] bg-gradient-to-b from-[#0D0B09]/70 via-[#0D0B09]/40 to-[#0D0B09]/80" />
+
+        <div className="relative z-[2] max-w-3xl mx-auto pt-20">
           <motion.div
             {...fadeUpDelay(0)}
             className="inline-block border border-[#D4A853]/40 rounded-full px-4 py-1.5 mb-8"
@@ -529,5 +577,6 @@ export default function Home() {
         </div>
       </footer>
     </main>
+    </IntroAnimation>
   );
 }
