@@ -87,7 +87,7 @@ const Hyperspeed = ({
 
     const turbulentUniforms = {
       uFreq: { value: new THREE.Vector4(4, 8, 8, 1) },
-      uAmp: { value: new THREE.Vector4(25, 5, 10, 10) },
+      uAmp: { value: new THREE.Vector4(5, 2, 10, 10) },
     };
 
     const deepUniforms = {
@@ -242,8 +242,8 @@ const Hyperspeed = ({
             getY(progress) - getY(progress + 0.007),
             0
           );
-          const lookAtAmp = new THREE.Vector3(-0.3, -1.5, 0);
-          const lookAtOffset = new THREE.Vector3(0, 0, -10);
+          const lookAtAmp = new THREE.Vector3(0, -0.3, 0);
+          const lookAtOffset = new THREE.Vector3(0, -6, -10);
           return distortion.multiply(lookAtAmp).add(lookAtOffset);
         },
       },
@@ -403,7 +403,7 @@ const Hyperspeed = ({
 
         this.camera = new THREE.PerspectiveCamera(options.fov, initW / initH, 0.1, 10000);
         this.camera.position.z = -5;
-        this.camera.position.y = 10;
+        this.camera.position.y = 8;
         this.camera.position.x = 0;
         this.scene = new THREE.Scene();
         this.scene.background = null;
