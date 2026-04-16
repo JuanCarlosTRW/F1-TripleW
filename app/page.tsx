@@ -140,8 +140,8 @@ export default function Home() {
 
       {/* ─── SECTION 1: HERO ─── */}
       <section className="relative min-h-screen flex items-center justify-center bg-[#0D0B09] px-6 text-center overflow-hidden">
-        {/* Hyperspeed racing lights background */}
-        <div className="absolute inset-0 z-0 opacity-70">
+        {/* Hyperspeed racing lights background — exact React Bits defaults */}
+        <div className="absolute inset-0 z-0">
           <Hyperspeed
             effectOptions={{
               distortion: "turbulentDistortion",
@@ -168,20 +168,20 @@ export default function Home() {
               carShiftX: [-0.8, 0.8],
               carFloorSeparation: [0, 5],
               colors: {
-                roadColor: 0x080808,
-                islandColor: 0x0a0a0a,
-                background: 0x000000,
-                shoulderLines: 0x131313,
-                brokenLines: 0x131313,
-                leftCars: [0xd4a853, 0xb8923e, 0xe0b964],
-                rightCars: [0x03b3c3, 0x0e5ea5, 0x324555],
-                sticks: 0xd4a853,
+                roadColor: 526344,
+                islandColor: 657930,
+                background: 0,
+                shoulderLines: 1250072,
+                brokenLines: 1250072,
+                leftCars: [14177983, 6770850, 12732332],
+                rightCars: [242627, 941733, 3294549],
+                sticks: 242627,
               },
             }}
           />
         </div>
-        {/* Gradient overlay to keep text readable */}
-        <div className="absolute inset-0 z-[1] bg-gradient-to-b from-[#0D0B09]/50 via-[#0D0B09]/20 to-[#0D0B09]/60" />
+        {/* Subtle gradient overlay for text readability */}
+        <div className="absolute inset-0 z-[1] bg-gradient-to-b from-[#0D0B09]/40 via-transparent to-[#0D0B09]/50" />
 
         <div className="relative z-[2] max-w-3xl mx-auto pt-20">
           <motion.div
