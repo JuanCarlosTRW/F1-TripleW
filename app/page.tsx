@@ -4,7 +4,6 @@ import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Phone, Truck, PartyPopper } from "lucide-react";
-import PremiumImageGallery, { type GalleryItem } from "@/components/ui/PremiumImageGallery";
 import IntroAnimation from "@/components/ui/IntroAnimation";
 
 const Hyperspeed = dynamic(() => import("@/components/ui/Hyperspeed"), { ssr: false });
@@ -29,38 +28,38 @@ function fadeUpDelay(delay: number) {
 
 const painPoints = [
   {
-    title: "$600/night hotel rooms",
+    title: "$600/Night Hotel Rooms",
     desc: "Austin hotels triple their rates during race weekend. You\u2019re paying resort prices for a Holiday Inn 25 miles from the track.",
   },
   {
-    title: "2-hour traffic each way",
-    desc: "100,000+ fans trying to reach COTA on the same two-lane roads. You\u2019ll spend more time in traffic than watching the race.",
+    title: "2-Hour Traffic Each Way",
+    desc: "100,000+ fans trying to reach COTA on the same roads. You\u2019ll spend more time in traffic than watching the race.",
   },
   {
-    title: "Missing the concerts",
+    title: "Missing the Concerts",
     desc: "Maroon 5 on Friday. Post Malone on Saturday. Leave early to beat traffic, or stay and face a 90-minute Uber surge.",
   },
   {
-    title: "Split across 3 hotel rooms",
+    title: "Split Across 3 Hotel Rooms",
     desc: "Your group of 8 is scattered across different floors, different hotels. The trip you planned together becomes separate trips.",
   },
 ];
 
 const desirePoints = [
   {
-    title: "Wake up at the track",
+    title: "Wake Up at the Track",
     desc: "Your RV is parked at COTA. Step outside, grab your coffee, and walk to the gates. No commute. No stress.",
   },
   {
-    title: "Your own private space",
+    title: "Your Own Private Space",
     desc: "Full kitchen, king beds, outdoor setup, smart TVs. Everything you need \u2014 nothing you don\u2019t.",
   },
   {
-    title: "Stay for everything",
+    title: "Stay for Everything",
     desc: "Concerts, qualifying, the race itself. Walk back to your RV whenever you want. No curfew. No checkout.",
   },
   {
-    title: "Everyone together",
+    title: "Everyone Together",
     desc: "Your whole crew under one roof. Cook breakfast together. Watch the sunset over the track. This is how it\u2019s supposed to feel.",
   },
 ];
@@ -86,40 +85,79 @@ const steps = [
   },
 ];
 
-const FLEET_MEDIA: GalleryItem[] = [
+const fleetUnits = [
   {
-    type: "video",
-    src: "https://video.wixstatic.com/video/62f926_8ff76b0555c04f32acb69a68ef4633af/480p/mp4/file.mp4",
-    poster: "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp",
+    name: "Momentum 2",
+    category: "Premium Luxury",
+    spec: "Sleeps 8 \u00b7 42 ft \u00b7 Toy Hauler Garage",
+    image: "https://static.wixstatic.com/media/62f926_b687d2cf0d374773b965a26a2da00832~mv2.webp",
   },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_72984415dae543f5a93113defc3976a4~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_6081972934c541bf9b8aaa703b74f585~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_69694ee7940c4fe4985b984e4067343e~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_26b6714d0a0d4937b73e45668ce44bd9~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_d5db0126f18a4cc0884f4308913f9362~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_e4c918f468b243d89371fa40f6424fce~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_b833defbf81b455991760bc1f4c878ff~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_1ba23ff81e904ae2b5feae14ed4754fb~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_cf6fafa3b7184f93b149c98ee96c783f~mv2.webp" },
+  {
+    name: "Momentum 3",
+    category: "Deluxe Toy Hauler",
+    spec: "Sleeps 10 \u00b7 44 ft \u00b7 Dual Living Areas",
+    image: "https://static.wixstatic.com/media/62f926_a4d11de4461f4bdd954c4a308e09f35b~mv2.webp",
+  },
+  {
+    name: "Heartland Gateway",
+    category: "Premium Fifth Wheel",
+    spec: "Sleeps 6 \u00b7 38 ft \u00b7 Full Kitchen",
+    image: "https://static.wixstatic.com/media/62f926_e82ba4137dbb44ecb018eda98ab166b9~mv2.webp",
+  },
+  {
+    name: "Solitude",
+    category: "Luxury Fifth Wheel",
+    spec: "Sleeps 4 \u00b7 36 ft \u00b7 King Suite",
+    image: "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp",
+  },
+  {
+    name: "Grand Design",
+    category: "Premium Fifth Wheel",
+    spec: "Sleeps 12 \u00b7 45 ft \u00b7 Super Toy Hauler",
+    image: "https://static.wixstatic.com/media/62f926_69694ee7940c4fe4985b984e4067343e~mv2.webp",
+  },
+  {
+    name: "Forest River Impression",
+    category: "Premium Fifth Wheel",
+    spec: "Sleeps 6 \u00b7 32 ft \u00b7 Outdoor Kitchen",
+    image: "https://static.wixstatic.com/media/62f926_d5db0126f18a4cc0884f4308913f9362~mv2.webp",
+  },
 ];
 
 const trustPoints = [
   {
     title: "Delivered. Set Up. Walked Through.",
-    desc: "Your RV arrives at COTA before you do. We handle placement, hookups, and a full walkthrough so you know everything works.",
+    desc: "Your RV arrives at COTA before you do. We handle placement, hookups, and a full walkthrough.",
   },
   {
     title: "Generator Rental Available",
-    desc: "Camping in Lot N with no hookups? We offer generator rentals so you have full power all weekend.",
+    desc: "Camping in Lot N with no hookups? We provide generator rentals for full power all weekend.",
   },
   {
-    title: "Optional Outdoor Add-On \u2014 $100",
-    desc: "Grill, chairs, outdoor table, and lawn setup. Everything you need to turn your campsite into a tailgate.",
+    title: "Outdoor Add-On \u2014 $100",
+    desc: "Grill, chairs, outdoor table, and lawn setup. Turn your campsite into a tailgate.",
   },
   {
-    title: "4.7 Stars Across 200+ Bookings",
-    desc: "We\u2019ve built our reputation on showing up early, setting up right, and being reachable 24/7. Every single time.",
+    title: "4.7 Stars \u00b7 200+ Bookings",
+    desc: "We show up early, set up right, and stay reachable 24/7. Every single time.",
+  },
+];
+
+const testimonials = [
+  {
+    quote: "Westin had everything set up and ready when we arrived. The RV was spotless, fully stocked, and way nicer than we expected. Our whole group was blown away.",
+    name: "\u2014 Sarah M.",
+    context: "Family reunion, Texas Rose Horse Park",
+  },
+  {
+    quote: "Absolutely outstanding RV standards. Each RV is perfectly picked and tailored to your needs while being very affordable. Setup and delivery make it perfect so you don\u2019t have to worry about a thing.",
+    name: "\u2014 Verified Google Review",
+    context: "5-star review",
+  },
+  {
+    quote: "Communication was flawless from start to finish. They handled the entire setup and pickup, making the process completely seamless and stress-free. Would absolutely book again.",
+    name: "\u2014 F1 Weekend Renter",
+    context: "COTA RV Park, Austin",
   },
 ];
 
@@ -128,6 +166,11 @@ const trustPoints = [
 export default function Home() {
   return (
     <IntroAnimation>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+    >
     <main className="font-[var(--font-outfit)]">
       {/* ─── NAVBAR ─── */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-4 bg-[#0D0B09]/90 backdrop-blur-md">
@@ -144,7 +187,6 @@ export default function Home() {
 
       {/* ─── SECTION 1: HERO ─── */}
       <section className="relative min-h-screen flex items-center justify-center bg-[#0D0B09] px-6 text-center overflow-hidden">
-        {/* Hyperspeed racing lights background — exact React Bits defaults */}
         <div className="absolute inset-0 z-0">
           <Hyperspeed
             effectOptions={{
@@ -184,12 +226,13 @@ export default function Home() {
             }}
           />
         </div>
-        {/* Subtle gradient overlay for text readability */}
         <div className="absolute inset-0 z-[1] bg-gradient-to-b from-[#0D0B09]/40 via-transparent to-[#0D0B09]/50" />
 
         <div className="relative z-[2] max-w-3xl mx-auto pt-20">
           <motion.div
-            {...fadeUpDelay(0)}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease }}
             className="inline-block border border-[#D4A853]/40 rounded-full px-4 py-1.5 mb-8"
           >
             <span className="text-xs font-medium uppercase tracking-[0.2em] text-[#D4A853]">
@@ -198,21 +241,27 @@ export default function Home() {
           </motion.div>
 
           <motion.h1
-            {...fadeUpDelay(0)}
+            initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            transition={{ duration: 1, delay: 0.2, ease }}
             className="font-[var(--font-cormorant)] text-4xl sm:text-5xl md:text-7xl font-normal text-[#F5F0E8] leading-[1.1]"
           >
-            Your Private Base Camp at the United States Grand Prix
+            Your Private Suite at the United States Grand Prix
           </motion.h1>
 
           <motion.p
-            {...fadeUpDelay(0.2)}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease, delay: 0.4 }}
             className="mt-6 text-lg md:text-xl font-light text-[#F5F0E8]/80 max-w-2xl mx-auto leading-relaxed"
           >
             Premium RVs delivered and set up at COTA. Wake up trackside. Walk to the race. Skip the hotel chaos and the $600-a-night rooms.
           </motion.p>
 
           <motion.a
-            {...fadeUpDelay(0.4)}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease, delay: 0.6 }}
             href="tel:9729656901"
             className="inline-block mt-10 bg-[#D4A853] text-[#0D0B09] font-semibold uppercase tracking-wider px-8 py-4 rounded-sm hover:bg-[#e0b964] transition-colors text-sm md:text-base"
           >
@@ -220,8 +269,10 @@ export default function Home() {
           </motion.a>
 
           <motion.div
-            {...fadeUpDelay(0.6)}
-            className="mt-12 flex flex-wrap items-center justify-center gap-4 md:gap-8 text-sm text-[#F5F0E8]/50 uppercase tracking-wider"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease, delay: 0.8 }}
+            className="mt-12 flex flex-wrap items-center justify-center gap-4 md:gap-8 text-sm text-[#F5F0E8]/80 uppercase tracking-wider"
           >
             {["200+ Rentals", "4.7\u2605 Google Reviews", "Delivered & Set Up", "Texas Statewide"].map(
               (item, i) => (
@@ -234,50 +285,90 @@ export default function Home() {
               )
             )}
           </motion.div>
+
+          {/* Scroll indicator */}
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+            className="mt-12 flex justify-center text-[#D4A853] opacity-40"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M6 9l6 6 6-6" />
+            </svg>
+          </motion.div>
         </div>
       </section>
 
-      {/* ─── SECTION 2: PROBLEM / DESIRE ─── */}
-      <section className="bg-[#F5F0E8] py-24 md:py-32 px-6">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-16 md:gap-20">
-          {/* Pain */}
+      {/* ─── SECTION 2A: THE PROBLEM (Dark) ─── */}
+      <section className="bg-[#0D0B09] py-20 md:py-28 px-6">
+        <div className="max-w-5xl mx-auto">
+          <motion.span
+            {...fadeUp}
+            className="block text-xs uppercase tracking-[0.2em] text-[#D4A853] mb-4"
+          >
+            The Reality of F1 Weekend
+          </motion.span>
+          <motion.h2
+            {...fadeUpDelay(0.1)}
+            className="font-[var(--font-cormorant)] text-3xl md:text-4xl text-[#F5F0E8]"
+          >
+            What Race Weekend Actually Looks Like Without a Plan
+          </motion.h2>
+
+          <div className="mt-12 grid md:grid-cols-2 gap-8">
+            {painPoints.map((p, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5, ease, delay: i * 0.1 }}
+                className="bg-[#1A1510] p-6 md:p-8 rounded-sm border-l-[3px] border-[#8B4513]/40"
+              >
+                <h3 className="text-lg font-semibold text-[#F5F0E8]">{p.title}</h3>
+                <p className="mt-2 text-base font-light text-[#F5F0E8]/70 leading-relaxed">{p.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── SECTION 2B: THE DREAM (Light split-panel) ─── */}
+      <section className="bg-[#F5F0E8]">
+        <div className="grid md:grid-cols-2">
+          {/* Image */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.7, ease }}
+            className="relative min-h-[400px] md:min-h-[500px]"
           >
-            <h2 className="font-[var(--font-cormorant)] text-2xl md:text-3xl text-[#1A1510] mb-10">
-              What F1 Weekend Usually Looks Like
-            </h2>
-            <div className="space-y-8">
-              {painPoints.map((p, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.5, ease, delay: i * 0.1 }}
-                  className="border-l-2 border-[#8B4513]/30 pl-5"
-                >
-                  <h3 className="font-semibold text-[#1A1510] mb-1">{p.title}</h3>
-                  <p className="font-light text-[#1A1510]/60 text-sm leading-relaxed">{p.desc}</p>
-                </motion.div>
-              ))}
-            </div>
+            <Image
+              src="https://static.wixstatic.com/media/62f926_bf23e37064074d13911e9210dd2584e6~mv2.png"
+              alt="Triple W RV setup at an event"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
           </motion.div>
 
-          {/* Desire */}
+          {/* Text */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.7, ease }}
+            className="p-10 md:p-16 flex flex-col justify-center"
           >
-            <h2 className="font-[var(--font-cormorant)] text-2xl md:text-3xl text-[#1A1510] mb-10">
-              What It Looks Like With Triple W
+            <span className="text-xs uppercase tracking-[0.2em] text-[#D4A853] mb-4">
+              With Triple W
+            </span>
+            <h2 className="font-[var(--font-cormorant)] text-3xl md:text-4xl text-[#1A1510]">
+              What It Feels Like When You Do It Right
             </h2>
-            <div className="space-y-8">
+
+            <div className="mt-8 space-y-6">
               {desirePoints.map((d, i) => (
                 <motion.div
                   key={i}
@@ -285,10 +376,10 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.2 }}
                   transition={{ duration: 0.5, ease, delay: i * 0.1 }}
-                  className="border-l-2 border-[#D4A853] pl-5"
+                  className="border-l-[3px] border-[#D4A853] pl-5"
                 >
-                  <h3 className="font-semibold text-[#1A1510] mb-1">{d.title}</h3>
-                  <p className="font-light text-[#1A1510]/60 text-sm leading-relaxed">{d.desc}</p>
+                  <h3 className="text-lg font-semibold text-[#1A1510]">{d.title}</h3>
+                  <p className="mt-1 text-base font-light text-[#1A1510]/70 leading-relaxed">{d.desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -326,10 +417,11 @@ export default function Home() {
                         <div className="w-full h-full bg-[#D4A853]/20" />
                         <motion.div
                           className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#D4A853] via-[#e0b964] to-[#D4A853]"
-                          initial={{ width: "0%" }}
-                          whileInView={{ width: "100%" }}
+                          initial={{ scaleX: 0 }}
+                          whileInView={{ scaleX: 1 }}
                           viewport={{ once: true, amount: 0.5 }}
-                          transition={{ duration: 1.2, delay: 0.8 + i * 0.3, ease: "easeInOut" }}
+                          transition={{ duration: 1, delay: 0.3 + i * 0.3, ease }}
+                          style={{ originX: 0 }}
                         />
                       </div>
                     )}
@@ -374,28 +466,22 @@ export default function Home() {
                             <Icon className="w-8 h-8 text-[#D4A853]" />
                           </motion.div>
 
-                          {/* Pulse ring */}
                           <motion.div
                             className="absolute inset-0 rounded-full border-2 border-[#D4A853]"
                             initial={{ scale: 1, opacity: 0.5 }}
                             animate={{ scale: 1.4, opacity: 0 }}
-                            transition={{
-                              duration: 2,
-                              repeat: Infinity,
-                              ease: "easeOut",
-                              delay: i * 0.5,
-                            }}
+                            transition={{ duration: 2, repeat: Infinity, ease: "easeOut", delay: i * 0.5 }}
                           />
                         </motion.div>
                       </div>
 
-                      {/* Step number */}
+                      {/* Step number with scale-in */}
                       <motion.div
                         className="text-center mb-3"
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.15 + 0.1 }}
+                        initial={{ opacity: 0, scale: 0.5 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        transition={{ duration: 0.5, delay: i * 0.2, ease }}
                       >
                         <span className="font-[var(--font-cormorant)] text-5xl font-light text-[#D4A853]/25">
                           {s.num}
@@ -423,12 +509,20 @@ export default function Home() {
               })}
             </div>
           </div>
+
+          {/* Mid-section tagline */}
+          <motion.p
+            {...fadeUpDelay(0.3)}
+            className="mt-12 text-center text-base text-[#F5F0E8]/60 italic"
+          >
+            It really is that simple.
+          </motion.p>
         </div>
       </section>
 
       {/* ─── SECTION 4: THE FLEET ─── */}
       <section className="bg-[#F7F4F0] py-24 md:py-32 px-6">
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-7xl mx-auto">
           <motion.h2
             {...fadeUp}
             className="font-[var(--font-cormorant)] text-3xl md:text-5xl text-[#1A1510] text-center"
@@ -442,25 +536,51 @@ export default function Home() {
             Every unit is cleaned, prepped, and delivered with the same standard &mdash; whether it sleeps 4 or 12.
           </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.7, ease }}
-            className="mt-16"
-          >
-            <PremiumImageGallery items={FLEET_MEDIA} />
-          </motion.div>
+          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+            {fleetUnits.map((unit, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20, scale: 0.97 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.6, ease, delay: i * 0.1 }}
+                className="bg-white rounded-sm overflow-hidden shadow-[0_2px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_30px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all duration-300"
+              >
+                <div className="relative aspect-[4/3]">
+                  <Image
+                    src={unit.image}
+                    alt={unit.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </div>
+                <div className="p-6">
+                  <h3 className="font-[var(--font-cormorant)] text-xl font-medium text-[#1A1510]">
+                    {unit.name}
+                  </h3>
+                  <p className="text-sm text-[#1A1510]/50 mt-1">{unit.category}</p>
+                  <p className="text-sm text-[#D4A853]/80 mt-1">{unit.spec}</p>
+                  <a
+                    href="tel:9729656901"
+                    className="inline-flex items-center gap-1 text-sm font-medium text-[#D4A853] mt-4 hover:text-[#e0b964] transition-colors"
+                  >
+                    Ask About This Unit &rarr;
+                  </a>
+                </div>
+              </motion.div>
+            ))}
+          </div>
 
-          <motion.div {...fadeUpDelay(0.2)} className="mt-16 text-center">
-            <p className="text-[#1A1510]/60 mb-6">
+          <motion.div {...fadeUpDelay(0.2)} className="mt-12 text-center">
+            <p className="text-[#1A1510]/60">
               We have 14 units in our fleet. Call to see the full lineup and find the right fit.
             </p>
             <a
               href="https://triple-w-rentals.vercel.app"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block border border-[#D4A853] text-[#D4A853] font-semibold uppercase tracking-wider px-8 py-3 rounded-sm hover:bg-[#D4A853] hover:text-[#0D0B09] transition-colors text-sm"
+              className="inline-block mt-6 border border-[#D4A853] text-[#D4A853] font-medium uppercase tracking-wider px-8 py-3 rounded-sm hover:bg-[#D4A853] hover:text-[#0D0B09] transition-colors text-sm"
             >
               See Full Fleet at TripleWRentals.com &rarr;
             </a>
@@ -468,65 +588,133 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── SECTION 5: WHY TRIPLE W ─── */}
-      <section className="bg-[#1A1510] py-24 md:py-32 px-6">
-        <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 md:gap-16 items-stretch">
-          {/* Text */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.7, ease }}
-            className="flex flex-col justify-center"
+      {/* ─── MID-PAGE CTA STRIP ─── */}
+      <section className="bg-[#0D0B09] py-8 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <motion.h3
+            {...fadeUp}
+            className="font-[var(--font-cormorant)] text-2xl md:text-3xl text-[#F5F0E8]"
           >
-            <h2 className="font-[var(--font-cormorant)] text-3xl md:text-4xl text-[#F5F0E8]">
-              Built for Events Like This
-            </h2>
-            <p className="mt-4 text-lg text-[#F5F0E8]/80 font-light leading-relaxed">
-              Triple W Rentals has delivered RVs to motorsport events, horse shows, family reunions, and corporate retreats across Texas. F1 weekend is no different &mdash; except the stakes are higher and the demand is bigger.
-            </p>
-            <div className="mt-8 space-y-6">
-              {trustPoints.map((tp, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.5, ease, delay: i * 0.1 }}
-                  className="flex gap-4"
-                >
-                  <span className="mt-1.5 w-2 h-2 rounded-full bg-[#D4A853] shrink-0" />
-                  <div>
-                    <h3 className="font-semibold text-[#F5F0E8] text-sm">{tp.title}</h3>
-                    <p className="mt-1 text-sm font-light text-[#F5F0E8]/60 leading-relaxed">
-                      {tp.desc}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Image */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.7, ease }}
-            className="relative min-h-[500px] rounded-sm overflow-hidden"
+            See a unit you like?
+          </motion.h3>
+          <motion.p
+            {...fadeUpDelay(0.1)}
+            className="mt-2 text-base text-[#F5F0E8]/70"
           >
-            <Image
-              src="https://static.wixstatic.com/media/62f926_bf23e37064074d13911e9210dd2584e6~mv2.png"
-              alt="Triple W RV setup at an event"
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 100vw, 50vw"
-            />
-          </motion.div>
+            Call or text us &mdash; we&rsquo;ll check F1 weekend availability on the spot.
+          </motion.p>
+          <motion.a
+            {...fadeUpDelay(0.2)}
+            href="tel:9729656901"
+            className="inline-block mt-4 bg-[#D4A853] text-[#0D0B09] font-semibold uppercase tracking-wider px-8 py-4 rounded-sm hover:bg-[#e0b964] transition-colors text-sm md:text-base"
+          >
+            (972) 965-6901
+          </motion.a>
         </div>
       </section>
 
-      {/* ─── SECTION 6: COTA CAMPING GUIDE ─── */}
+      {/* ─── SECTION 5: SOCIAL PROOF / TESTIMONIALS ─── */}
+      <section className="bg-[#F5F0E8] py-20 md:py-24 px-6">
+        <div className="max-w-5xl mx-auto text-center">
+          <motion.h2
+            {...fadeUp}
+            className="font-[var(--font-cormorant)] text-3xl md:text-4xl text-[#1A1510]"
+          >
+            What Our Clients Say
+          </motion.h2>
+          <motion.p
+            {...fadeUpDelay(0.1)}
+            className="mt-3 text-base text-[#1A1510]/60"
+          >
+            4.7 stars across 200+ verified Google reviews.
+          </motion.p>
+
+          <div className="mt-12 grid md:grid-cols-3 gap-6">
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.6, ease, delay: i * 0.1 }}
+                className="bg-white p-8 rounded-sm shadow-[0_2px_20px_rgba(0,0,0,0.06)] text-left"
+              >
+                <div className="text-[#D4A853] text-lg tracking-wider">{"\u2605\u2605\u2605\u2605\u2605"}</div>
+                <p className="mt-4 text-base font-light text-[#1A1510] italic leading-relaxed">
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <p className="mt-6 text-sm font-semibold text-[#1A1510]">{t.name}</p>
+                <p className="text-xs text-[#1A1510]/50">{t.context}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── SECTION 6: WHY TRIPLE W ─── */}
+      <section className="bg-[#1A1510] py-24 md:py-32 px-6 relative overflow-hidden">
+        {/* Subtle background image */}
+        <div className="absolute inset-0">
+          <Image
+            src="https://static.wixstatic.com/media/62f926_b687d2cf0d374773b965a26a2da00832~mv2.webp"
+            alt=""
+            fill
+            className="object-cover opacity-[0.08]"
+            sizes="100vw"
+          />
+        </div>
+
+        <div className="relative z-10 max-w-4xl mx-auto text-center">
+          <motion.span
+            {...fadeUp}
+            className="block text-xs uppercase tracking-[0.2em] text-[#D4A853] mb-4"
+          >
+            Why Triple W
+          </motion.span>
+          <motion.h2
+            {...fadeUpDelay(0.1)}
+            className="font-[var(--font-cormorant)] text-3xl md:text-5xl text-[#F5F0E8]"
+          >
+            Built for Events Exactly Like This
+          </motion.h2>
+          <motion.p
+            {...fadeUpDelay(0.2)}
+            className="mt-6 text-lg text-[#F5F0E8]/80 max-w-2xl mx-auto leading-relaxed"
+          >
+            We&rsquo;ve delivered RVs to motorsport events, horse shows, family reunions, and corporate retreats across Texas. F1 weekend is our kind of challenge &mdash; and your crew deserves better than a hotel.
+          </motion.p>
+
+          <div className="mt-12 grid md:grid-cols-2 gap-6 text-left">
+            {trustPoints.map((tp, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5, ease, delay: i * 0.1 }}
+                className="bg-[rgba(245,240,232,0.05)] border border-[rgba(212,168,83,0.15)] p-6 rounded-sm"
+              >
+                <div className="flex items-start gap-3">
+                  <span className="mt-1.5 w-2 h-2 rounded-full bg-[#D4A853] shrink-0" />
+                  <div>
+                    <h3 className="text-base font-semibold text-[#F5F0E8]">{tp.title}</h3>
+                    <p className="mt-2 text-sm font-light text-[#F5F0E8]/65 leading-relaxed">{tp.desc}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.p
+            {...fadeUpDelay(0.3)}
+            className="mt-10 text-base text-[#F5F0E8]/70 italic"
+          >
+            For a group of 6, an RV at COTA costs less per person than one downtown hotel room &mdash; and you&rsquo;re sleeping trackside.
+          </motion.p>
+        </div>
+      </section>
+
+      {/* ─── SECTION 7: COTA CAMPING GUIDE ─── */}
       <section className="bg-[#F4EDE3] py-20 md:py-28 px-6">
         <div className="max-w-4xl mx-auto">
           <motion.h2
@@ -549,7 +737,7 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.6, ease }}
-              className="bg-white rounded-sm p-8"
+              className="bg-white rounded-sm p-8 border border-[#D4A853]/10"
             >
               <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#D4A853] border border-[#D4A853]/40 rounded-full px-3 py-1 mb-4">
                 Premium
@@ -576,7 +764,7 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.6, ease, delay: 0.1 }}
-              className="bg-white rounded-sm p-8"
+              className="bg-white rounded-sm p-8 border border-[#D4A853]/10"
             >
               <span className="inline-block text-xs font-semibold uppercase tracking-wider text-[#1A1510]/70 border border-[#1A1510]/20 rounded-full px-3 py-1 mb-4">
                 Lot N
@@ -612,17 +800,31 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ─── SECTION 7: FINAL CTA ─── */}
+      {/* ─── SECTION 8: FINAL CTA ─── */}
       <section className="bg-[#0D0B09] py-20 md:py-28 px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <motion.h2
+          {/* Urgency badge */}
+          <motion.div
             {...fadeUp}
+            className="mb-8 inline-block"
+          >
+            <motion.span
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="inline-block text-xs uppercase tracking-widest text-[#D4A853] border border-[#D4A853]/30 rounded-full px-4 py-1.5"
+            >
+              Limited Availability &mdash; 14 Units
+            </motion.span>
+          </motion.div>
+
+          <motion.h2
+            {...fadeUpDelay(0.1)}
             className="font-[var(--font-cormorant)] text-3xl md:text-5xl text-[#F5F0E8] leading-tight"
           >
             Race Weekend Fills Up. Your RV Shouldn&rsquo;t Be an Afterthought.
           </motion.h2>
           <motion.p
-            {...fadeUpDelay(0.15)}
+            {...fadeUpDelay(0.2)}
             className="mt-4 text-lg text-[#F5F0E8]/70 max-w-xl mx-auto leading-relaxed"
           >
             Lock in your unit now. We&rsquo;ll handle everything from delivery to setup &mdash; you just show up and enjoy the Grand Prix.
@@ -636,9 +838,9 @@ export default function Home() {
           </motion.a>
           <motion.p
             {...fadeUpDelay(0.4)}
-            className="mt-6 text-sm text-[#F5F0E8]/50"
+            className="mt-6 text-sm text-[#F5F0E8]/50 max-w-lg mx-auto"
           >
-            Every booking is personally handled by Corbin. No bots. No runaround.
+            Every booking is personally handled by Corbin Walker, owner of Triple W. He&rsquo;ll answer your call, confirm your unit, and make sure everything&rsquo;s ready when you arrive.
           </motion.p>
         </div>
       </section>
@@ -667,6 +869,7 @@ export default function Home() {
         </div>
       </footer>
     </main>
+    </motion.div>
     </IntroAnimation>
   );
 }
