@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Phone, Truck, PartyPopper } from "lucide-react";
+import PremiumImageGallery, { type GalleryItem } from "@/components/ui/PremiumImageGallery";
 import IntroAnimation from "@/components/ui/IntroAnimation";
 
 const Hyperspeed = dynamic(() => import("@/components/ui/Hyperspeed"), { ssr: false });
@@ -85,43 +86,22 @@ const steps = [
   },
 ];
 
-const fleetUnits = [
+const FLEET_MEDIA: GalleryItem[] = [
   {
-    name: "Momentum 2",
-    category: "Premium Luxury",
-    spec: "Sleeps 8 \u00b7 42 ft \u00b7 Toy Hauler Garage",
-    image: "https://static.wixstatic.com/media/62f926_b687d2cf0d374773b965a26a2da00832~mv2.webp",
+    type: "video",
+    src: "https://video.wixstatic.com/video/62f926_8ff76b0555c04f32acb69a68ef4633af/480p/mp4/file.mp4",
+    poster: "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp",
   },
-  {
-    name: "Momentum 3",
-    category: "Deluxe Toy Hauler",
-    spec: "Sleeps 10 \u00b7 44 ft \u00b7 Dual Living Areas",
-    image: "https://static.wixstatic.com/media/62f926_a4d11de4461f4bdd954c4a308e09f35b~mv2.webp",
-  },
-  {
-    name: "Heartland Gateway",
-    category: "Premium Fifth Wheel",
-    spec: "Sleeps 6 \u00b7 38 ft \u00b7 Full Kitchen",
-    image: "https://static.wixstatic.com/media/62f926_e82ba4137dbb44ecb018eda98ab166b9~mv2.webp",
-  },
-  {
-    name: "Solitude",
-    category: "Luxury Fifth Wheel",
-    spec: "Sleeps 4 \u00b7 36 ft \u00b7 King Suite",
-    image: "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp",
-  },
-  {
-    name: "Grand Design",
-    category: "Premium Fifth Wheel",
-    spec: "Sleeps 12 \u00b7 45 ft \u00b7 Super Toy Hauler",
-    image: "https://static.wixstatic.com/media/62f926_69694ee7940c4fe4985b984e4067343e~mv2.webp",
-  },
-  {
-    name: "Forest River Impression",
-    category: "Premium Fifth Wheel",
-    spec: "Sleeps 6 \u00b7 32 ft \u00b7 Outdoor Kitchen",
-    image: "https://static.wixstatic.com/media/62f926_d5db0126f18a4cc0884f4308913f9362~mv2.webp",
-  },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_72984415dae543f5a93113defc3976a4~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_6081972934c541bf9b8aaa703b74f585~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_69694ee7940c4fe4985b984e4067343e~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_26b6714d0a0d4937b73e45668ce44bd9~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_d5db0126f18a4cc0884f4308913f9362~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_e4c918f468b243d89371fa40f6424fce~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_b833defbf81b455991760bc1f4c878ff~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_1ba23ff81e904ae2b5feae14ed4754fb~mv2.webp" },
+  { type: "image", src: "https://static.wixstatic.com/media/62f926_cf6fafa3b7184f93b149c98ee96c783f~mv2.webp" },
 ];
 
 const trustPoints = [
@@ -140,24 +120,6 @@ const trustPoints = [
   {
     title: "4.7 Stars \u00b7 200+ Bookings",
     desc: "We show up early, set up right, and stay reachable 24/7. Every single time.",
-  },
-];
-
-const testimonials = [
-  {
-    quote: "Westin had everything set up and ready when we arrived. The RV was spotless, fully stocked, and way nicer than we expected. Our whole group was blown away.",
-    name: "\u2014 Sarah M.",
-    context: "Family reunion, Texas Rose Horse Park",
-  },
-  {
-    quote: "Absolutely outstanding RV standards. Each RV is perfectly picked and tailored to your needs while being very affordable. Setup and delivery make it perfect so you don\u2019t have to worry about a thing.",
-    name: "\u2014 Verified Google Review",
-    context: "5-star review",
-  },
-  {
-    quote: "Communication was flawless from start to finish. They handled the entire setup and pickup, making the process completely seamless and stress-free. Would absolutely book again.",
-    name: "\u2014 F1 Weekend Renter",
-    context: "COTA RV Park, Austin",
   },
 ];
 
@@ -522,7 +484,7 @@ export default function Home() {
 
       {/* ─── SECTION 4: THE FLEET ─── */}
       <section className="bg-[#F7F4F0] py-24 md:py-32 px-6">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-5xl mx-auto">
           <motion.h2
             {...fadeUp}
             className="font-[var(--font-cormorant)] text-3xl md:text-5xl text-[#1A1510] text-center"
@@ -536,51 +498,25 @@ export default function Home() {
             Every unit is cleaned, prepped, and delivered with the same standard &mdash; whether it sleeps 4 or 12.
           </motion.p>
 
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-            {fleetUnits.map((unit, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20, scale: 0.97 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.6, ease, delay: i * 0.1 }}
-                className="bg-white rounded-sm overflow-hidden shadow-[0_2px_20px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_30px_rgba(0,0,0,0.1)] hover:-translate-y-0.5 transition-all duration-300"
-              >
-                <div className="relative aspect-[4/3]">
-                  <Image
-                    src={unit.image}
-                    alt={unit.name}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                </div>
-                <div className="p-6">
-                  <h3 className="font-[var(--font-cormorant)] text-xl font-medium text-[#1A1510]">
-                    {unit.name}
-                  </h3>
-                  <p className="text-sm text-[#1A1510]/50 mt-1">{unit.category}</p>
-                  <p className="text-sm text-[#D4A853]/80 mt-1">{unit.spec}</p>
-                  <a
-                    href="tel:9729656901"
-                    className="inline-flex items-center gap-1 text-sm font-medium text-[#D4A853] mt-4 hover:text-[#e0b964] transition-colors"
-                  >
-                    Ask About This Unit &rarr;
-                  </a>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.7, ease }}
+            className="mt-16"
+          >
+            <PremiumImageGallery items={FLEET_MEDIA} />
+          </motion.div>
 
-          <motion.div {...fadeUpDelay(0.2)} className="mt-12 text-center">
-            <p className="text-[#1A1510]/60">
+          <motion.div {...fadeUpDelay(0.2)} className="mt-16 text-center">
+            <p className="text-[#1A1510]/60 mb-6">
               We have 14 units in our fleet. Call to see the full lineup and find the right fit.
             </p>
             <a
               href="https://triple-w-rentals.vercel.app"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block mt-6 border border-[#D4A853] text-[#D4A853] font-medium uppercase tracking-wider px-8 py-3 rounded-sm hover:bg-[#D4A853] hover:text-[#0D0B09] transition-colors text-sm"
+              className="inline-block border border-[#D4A853] text-[#D4A853] font-semibold uppercase tracking-wider px-8 py-3 rounded-sm hover:bg-[#D4A853] hover:text-[#0D0B09] transition-colors text-sm"
             >
               See Full Fleet at TripleWRentals.com &rarr;
             </a>
@@ -610,44 +546,6 @@ export default function Home() {
           >
             (972) 965-6901
           </motion.a>
-        </div>
-      </section>
-
-      {/* ─── SECTION 5: SOCIAL PROOF / TESTIMONIALS ─── */}
-      <section className="bg-[#F5F0E8] py-20 md:py-24 px-6">
-        <div className="max-w-5xl mx-auto text-center">
-          <motion.h2
-            {...fadeUp}
-            className="font-[var(--font-cormorant)] text-3xl md:text-4xl text-[#1A1510]"
-          >
-            What Our Clients Say
-          </motion.h2>
-          <motion.p
-            {...fadeUpDelay(0.1)}
-            className="mt-3 text-base text-[#1A1510]/60"
-          >
-            4.7 stars across 200+ verified Google reviews.
-          </motion.p>
-
-          <div className="mt-12 grid md:grid-cols-3 gap-6">
-            {testimonials.map((t, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.6, ease, delay: i * 0.1 }}
-                className="bg-white p-8 rounded-sm shadow-[0_2px_20px_rgba(0,0,0,0.06)] text-left"
-              >
-                <div className="text-[#D4A853] text-lg tracking-wider">{"\u2605\u2605\u2605\u2605\u2605"}</div>
-                <p className="mt-4 text-base font-light text-[#1A1510] italic leading-relaxed">
-                  &ldquo;{t.quote}&rdquo;
-                </p>
-                <p className="mt-6 text-sm font-semibold text-[#1A1510]">{t.name}</p>
-                <p className="text-xs text-[#1A1510]/50">{t.context}</p>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
 
