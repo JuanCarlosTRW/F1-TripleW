@@ -141,7 +141,7 @@ export default function Home() {
       {/* ─── SECTION 1: HERO ─── */}
       <section className="relative min-h-screen flex items-center justify-center bg-[#0D0B09] px-6 text-center overflow-hidden">
         {/* Hyperspeed racing lights background */}
-        <div className="absolute inset-0 z-0 opacity-40">
+        <div className="absolute inset-0 z-0 opacity-70">
           <Hyperspeed
             effectOptions={{
               distortion: "turbulentDistortion",
@@ -181,7 +181,7 @@ export default function Home() {
           />
         </div>
         {/* Gradient overlay to keep text readable */}
-        <div className="absolute inset-0 z-[1] bg-gradient-to-b from-[#0D0B09]/70 via-[#0D0B09]/40 to-[#0D0B09]/80" />
+        <div className="absolute inset-0 z-[1] bg-gradient-to-b from-[#0D0B09]/50 via-[#0D0B09]/20 to-[#0D0B09]/60" />
 
         <div className="relative z-[2] max-w-3xl mx-auto pt-20">
           <motion.div

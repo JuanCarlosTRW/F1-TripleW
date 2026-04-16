@@ -275,7 +275,7 @@ const roadVertex = `
 function buildDistortions() {
   const turbulentUniforms = {
     uFreq: { value: new THREE.Vector4(4, 8, 8, 1) },
-    uAmp: { value: new THREE.Vector4(25, 5, 10, 10) },
+    uAmp: { value: new THREE.Vector4(10, 3, 5, 5) },
   };
 
   return {
@@ -320,7 +320,7 @@ function buildDistortions() {
           getY(progress) - getY(progress + 0.007),
           0
         );
-        const lookAtAmp = new THREE.Vector3(-2, -5, 0);
+        const lookAtAmp = new THREE.Vector3(-0.5, -2, 0);
         const lookAtOffset = new THREE.Vector3(0, 0, -10);
         return distortion.multiply(lookAtAmp).add(lookAtOffset);
       },
