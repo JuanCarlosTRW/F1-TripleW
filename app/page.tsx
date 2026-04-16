@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { Phone, Truck, PartyPopper } from "lucide-react";
 import PremiumImageGallery, { type GalleryItem } from "@/components/ui/PremiumImageGallery";
+import Reviews from "@/components/Reviews";
 import IntroAnimation from "@/components/ui/IntroAnimation";
 
 const Hyperspeed = dynamic(() => import("@/components/ui/Hyperspeed"), { ssr: false });
@@ -548,6 +549,9 @@ export default function Home() {
           </motion.a>
         </div>
       </section>
+
+      {/* ─── SECTION 5: TESTIMONIALS ─── */}
+      <Reviews />
 
       {/* ─── SECTION 6: WHY TRIPLE W ─── */}
       <section className="bg-[#1A1510] py-24 md:py-32 px-6 relative overflow-hidden">
