@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import { Phone, Truck, PartyPopper } from "lucide-react";
 import PremiumImageGallery, { type GalleryItem } from "@/components/ui/PremiumImageGallery";
 import IntroAnimation from "@/components/ui/IntroAnimation";
 
@@ -67,16 +68,19 @@ const desirePoints = [
 const steps = [
   {
     num: "01",
+    icon: Phone,
     title: "Call or Text Us",
     desc: "Tell us your dates, your group size, and which RV catches your eye. We\u2019ll confirm availability on the spot.",
   },
   {
     num: "02",
+    icon: Truck,
     title: "We Deliver to COTA",
     desc: "Your RV arrives before you do \u2014 fully set up, cleaned, stocked, and ready. We walk you through everything on arrival.",
   },
   {
     num: "03",
+    icon: PartyPopper,
     title: "Enjoy Race Weekend",
     desc: "Walk to the track. Come back whenever you want. Grill out between sessions. Live like a local, not a tourist.",
   },
@@ -294,44 +298,130 @@ export default function Home() {
 
       {/* ─── SECTION 3: HOW IT WORKS ─── */}
       <section className="bg-[#0D0B09] py-24 md:py-32 px-6">
-        <div className="max-w-5xl mx-auto text-center">
-          <motion.h2
-            {...fadeUp}
-            className="font-[var(--font-cormorant)] text-3xl md:text-5xl text-[#F5F0E8]"
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            className="text-center mb-16 md:mb-20"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 0.6, ease }}
           >
-            Three Steps. Zero Stress.
-          </motion.h2>
-          <motion.p
-            {...fadeUpDelay(0.1)}
-            className="mt-4 text-lg text-[#F5F0E8]/70 max-w-xl mx-auto"
-          >
-            We handle the hard part. You handle the fun part.
-          </motion.p>
+            <h2 className="font-[var(--font-cormorant)] text-3xl md:text-5xl text-[#F5F0E8]">
+              Three Steps. Zero Stress.
+            </h2>
+            <p className="mt-4 text-lg text-[#F5F0E8]/70 max-w-xl mx-auto">
+              We handle the hard part. You handle the fun part.
+            </p>
+          </motion.div>
 
-          <div className="mt-16 grid md:grid-cols-3 gap-12 md:gap-8 relative">
-            {/* Timeline line — desktop horizontal */}
-            <div className="hidden md:block absolute top-10 left-[16.67%] right-[16.67%] h-px bg-[#D4A853]/30" />
-            {/* Timeline line — mobile vertical */}
-            <div className="md:hidden absolute top-0 bottom-0 left-6 w-px bg-[#D4A853]/30" />
+          <div className="relative">
+            <div className="grid md:grid-cols-3 gap-16 md:gap-8">
+              {steps.map((s, i) => {
+                const Icon = s.icon;
+                return (
+                  <div key={i} className="relative">
+                    {/* Connecting line — desktop horizontal */}
+                    {i < steps.length - 1 && (
+                      <div className="hidden md:block absolute top-10 left-[calc(50%+2.5rem)] w-[calc(100%-5rem)] h-0.5 -z-0">
+                        <div className="w-full h-full bg-[#D4A853]/20" />
+                        <motion.div
+                          className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#D4A853] via-[#e0b964] to-[#D4A853]"
+                          initial={{ width: "0%" }}
+                          whileInView={{ width: "100%" }}
+                          viewport={{ once: true, amount: 0.5 }}
+                          transition={{ duration: 1.2, delay: 0.8 + i * 0.3, ease: "easeInOut" }}
+                        />
+                      </div>
+                    )}
 
-            {steps.map((s, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.6, ease, delay: i * 0.15 }}
-                className="relative text-center md:text-center pl-14 md:pl-0"
-              >
-                <span className="font-[var(--font-cormorant)] text-5xl font-light text-[#D4A853] block">
-                  {s.num}
-                </span>
-                <h3 className="mt-4 text-xl font-semibold text-[#F5F0E8]">{s.title}</h3>
-                <p className="mt-3 font-light text-[#F5F0E8]/70 text-sm leading-relaxed max-w-xs mx-auto">
-                  {s.desc}
-                </p>
-              </motion.div>
-            ))}
+                    {/* Connecting line — mobile vertical */}
+                    {i < steps.length - 1 && (
+                      <div className="md:hidden absolute top-24 left-1/2 -translate-x-1/2 w-0.5 h-[calc(100%+1rem)]">
+                        <div className="w-full h-full bg-[#D4A853]/20" />
+                        <motion.div
+                          className="absolute top-0 left-0 w-full bg-gradient-to-b from-[#D4A853] via-[#e0b964] to-[#D4A853]"
+                          initial={{ height: "0%" }}
+                          whileInView={{ height: "100%" }}
+                          viewport={{ once: true, amount: 0.3 }}
+                          transition={{ duration: 1.2, delay: 0.8 + i * 0.3, ease: "easeInOut" }}
+                        />
+                      </div>
+                    )}
+
+                    {/* Step card */}
+                    <motion.div
+                      className="relative z-10"
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.2 }}
+                      transition={{ duration: 0.6, ease, delay: i * 0.15 }}
+                    >
+                      {/* Icon circle */}
+                      <div className="flex justify-center mb-6">
+                        <motion.div
+                          className="relative w-20 h-20 rounded-full bg-[#D4A853]/10 border-2 border-[#D4A853] flex items-center justify-center"
+                          initial={{ scale: 0.8 }}
+                          whileInView={{ scale: 1 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.5, delay: i * 0.15 + 0.2 }}
+                        >
+                          <motion.div
+                            initial={{ opacity: 0, scale: 0 }}
+                            whileInView={{ opacity: 1, scale: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.4, delay: i * 0.15 + 0.3 }}
+                          >
+                            <Icon className="w-8 h-8 text-[#D4A853]" />
+                          </motion.div>
+
+                          {/* Pulse ring */}
+                          <motion.div
+                            className="absolute inset-0 rounded-full border-2 border-[#D4A853]"
+                            initial={{ scale: 1, opacity: 0.5 }}
+                            animate={{ scale: 1.4, opacity: 0 }}
+                            transition={{
+                              duration: 2,
+                              repeat: Infinity,
+                              ease: "easeOut",
+                              delay: i * 0.5,
+                            }}
+                          />
+                        </motion.div>
+                      </div>
+
+                      {/* Step number */}
+                      <motion.div
+                        className="text-center mb-3"
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.15 + 0.1 }}
+                      >
+                        <span className="font-[var(--font-cormorant)] text-5xl font-light text-[#D4A853]/25">
+                          {s.num}
+                        </span>
+                      </motion.div>
+
+                      {/* Text content */}
+                      <motion.div
+                        className="text-center"
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.15 + 0.3 }}
+                      >
+                        <h3 className="text-xl md:text-2xl font-semibold text-[#F5F0E8] mb-3">
+                          {s.title}
+                        </h3>
+                        <p className="font-light text-[#F5F0E8]/70 text-sm md:text-base leading-relaxed max-w-xs mx-auto">
+                          {s.desc}
+                        </p>
+                      </motion.div>
+                    </motion.div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>

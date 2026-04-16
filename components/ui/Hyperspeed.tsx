@@ -463,21 +463,26 @@ const Hyperspeed = ({
       }
 
       initPasses() {
-        this.renderPass = new RenderPass(this.scene, this.camera);
-        this.bloomPass = new EffectPass(
-          this.camera,
-          new BloomEffect({ luminanceThreshold: 0.2, luminanceSmoothing: 0, resolutionScale: 1 })
-        );
-        const smaaPass = new EffectPass(
-          this.camera,
-          new SMAAEffect({ preset: SMAAPreset.MEDIUM })
-        );
-        this.renderPass.renderToScreen = false;
-        this.bloomPass.renderToScreen = false;
-        smaaPass.renderToScreen = true;
-        this.composer.addPass(this.renderPass);
-        this.composer.addPass(this.bloomPass);
-        this.composer.addPass(smaaPass);
+        if (this.disposed) return;
+        try {
+          this.renderPass = new RenderPass(this.scene, this.camera);
+          this.bloomPass = new EffectPass(
+            this.camera,
+            new BloomEffect({ luminanceThreshold: 0.2, luminanceSmoothing: 0, resolutionScale: 1 })
+          );
+          const smaaPass = new EffectPass(
+            this.camera,
+            new SMAAEffect({ preset: SMAAPreset.MEDIUM })
+          );
+          this.renderPass.renderToScreen = false;
+          this.bloomPass.renderToScreen = false;
+          smaaPass.renderToScreen = true;
+          this.composer.addPass(this.renderPass);
+          this.composer.addPass(this.bloomPass);
+          this.composer.addPass(smaaPass);
+        } catch {
+          // WebGL context may be lost during HMR — silently skip
+        }
       }
 
       loadAssets() {
