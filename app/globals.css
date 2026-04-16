@@ -26,3 +26,79 @@ body {
   background: #D4A853;
   color: #0D0B09;
 }
+
+/* ─── DESIGN TOKENS ─── */
+
+:root {
+  /* Accessible gold for use on light backgrounds (small text) */
+  --gold-accessible: #8B6B1F;
+
+  /* Gradient treatments — subtle, Stripe-inspired */
+  --gradient-charcoal-warm: radial-gradient(ellipse at top, #1A1510 0%, #0D0B09 60%);
+  --gradient-gold-glow: radial-gradient(ellipse at center, rgba(212, 168, 83, 0.12) 0%, rgba(212, 168, 83, 0) 70%);
+  --gradient-section-fade: linear-gradient(180deg, #0D0B09 0%, #1A1510 100%);
+
+  /* Elevation — subtle shadows for card layouts */
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 32px rgba(0, 0, 0, 0.2);
+  --shadow-card-gold: 0 0 0 1px rgba(212, 168, 83, 0.15), 0 20px 60px rgba(212, 168, 83, 0.08);
+}
+
+/* ─── TYPOGRAPHY — STRIPE-INSPIRED RHYTHM ─── */
+
+@layer components {
+  .type-display {
+    font-family: var(--font-cormorant);
+    font-weight: 400;
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+
+  .type-h2 {
+    font-family: var(--font-cormorant);
+    font-weight: 400;
+    font-size: clamp(1.875rem, 4vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+  }
+
+  .type-h3 {
+    font-family: var(--font-cormorant);
+    font-weight: 500;
+    font-size: clamp(1.25rem, 2.2vw, 1.5rem);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+
+  .type-body {
+    font-size: clamp(1rem, 1.2vw, 1.125rem);
+    line-height: 1.6;
+    font-weight: 300;
+  }
+
+  .type-body-sm {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    font-weight: 300;
+  }
+
+  .type-eyebrow {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    font-weight: 500;
+  }
+}
+
+/* ─── ACCESSIBILITY ─── */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
