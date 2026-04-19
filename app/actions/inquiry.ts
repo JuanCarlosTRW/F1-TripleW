@@ -20,9 +20,7 @@ const InquirySchema = z
       "travel-trailer",
       "advise",
     ]),
-    addOns: z
-      .array(z.enum(["generator", "outdoor-kit", "groceries"]))
-      .default([]),
+    addOns: z.array(z.enum(["wifi-starlink"])).default([]),
     message: z.string().trim().max(2000).optional().default(""),
     // Honeypot — must be empty. Bots fill it.
     website: z.string().max(0, "bot").optional().default(""),
@@ -94,9 +92,7 @@ export async function submitInquiry(
   }
 
   const addOnLabels: Record<string, string> = {
-    generator: "Generator",
-    "outdoor-kit": "Outdoor Kit",
-    groceries: "Pre-stocked groceries",
+    "wifi-starlink": "Wi-Fi Starlink (paid add-on)",
   };
   const addOnsText = data.addOns.length
     ? data.addOns.map((a) => addOnLabels[a] ?? a).join(", ")
@@ -161,7 +157,7 @@ ${data.message || "(none)"}
   if (hasVerifiedDomain) {
     try {
       await resend.emails.send({
-        from: `Corbin at Triple W <${fromEmail}>`,
+        from: `Triple W Rentals <${fromEmail}>`,
         to: data.email,
         replyTo: toEmail,
         subject: "We got your F1 weekend inquiry",
@@ -179,8 +175,7 @@ I'll check F1 weekend availability for you and call you back at ${data.phone} wi
 
 If it's easier, feel free to call or text me directly at (972) 965-6901.
 
-— Corbin Walker
-   Owner, Triple W Rentals
+— Weston & the Triple W team
    Tyler, Texas
 `.trim(),
       });
@@ -192,6 +187,6 @@ If it's easier, feel free to call or text me directly at (972) 965-6901.
 
   return {
     ok: true,
-    message: "Thanks. Corbin will call you back within a few hours.",
+    message: "Thanks. The Triple W team will call you back within a few hours.",
   };
 }

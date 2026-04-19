@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useActionState } from "react";
+import { DollarSign } from "lucide-react";
 import { submitInquiry, type InquiryState } from "@/app/actions/inquiry";
 
 const initialState: InquiryState = { ok: false };
@@ -91,7 +92,7 @@ export default function BookingInquiryForm({
           Tell us about your weekend.
         </h3>
         <p className="mt-3 text-sm text-[#F5F0E8]/70">
-          Corbin calls you back within a few hours. Or{" "}
+          The team calls you back within a few hours. Or{" "}
           <a
             href="tel:9729656901"
             className="text-[#D4A853] hover:underline underline-offset-4"
@@ -185,27 +186,25 @@ export default function BookingInquiryForm({
           <span className="block text-xs uppercase tracking-wider text-[#F5F0E8]/60 mb-3">
             Add-ons (optional)
           </span>
-          <div className="flex flex-wrap gap-3">
-            {[
-              { val: "generator", label: "Generator" },
-              { val: "outdoor-kit", label: "Outdoor Kit ($100)" },
-              { val: "groceries", label: "Pre-stocked fridge" },
-            ].map((opt) => (
-              <label
-                key={opt.val}
-                className="inline-flex items-center gap-2 bg-[#0D0B09] border border-[#F5F0E8]/15 px-4 py-2.5 rounded-sm text-sm text-[#F5F0E8]/80 cursor-pointer hover:border-[#D4A853]/50 transition-colors has-[:checked]:border-[#D4A853] has-[:checked]:text-[#F5F0E8]"
-              >
-                <input
-                  type="checkbox"
-                  name="addOns"
-                  value={opt.val}
-                  defaultChecked={getAddOns().includes(opt.val)}
-                  className="accent-[#D4A853]"
-                />
-                {opt.label}
-              </label>
-            ))}
-          </div>
+          <label
+            className="inline-flex items-center gap-2.5 bg-[#0D0B09] border border-[#F5F0E8]/15 px-4 py-2.5 rounded-sm text-sm text-[#F5F0E8]/80 cursor-pointer hover:border-[#D4A853]/50 transition-colors has-[:checked]:border-[#D4A853] has-[:checked]:text-[#F5F0E8]"
+          >
+            <input
+              type="checkbox"
+              name="addOns"
+              value="wifi-starlink"
+              defaultChecked={getAddOns().includes("wifi-starlink")}
+              className="accent-[#D4A853]"
+            />
+            <span>Wi-Fi Starlink</span>
+            <span
+              aria-label="Paid add-on"
+              title="Paid add-on"
+              className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[#D4A853]/15 border border-[#D4A853]/40 text-[#D4A853]"
+            >
+              <DollarSign className="w-3 h-3" strokeWidth={2.5} />
+            </span>
+          </label>
         </div>
 
         <div className="md:col-span-2">
@@ -236,7 +235,7 @@ export default function BookingInquiryForm({
       </button>
 
       <p className="mt-4 text-xs text-center text-[#F5F0E8]/50">
-        Prefer to talk? Call Corbin directly at{" "}
+        Prefer to talk? Call the team directly at{" "}
         <a href="tel:9729656901" className="text-[#D4A853]">
           (972) 965-6901
         </a>

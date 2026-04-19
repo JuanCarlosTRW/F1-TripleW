@@ -72,13 +72,13 @@ const column3 = reviews.slice(8, 12);
 
 export default function Reviews() {
   return (
-    <section className="relative bg-charcoal w-full py-20 md:py-32 overflow-hidden">
+    <section className="relative bg-white w-full py-20 md:py-32 overflow-hidden">
       <div
         aria-hidden
-        className="absolute inset-0 opacity-20 pointer-events-none"
+        className="absolute inset-0 opacity-40 pointer-events-none"
         style={{
           background:
-            "radial-gradient(ellipse at 50% 50%, rgba(212,168,83,0.06) 0%, transparent 65%)",
+            "radial-gradient(ellipse at 50% 50%, rgba(212,168,83,0.08) 0%, transparent 65%)",
         }}
       />
       <div className="relative z-10 max-w-7xl mx-auto px-6">
@@ -90,26 +90,28 @@ export default function Reviews() {
           className="flex flex-col items-center justify-center max-w-[640px] mx-auto text-center"
         >
           <div className="flex justify-center">
-            <div className="border border-gold/30 text-gold py-1 px-4 rounded-full text-[11px] tracking-[0.25em] uppercase">
+            <div className="border border-[#D4A853]/40 text-[#8B6B1F] py-1 px-4 rounded-full text-[11px] tracking-[0.25em] uppercase">
               Testimonials
             </div>
           </div>
-          <h2 className="font-display text-cream text-4xl md:text-5xl mt-5 leading-tight">
+          <h2 className="font-display text-[#1A1510] text-4xl md:text-5xl mt-5 leading-tight">
             Don&apos;t Take Our Word for It.
           </h2>
         </motion.div>
 
         <div className="flex justify-center gap-6 mt-14 [mask-image:linear-gradient(to_bottom,transparent,black_15%,black_85%,transparent)] max-h-[640px] md:max-h-[720px] overflow-hidden">
-          <TestimonialsColumn testimonials={column1} duration={18} />
+          <TestimonialsColumn testimonials={column1} duration={18} variant="light" />
           <TestimonialsColumn
             testimonials={column2}
             className="hidden md:block"
             duration={22}
+            variant="light"
           />
           <TestimonialsColumn
             testimonials={column3}
             className="hidden lg:block"
             duration={20}
+            variant="light"
           />
         </div>
       </div>
