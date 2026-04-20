@@ -10,8 +10,8 @@ const InquirySchema = z
     name: z.string().trim().min(2, "Name is required").max(100),
     email: z.string().trim().email("Valid email required").max(200),
     phone: z.string().trim().min(7, "Phone is required").max(30),
-    arrivalDate: z.string().min(1, "Arrival date required"),
-    departureDate: z.string().min(1, "Departure date required"),
+    dateRangeStart: z.string().min(1, "Arrival date required"),
+    dateRangeEnd: z.string().min(1, "Departure date required"),
     groupSize: z.coerce.number().int().min(1).max(20),
     rvPreference: z.enum([
       "any",
@@ -19,15 +19,17 @@ const InquirySchema = z
       "fifth-wheel",
       "travel-trailer",
       "advise",
-    ]),
+    ]).default("any"),
     addOns: z.array(z.enum(["wifi-starlink"])).default([]),
     message: z.string().trim().max(2000).optional().default(""),
+    source: z.string().trim().max(64).optional().default(""),
     // Honeypot — must be empty. Bots fill it.
     website: z.string().max(0, "bot").optional().default(""),
   })
   .refine(
-    (data) => new Date(data.departureDate) > new Date(data.arrivalDate),
-    { message: "Departure must be after arrival", path: ["departureDate"] }
+    (data) =>
+      new Date(data.dateRangeEnd) > new Date(data.dateRangeStart),
+    { message: "Departure must be after arrival", path: ["dateRangeEnd"] }
   );
 
 export type InquiryValues = z.infer<typeof InquirySchema>;
@@ -39,6 +41,22 @@ export type InquiryState = {
   values?: Record<string, unknown>;
 };
 
+const MONTHS_LONG = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec",
+];
+
+function formatDate(iso: string) {
+  const [y, m, d] = iso.split("-").map(Number);
+  if (!y || !m || !d) return iso;
+  return `${MONTHS_LONG[m - 1]} ${d}, ${y}`;
+}
+
+function nightsBetween(startIso: string, endIso: string) {
+  const ms = new Date(endIso).getTime() - new Date(startIso).getTime();
+  return Math.max(1, Math.round(ms / (1000 * 60 * 60 * 24)));
+}
+
 export async function submitInquiry(
   _prev: InquiryState,
   formData: FormData
@@ -47,12 +65,13 @@ export async function submitInquiry(
     name: formData.get("name"),
     email: formData.get("email"),
     phone: formData.get("phone"),
-    arrivalDate: formData.get("arrivalDate"),
-    departureDate: formData.get("departureDate"),
+    dateRangeStart: formData.get("dateRangeStart"),
+    dateRangeEnd: formData.get("dateRangeEnd"),
     groupSize: formData.get("groupSize"),
-    rvPreference: formData.get("rvPreference"),
+    rvPreference: formData.get("rvPreference") || "any",
     addOns: formData.getAll("addOns"),
     message: formData.get("message"),
+    source: formData.get("source"),
     website: formData.get("website"),
   };
 
@@ -106,6 +125,10 @@ export async function submitInquiry(
     advise: "Advise me",
   };
 
+  const nights = nightsBetween(data.dateRangeStart, data.dateRangeEnd);
+  const dateRangeText = `${formatDate(data.dateRangeStart)} → ${formatDate(data.dateRangeEnd)} (${nights} nights)`;
+  const sourceLabel = data.source ? data.source : "direct";
+
   // 1. Owner notification
   try {
     const ownerEmail = await resend.emails.send({
@@ -120,11 +143,12 @@ Name:        ${data.name}
 Phone:       ${data.phone}
 Email:       ${data.email}
 
-Arrival:     ${data.arrivalDate}
-Departure:   ${data.departureDate}
+Dates:       ${dateRangeText}
 Group size:  ${data.groupSize}
 RV pref:     ${rvLabels[data.rvPreference]}
 Add-ons:     ${addOnsText}
+
+Lead source: ${sourceLabel}
 
 Message:
 ${data.message || "(none)"}
@@ -151,8 +175,6 @@ ${data.message || "(none)"}
   }
 
   // 2. Prospect auto-reply — only if we have a verified sending domain.
-  //    onboarding@resend.dev can't send to arbitrary recipients in sandbox mode,
-  //    so skip auto-reply when using the sandbox sender.
   const hasVerifiedDomain = !fromEmail.endsWith("@resend.dev");
   if (hasVerifiedDomain) {
     try {
@@ -166,12 +188,12 @@ Hi ${data.name.split(" ")[0]},
 
 Thanks for reaching out about race weekend. I got your details:
 
-• ${data.arrivalDate} → ${data.departureDate}
+• ${dateRangeText}
 • Group of ${data.groupSize}
 • RV preference: ${rvLabels[data.rvPreference]}
 ${data.addOns.length ? `• Add-ons: ${addOnsText}` : ""}
 
-I'll check F1 weekend availability for you and call you back at ${data.phone} within the next few hours (or by 9am tomorrow if you wrote in overnight).
+I'll check F1 weekend availability for you and call you back at ${data.phone} within 2 hours (or by 9am tomorrow if you wrote in overnight).
 
 If it's easier, feel free to call or text me directly at (972) 965-6901.
 
@@ -180,13 +202,13 @@ If it's easier, feel free to call or text me directly at (972) 965-6901.
 `.trim(),
       });
     } catch (err) {
-      // Non-blocking — the lead is already captured. Log only.
       console.error("Resend auto-reply exception:", err);
     }
   }
 
   return {
     ok: true,
-    message: "Thanks. The Triple W team will call you back within a few hours.",
+    message: `We'll call you within 2 hours at ${data.phone}.`,
+    values: { phone: data.phone },
   };
 }
