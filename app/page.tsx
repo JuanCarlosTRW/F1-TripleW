@@ -56,7 +56,7 @@ const desirePoints = [
     desc: "Step outside, grab your coffee, walk to the gates. No commute.",
   },
   {
-    title: "Six Minutes from Turn 6",
+    title: "Right at the track",
     desc: "Full kitchen, king beds, outdoor lounge. Your crew under one roof.",
   },
   {
@@ -82,7 +82,7 @@ const steps = [
     num: "03",
     icon: PartyPopper,
     title: "Walk to the Track",
-    desc: "Six minutes to Turn 6. Grill between sessions. Sleep through the night. Check out Monday \u2014 we handle cleanup.",
+    desc: "Minutes from the track. Grill between sessions. Sleep through the night. Check out Monday \u2014 we handle cleanup.",
   },
 ];
 
@@ -142,7 +142,7 @@ function heroCopy(src: string): HeroVariant {
           </span>
         </>
       ),
-      sub: "We deliver your RV to Premium Lot or Lot N, level it, deploy the slides, and install your generator if required. Walk six minutes to Turn 6.",
+      sub: "We deliver your RV to Premium Lot or Lot N, level it, deploy the slides, and install your generator if required. You\u2019re right at the track.",
     };
   }
   if (src === "hotel") {
@@ -154,7 +154,7 @@ function heroCopy(src: string): HeroVariant {
           <span className="text-[#D4A853]">$600/Night Austin Hotels.</span>
         </>
       ),
-      sub: "Your whole group under one roof, six minutes from Turn 6 \u2014 for less per person than a Holiday Inn 25 miles away. We deliver the RV. You just show up.",
+      sub: "Your whole group under one roof, at the track \u2014 for less per person than a Holiday Inn 25 miles away. We deliver the RV. You just show up.",
     };
   }
   return {
@@ -168,7 +168,7 @@ function heroCopy(src: string): HeroVariant {
         </span>
       </>
     ),
-    sub: "We tow your unit to Circuit of The Americas, level it, hook up power and water, and hand you the keys. You land Thursday with coffee in hand and walk to Turn 6 before first practice.",
+    sub: "We tow your unit to Circuit of The Americas, level it, hook up power and water, and hand you the keys. You land Thursday with coffee in hand and you\u2019re at the place before first practice.",
   };
 }
 
@@ -302,29 +302,8 @@ function HomeBody() {
         {/* ─── HERO ─── */}
         <Hero src={src} />
 
-        {/* ─── CREDIBILITY STRIP ─── */}
-        <section className="relative bg-[#0D0B09] border-t border-b border-[#D4A853]/8 py-10 md:py-12 px-6 overflow-hidden">
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 opacity-60"
-            style={{
-              background:
-                "radial-gradient(ellipse at 50% 50%, rgba(212,168,83,0.05) 0%, transparent 70%)",
-            }}
-          />
-          <div className="relative max-w-3xl mx-auto text-center">
-            <motion.p
-              {...fadeUp}
-              className="font-[var(--font-cormorant)] italic text-[#F5F0E8]/80 text-lg md:text-xl leading-relaxed"
-            >
-              Triple W isn&rsquo;t a marketplace. It&rsquo;s a 14-unit fleet out of Tyler, Texas,
-              run by Weston and the team. Every booking confirmed. Every delivery tracked.
-            </motion.p>
-          </div>
-        </section>
-
         {/* ─── HOW IT WORKS ─── */}
-        <section className="relative bg-[#0D0B09] py-20 md:py-28 px-6 overflow-hidden texture-grain">
+        <section className="relative border-t border-[#D4A853]/8 bg-[#0D0B09] py-20 md:py-28 px-6 overflow-hidden texture-grain">
           <div
             aria-hidden="true"
             className="glow-spot"
@@ -575,7 +554,7 @@ function HomeBody() {
                 </div>
                 <p className="mt-5 text-sm text-[#F5F0E8]/70 leading-relaxed">
                   A 4-night trip for 6 runs about <strong className="text-[#F5F0E8] font-medium">$133/person/night</strong>.
-                  Less than a downtown hotel &mdash; six minutes from Turn 6.
+                  Less than a downtown hotel &mdash; right at the track.
                 </p>
                 <PhoneLink
                   className="block mt-6 bg-[#D4A853] text-[#0D0B09] font-semibold uppercase tracking-wider px-6 py-3.5 rounded-sm hover:brightness-105 active:scale-[0.98] transition-all text-sm shadow-[0_8px_24px_rgba(212,168,83,0.2)] text-center"
@@ -608,7 +587,7 @@ function HomeBody() {
             >
               A 4-night trip for 6 runs about{" "}
               <span className="text-[#D4A853] font-semibold">$133 per person, per night</span>.
-              Less than a downtown hotel &mdash; six minutes from Turn 6.
+              Less than a downtown hotel &mdash; right at the track.
             </motion.p>
           </div>
         </section>

@@ -12,7 +12,107 @@ const initialState: InquiryState = { ok: false };
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 
+const successEase = [0.22, 1, 0.36, 1] as const;
+
+const successContainer = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.06, duration: 0.4 },
+  },
+};
+
+const successChild = {
+  hidden: { opacity: 0, y: 18 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: successEase },
+  },
+};
+
 type Variant = "primary" | "compact";
+
+function InquirySuccess({ phoneDisplay }: { phoneDisplay: string }) {
+  return (
+    <motion.div
+      id="request-a-quote"
+      data-form-container
+      role="status"
+      aria-live="polite"
+      variants={successContainer}
+      initial="hidden"
+      animate="show"
+      className="relative mx-auto max-w-xl overflow-hidden px-4 py-14 text-center"
+    >
+      <motion.div
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-8 h-44 w-44 -translate-x-1/2 rounded-full bg-[#D4A853]/12 blur-3xl"
+        initial={{ opacity: 0, scale: 0.7 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.9, ease: successEase }}
+      />
+      <motion.div variants={successChild} className="relative mb-10 flex justify-center">
+        <motion.div
+          className="absolute inset-0 m-auto h-24 w-24 rounded-full border border-[#D4A853]/25"
+          initial={{ scale: 0.6, opacity: 0 }}
+          animate={{ scale: [0.6, 1.12, 1], opacity: [0, 0.9, 0.35] }}
+          transition={{ duration: 1, times: [0, 0.55, 1], ease: successEase }}
+        />
+        <motion.div
+          className="relative flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full border border-[#D4A853]/45 bg-[#14110E] shadow-[0_0_48px_rgba(212,168,83,0.22)]"
+          initial={{ scale: 0.45, rotate: -8 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ type: "spring", stiffness: 280, damping: 20, delay: 0.08 }}
+        >
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" aria-hidden>
+            <motion.path
+              d="M5 13l4 4L19 7"
+              stroke="#D4A853"
+              strokeWidth="2.25"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              initial={{ pathLength: 0, opacity: 1 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 0.5, ease: successEase, delay: 0.35 }}
+            />
+          </svg>
+        </motion.div>
+      </motion.div>
+
+      <motion.h3
+        variants={successChild}
+        className="font-[var(--font-cormorant)] text-3xl text-[#F5F0E8] md:text-4xl"
+      >
+        You&rsquo;re on the list.
+      </motion.h3>
+      <motion.p
+        variants={successChild}
+        className="mt-4 text-base leading-relaxed text-[#F5F0E8]/82"
+      >
+        We&apos;ll call you within 2 hours at <span className="font-medium text-[#F5F0E8]">{phoneDisplay}</span>.
+      </motion.p>
+      <motion.p variants={successChild} className="mt-6 text-sm leading-relaxed text-[#F5F0E8]/65">
+        In a rush? Call{" "}
+        <PhoneLink className="text-[#D4A853] underline decoration-[#D4A853]/40 underline-offset-4 transition-colors hover:text-[#e0c26f]">
+          (972) 965-6901
+        </PhoneLink>{" "}
+        now.
+      </motion.p>
+
+      <motion.div
+        variants={successChild}
+        className="mx-auto mt-10 h-px max-w-[200px] bg-gradient-to-r from-transparent via-[#D4A853]/35 to-transparent"
+      />
+      <motion.p
+        variants={successChild}
+        className="mt-6 text-[11px] uppercase tracking-[0.2em] text-[#D4A853]/75"
+      >
+        Request received
+      </motion.p>
+    </motion.div>
+  );
+}
 
 function displayPhone(raw: string): string {
   const d = raw.replace(/\D/g, "");
@@ -66,40 +166,7 @@ export default function BookingInquiryForm({
   if (state.ok) {
     const phoneRaw = getStr(state.values, "phone");
     const shown = displayPhone(phoneRaw);
-    return (
-      <motion.div
-        id="request-a-quote"
-        data-form-container
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease }}
-        className="max-w-xl mx-auto text-center py-12"
-      >
-        <div className="inline-flex w-14 h-14 rounded-full bg-[#D4A853]/15 border border-[#D4A853] items-center justify-center mb-6">
-          <svg
-            width="28"
-            height="28"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#D4A853"
-            strokeWidth="2"
-          >
-            <path d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
-        <h3 className="font-[var(--font-cormorant)] text-3xl text-[#F5F0E8]">Got it.</h3>
-        <p className="mt-4 text-base text-[#F5F0E8]/80 leading-relaxed">
-          We&apos;ll call you within 2 hours at {shown}.
-        </p>
-        <p className="mt-4 text-sm text-[#F5F0E8]/70 leading-relaxed">
-          In a rush? Call{" "}
-          <PhoneLink className="text-[#D4A853] hover:underline underline-offset-4">
-            (972) 965-6901
-          </PhoneLink>{" "}
-          now.
-        </p>
-      </motion.div>
-    );
+    return <InquirySuccess phoneDisplay={shown} />;
   }
 
   const vals = state.values;
