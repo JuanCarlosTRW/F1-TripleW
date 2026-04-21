@@ -6,6 +6,8 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { Phone, Truck, PartyPopper } from "lucide-react";
+import SiteHeader from "@/components/SiteHeader";
+import PhoneLink from "@/components/PhoneLink";
 import PremiumImageGallery, { type GalleryItem } from "@/components/ui/PremiumImageGallery";
 import Reviews from "@/components/Reviews";
 import IntroAnimation from "@/components/ui/IntroAnimation";
@@ -217,7 +219,7 @@ function Hero({ src }: { src: string }) {
       </div>
       <div className="absolute inset-0 z-[1] bg-gradient-to-b from-[#0D0B09]/50 via-transparent to-[#0D0B09]/70" />
 
-      <div className="relative z-[2] max-w-4xl mx-auto pt-36 md:pt-28 pb-10">
+      <div className="relative z-[2] max-w-4xl mx-auto pt-32 md:pt-36 pb-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -251,12 +253,11 @@ function Hero({ src }: { src: string }) {
           transition={{ duration: 0.7, ease, delay: 0.6 }}
           className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <a
-            href="tel:9729656901"
-            className="w-full sm:w-auto bg-[#D4A853] text-[#0D0B09] font-semibold uppercase tracking-wider px-8 py-4 rounded-sm hover:brightness-105 active:scale-[0.98] transition-all text-sm shadow-[0_10px_40px_rgba(212,168,83,0.25)]"
+          <PhoneLink
+            className="w-full sm:w-auto bg-[#D4A853] text-[#0D0B09] font-semibold uppercase tracking-wider px-8 py-4 rounded-sm hover:brightness-105 active:scale-[0.98] transition-all text-sm shadow-[0_10px_40px_rgba(212,168,83,0.25)] text-center"
           >
             Call (972) 965-6901 &middot; Reserve Now
-          </a>
+          </PhoneLink>
           <a
             href="#request-a-quote"
             className="w-full sm:w-auto border border-[#D4A853]/50 text-[#D4A853] font-semibold uppercase tracking-wider px-8 py-4 rounded-sm hover:bg-[#D4A853]/10 hover:border-[#D4A853] active:scale-[0.98] transition-all text-sm"
@@ -292,32 +293,12 @@ function HomeBody() {
 
   return (
     <>
-      <UrgencyStrip />
+      <div className="fixed top-0 left-0 right-0 z-50 flex flex-col [padding-top:env(safe-area-inset-top)]">
+        <UrgencyStrip layout="stacked" />
+        <SiteHeader layout="stacked" />
+      </div>
 
       <main className="font-[var(--font-outfit)] bg-[#0D0B09] text-[#F5F0E8]">
-        {/* ─── NAVBAR ─── */}
-        <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-12 py-4 bg-[#0D0B09]/85 backdrop-blur-xl border-b border-[#D4A853]/8 mt-[36px] md:mt-[32px]">
-          <span className="font-[var(--font-cormorant)] text-xl md:text-2xl font-medium text-[#D4A853] tracking-wide">
-            Triple W Rentals
-          </span>
-          <div className="flex items-center gap-4 md:gap-6">
-            <a
-              href="#request-a-quote"
-              className="hidden md:inline-block text-sm text-[#F5F0E8]/60 hover:text-[#D4A853] transition-colors tracking-wide"
-            >
-              Request Quote
-            </a>
-            <a
-              href="tel:9729656901"
-              className="inline-flex items-center gap-2 text-sm text-[#0D0B09] bg-[#D4A853] hover:brightness-105 active:scale-[0.98] transition-all tracking-wide font-semibold px-4 py-2 rounded-sm"
-            >
-              <Phone className="w-3.5 h-3.5" strokeWidth={2.5} />
-              <span className="hidden sm:inline">(972) 965-6901</span>
-              <span className="sm:hidden">Call</span>
-            </a>
-          </div>
-        </nav>
-
         {/* ─── HERO ─── */}
         <Hero src={src} />
 
@@ -581,7 +562,7 @@ function HomeBody() {
 
               <motion.div
                 {...fadeUpDelay(0.15)}
-                className="bg-[#1A1510] border border-[#D4A853]/25 rounded-lg p-8 text-center md:sticky md:top-24"
+                className="bg-[#1A1510] border border-[#D4A853]/25 rounded-lg p-8 text-center md:sticky md:top-32"
                 style={{ boxShadow: "var(--shadow-card-gold)" }}
               >
                 <span className="type-eyebrow text-[#D4A853]/80 block mb-4">Weekend Packages</span>
@@ -596,12 +577,11 @@ function HomeBody() {
                   A 4-night trip for 6 runs about <strong className="text-[#F5F0E8] font-medium">$133/person/night</strong>.
                   Less than a downtown hotel &mdash; six minutes from Turn 6.
                 </p>
-                <a
-                  href="tel:9729656901"
-                  className="block mt-6 bg-[#D4A853] text-[#0D0B09] font-semibold uppercase tracking-wider px-6 py-3.5 rounded-sm hover:brightness-105 active:scale-[0.98] transition-all text-sm shadow-[0_8px_24px_rgba(212,168,83,0.2)]"
+                <PhoneLink
+                  className="block mt-6 bg-[#D4A853] text-[#0D0B09] font-semibold uppercase tracking-wider px-6 py-3.5 rounded-sm hover:brightness-105 active:scale-[0.98] transition-all text-sm shadow-[0_8px_24px_rgba(212,168,83,0.2)] text-center"
                 >
                   Call for a Quote
-                </a>
+                </PhoneLink>
                 <div className="mt-3 text-xs text-[#F5F0E8]/50">
                   (972) 965-6901 &nbsp;&middot;&nbsp;{" "}
                   <a
@@ -748,12 +728,11 @@ function HomeBody() {
               {...fadeUpDelay(0.2)}
               className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
             >
-              <a
-                href="tel:9729656901"
-                className="w-full sm:w-auto bg-[#D4A853] text-[#0D0B09] font-semibold uppercase tracking-wider px-8 py-4 rounded-sm hover:brightness-105 active:scale-[0.98] transition-all text-sm shadow-[0_10px_40px_rgba(212,168,83,0.25)]"
+              <PhoneLink
+                className="w-full sm:w-auto bg-[#D4A853] text-[#0D0B09] font-semibold uppercase tracking-wider px-8 py-4 rounded-sm hover:brightness-105 active:scale-[0.98] transition-all text-sm shadow-[0_10px_40px_rgba(212,168,83,0.25)] text-center"
               >
                 Call the Team &middot; (972) 965-6901
-              </a>
+              </PhoneLink>
               <a
                 href="#request-a-quote"
                 className="text-sm text-[#D4A853]/80 hover:text-[#D4A853] transition-colors underline underline-offset-4"
@@ -776,7 +755,7 @@ function HomeBody() {
           <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-[#F5F0E8]/45 tracking-wide">
             <span>&copy; 2026 Triple W Rentals &middot; Tyler, Texas</span>
             <span className="flex gap-3">
-              <a href="tel:9729656901" className="hover:text-[#D4A853] transition-colors">(972) 965-6901</a>
+              <PhoneLink className="hover:text-[#D4A853] transition-colors">(972) 965-6901</PhoneLink>
               <span>&middot;</span>
               <a href="mailto:triplewrentals@gmail.com" className="hover:text-[#D4A853] transition-colors">triplewrentals@gmail.com</a>
             </span>

@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
 import { useEffect, useState } from "react";
+import PhoneLink from "@/components/PhoneLink";
 
 export default function StickyMobileCTA() {
   const [visible, setVisible] = useState(false);
@@ -45,13 +46,10 @@ export default function StickyMobileCTA() {
           className="md:hidden fixed bottom-0 left-0 right-0 z-[55] flex shadow-[0_-8px_28px_rgba(0,0,0,0.45)]"
           style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
         >
-          <a
-            href="tel:9729656901"
-            className="flex-1 basis-[70%] flex items-center justify-center gap-2 bg-[#D4A853] text-[#0D0B09] font-semibold text-[13px] py-4 tracking-wide active:brightness-95"
-          >
+          <PhoneLink className="flex-1 basis-[70%] flex items-center justify-center gap-2 bg-[#D4A853] text-[#0D0B09] font-semibold text-[13px] py-4 tracking-wide active:brightness-95">
             <Phone className="w-4 h-4" strokeWidth={2.5} />
             <span>Call (972) 965-6901</span>
-          </a>
+          </PhoneLink>
           <a
             href="#request-a-quote"
             className="flex-1 basis-[30%] flex items-center justify-center gap-1.5 bg-[#1A1510] text-[#D4A853] font-semibold text-[13px] py-4 tracking-wide uppercase active:brightness-110"

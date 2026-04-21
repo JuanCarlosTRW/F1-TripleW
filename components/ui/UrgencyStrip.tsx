@@ -6,7 +6,12 @@ import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "triplew:urgency-dismissed";
 
-export default function UrgencyStrip() {
+type UrgencyStripProps = {
+  /** `stacked` = not fixed; parent provides the fixed shell. */
+  layout?: "overlay" | "stacked";
+};
+
+export default function UrgencyStrip({ layout = "overlay" }: UrgencyStripProps) {
   const [mounted, setMounted] = useState(false);
   const [visible, setVisible] = useState(true);
 
@@ -38,7 +43,11 @@ export default function UrgencyStrip() {
           animate={{ height: "auto", opacity: 1 }}
           exit={{ height: 0, opacity: 0 }}
           transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed top-0 left-0 right-0 z-[60] overflow-hidden bg-gradient-to-r from-[#D4A853] via-[#E0B964] to-[#D4A853] border-b border-[#0D0B09]/10"
+          className={
+            layout === "stacked"
+              ? "relative z-20 w-full overflow-hidden bg-gradient-to-r from-[#D4A853] via-[#E0B964] to-[#D4A853] border-b border-[#0D0B09]/10"
+              : "fixed top-0 left-0 right-0 z-[60] overflow-hidden bg-gradient-to-r from-[#D4A853] via-[#E0B964] to-[#D4A853] border-b border-[#0D0B09]/10"
+          }
         >
           <div className="relative max-w-7xl mx-auto px-6 py-2 flex items-center justify-center gap-3 text-[#0D0B09]">
             <span className="text-[11px] md:text-xs font-medium tracking-wide text-center">
