@@ -8,7 +8,9 @@ import {
   type InquiryParsed,
 } from "@/lib/inquiry-validate";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+/** Used only when INQUIRY_TO_EMAIL is unset (e.g. missing Vercel env). */
+const DEFAULT_INQUIRY_TO_EMAIL =
+  "jcpl-07@hotmail.com,triplewrentals@gmail.com";
 
 function parseToAddresses(raw: string | undefined): string[] {
   if (!raw?.trim()) return [];
@@ -96,11 +98,13 @@ export async function submitInquiry(
     return { ok: true, message: "", values: { ...values, phone: data.phone } };
   }
 
-  const toList = parseToAddresses(process.env.INQUIRY_TO_EMAIL);
+  const toList = parseToAddresses(
+    process.env.INQUIRY_TO_EMAIL?.trim() || DEFAULT_INQUIRY_TO_EMAIL
+  );
   const fromEmail = process.env.RESEND_FROM_EMAIL ?? "onboarding@resend.dev";
 
   if (toList.length === 0) {
-    console.error("INQUIRY_TO_EMAIL env var is missing or empty");
+    console.error("INQUIRY_TO_EMAIL resolved to no addresses");
     return {
       ok: false,
       message:
@@ -108,6 +112,19 @@ export async function submitInquiry(
       values,
     };
   }
+
+  const apiKey = process.env.RESEND_API_KEY?.trim();
+  if (!apiKey) {
+    console.error("RESEND_API_KEY is missing");
+    return {
+      ok: false,
+      message:
+        "Something went wrong. Please call us directly at (972) 965-6901 — we'll take care of you.",
+      values,
+    };
+  }
+
+  const resend = new Resend(apiKey);
 
   const emailBody = buildOwnerEmailBody(data);
 

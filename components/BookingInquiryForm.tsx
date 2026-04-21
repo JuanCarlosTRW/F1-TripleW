@@ -176,10 +176,7 @@ export default function BookingInquiryForm({
     !state.errors;
 
   return (
-    <motion.form
-      id="request-a-quote"
-      data-form-container
-      action={formAction}
+    <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
@@ -189,6 +186,18 @@ export default function BookingInquiryForm({
       } mx-auto bg-[#1A1510] border border-[#D4A853]/20 rounded-lg p-6 md:p-10 relative`}
       style={{ boxShadow: "var(--shadow-card-gold)" }}
     >
+      {/*
+        Native <form> is required for Next.js Server Actions. motion.form can prevent
+        the action from running reliably. noValidate avoids silent browser validation
+        blocking submit before the server can return field errors.
+      */}
+      <form
+        id="request-a-quote"
+        data-form-container
+        action={formAction}
+        noValidate
+        className="relative"
+      >
       <div className="text-center mb-8">
         <span className="block text-xs uppercase tracking-[0.2em] text-[#D4A853] mb-3">
           Request a Callback
@@ -430,7 +439,8 @@ export default function BookingInquiryForm({
         </PhoneLink>{" "}
         — Weston answers directly.
       </p>
-    </motion.form>
+      </form>
+    </motion.div>
   );
 }
 
