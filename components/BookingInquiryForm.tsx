@@ -87,7 +87,7 @@ export default function BookingInquiryForm({
             <path d="M5 13l4 4L19 7" />
           </svg>
         </div>
-        <h3 className="font-[var(--font-cormorant)] text-3xl text-[#F5F0E8]">✓ Got it.</h3>
+        <h3 className="font-[var(--font-cormorant)] text-3xl text-[#F5F0E8]">Got it.</h3>
         <p className="mt-4 text-base text-[#F5F0E8]/80 leading-relaxed">
           We&apos;ll call you within 2 hours at {shown}.
         </p>

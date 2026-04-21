@@ -51,7 +51,7 @@ export default function UrgencyStrip({ layout = "overlay" }: UrgencyStripProps) 
         >
           <div className="relative max-w-7xl mx-auto px-6 py-2 flex items-center justify-center gap-3 text-[#0D0B09]">
             <span className="text-[11px] md:text-xs font-medium tracking-wide text-center">
-              🔥 Only 14 units · Race weekend books out by August ·{" "}
+              Only 14 units · Race weekend books out by August ·{" "}
               <a
                 href="#request-a-quote"
                 className="font-bold underline underline-offset-2 hover:no-underline"
