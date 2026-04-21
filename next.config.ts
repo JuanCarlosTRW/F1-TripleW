@@ -13,11 +13,6 @@ const nextConfig: NextConfig = {
         hostname: "video.wixstatic.com",
         pathname: "/video/**",
       },
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-        pathname: "/**",
-      },
     ],
   },
 };
