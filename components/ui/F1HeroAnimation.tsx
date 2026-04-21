@@ -132,9 +132,6 @@ export default function F1HeroAnimation() {
               <circle cx="360" cy="110" r="17" fill="#1a1a1a" />
               <circle cx="360" cy="110" r="7" fill="#444" />
               <circle cx="360" cy="110" r="3" fill="#e10600" />
-              <text x="240" y="100" fontFamily="Arial Black" fontSize="24" fontWeight="900" fill="#fff">
-                44
-              </text>
             </svg>
           </div>
         </div>

@@ -5,10 +5,10 @@ import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-import { Phone, Truck, PartyPopper } from "lucide-react";
+import { Phone, Truck, Flag } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
 import PhoneLink from "@/components/PhoneLink";
-import PremiumImageGallery, { type GalleryItem } from "@/components/ui/PremiumImageGallery";
+import FleetImageGrid from "@/components/FleetImageGrid";
 import Reviews from "@/components/Reviews";
 import IntroAnimation from "@/components/ui/IntroAnimation";
 import BookingInquiryForm from "@/components/BookingInquiryForm";
@@ -80,31 +80,19 @@ const steps = [
   },
   {
     num: "03",
-    icon: PartyPopper,
+    icon: Flag,
     title: "Walk to the Track",
     desc: "Six minutes to Turn 6. Grill between sessions. Sleep through the night. Check out Monday \u2014 we handle cleanup.",
   },
 ];
 
-const FLEET_MEDIA: GalleryItem[] = [
-  {
-    type: "video",
-    src: "https://video.wixstatic.com/video/62f926_8ff76b0555c04f32acb69a68ef4633af/480p/mp4/file.mp4",
-    poster: "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp",
-  },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_72984415dae543f5a93113defc3976a4~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_6081972934c541bf9b8aaa703b74f585~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_69694ee7940c4fe4985b984e4067343e~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_26b6714d0a0d4937b73e45668ce44bd9~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_d5db0126f18a4cc0884f4308913f9362~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_e4c918f468b243d89371fa40f6424fce~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_b833defbf81b455991760bc1f4c878ff~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_1ba23ff81e904ae2b5feae14ed4754fb~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_cf6fafa3b7184f93b149c98ee96c783f~mv2.webp" },
-];
-
 const DREAM_IMAGE = "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp";
+
+const HOTEL_CHAOS_IMAGE =
+  "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=900&q=80&auto=format&fit=crop";
+
+const F1_STRIP_IMAGE =
+  "https://images.unsplash.com/photo-1553440569-bcc63803a83d?w=1600&q=80&auto=format&fit=crop";
 
 const valueStack: Array<[string, string]> = [
   ["Premium RV (Class A, Fifth Wheel, Travel Trailer \u2014 sleeps 4\u201312)", "From $200/night"],
@@ -224,7 +212,7 @@ function Hero({ src }: { src: string }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease }}
-          className="inline-block border border-[#D4A853]/40 rounded-full px-4 py-1.5 mb-8"
+          className="inline-block rounded-full border border-[#D4A853]/50 bg-[#D4A853]/5 px-4 py-1.5 mb-8 backdrop-blur-sm"
         >
           <span className="type-eyebrow text-[#D4A853]">{copy.eyebrow}</span>
         </motion.div>
@@ -302,6 +290,20 @@ function HomeBody() {
         {/* ─── HERO ─── */}
         <Hero src={src} />
 
+        <section className="relative w-full overflow-hidden border-y border-[#D4A853]/15 bg-[#0D0B09]">
+          <div className="relative aspect-[21/9] max-h-[220px] md:max-h-[280px] w-full">
+            <Image
+              src={F1_STRIP_IMAGE}
+              alt="Race circuit atmosphere"
+              fill
+              className="object-cover opacity-90"
+              sizes="100vw"
+              priority={false}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0D0B09] via-[#0D0B09]/55 to-[#0D0B09]/25" />
+          </div>
+        </section>
+
         {/* ─── CREDIBILITY STRIP ─── */}
         <section className="relative bg-[#0D0B09] border-t border-b border-[#D4A853]/8 py-10 md:py-12 px-6 overflow-hidden">
           <div
@@ -347,7 +349,7 @@ function HomeBody() {
               </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-3 gap-5 md:gap-6">
+            <div className="grid md:grid-cols-3 gap-5 md:gap-6 md:items-stretch">
               {steps.map((s, i) => {
                 const Icon = s.icon;
                 return (
@@ -357,18 +359,20 @@ function HomeBody() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, amount: 0.2 }}
                     transition={{ duration: 0.5, ease, delay: i * 0.1 }}
-                    className="relative bg-[#1A1510]/60 border border-[#D4A853]/12 rounded-lg p-7 md:p-8 hover:border-[#D4A853]/30 transition-colors"
+                    className="relative flex h-full min-h-[280px] flex-col bg-[#1A1510]/60 border border-[#D4A853]/12 rounded-lg p-7 md:p-8 hover:border-[#D4A853]/30 transition-colors"
                   >
-                    <div className="flex items-center justify-between mb-6">
+                    <div className="flex shrink-0 items-center justify-between pb-6">
                       <span className="font-[var(--font-cormorant)] text-4xl text-[#D4A853]/30 leading-none">
                         {s.num}
                       </span>
-                      <div className="w-11 h-11 rounded-full bg-[#D4A853]/10 border border-[#D4A853]/40 flex items-center justify-center">
-                        <Icon className="w-5 h-5 text-[#D4A853]" />
+                      <div className="flex h-11 w-11 items-center justify-center rounded-full border border-[#D4A853]/40 bg-[#D4A853]/10">
+                        <Icon className="h-5 w-5 text-[#D4A853]" />
                       </div>
                     </div>
-                    <h3 className="type-h3 text-[#F5F0E8] mb-2">{s.title}</h3>
-                    <p className="type-body-sm text-[#F5F0E8]/65">{s.desc}</p>
+                    <div className="flex min-h-0 flex-1 flex-col justify-center gap-2">
+                      <h3 className="type-h3 shrink-0 text-[#F5F0E8]">{s.title}</h3>
+                      <p className="type-body-sm leading-relaxed text-[#F5F0E8]/70">{s.desc}</p>
+                    </div>
                   </motion.div>
                 );
               })}
@@ -412,25 +416,37 @@ function HomeBody() {
               <h2 className="type-h2 text-[#F5F0E8]">Two Very Different Trips.</h2>
             </motion.div>
 
-            <div className="grid md:grid-cols-2 gap-5 md:gap-6">
+            <div className="grid md:grid-cols-2 gap-5 md:gap-6 md:items-stretch">
               <motion.div
                 {...fadeUpDelay(0.1)}
-                className="bg-[#1A1510]/60 backdrop-blur-sm border border-[#F5F0E8]/5 rounded-lg p-7 md:p-8"
+                className="flex h-full flex-col overflow-hidden rounded-lg border border-[#F5F0E8]/10 bg-[#1A1510]/80 backdrop-blur-sm"
               >
-                <span className="type-eyebrow text-[#A8A29E]/80 block mb-5">Without a Plan</span>
-                <ul className="space-y-5">
-                  {painPoints.map((p, i) => (
-                    <li key={i} className="border-l-2 border-[#8B4513]/30 pl-4">
-                      <h3 className="text-[15px] font-medium text-[#F5F0E8]/90">{p.title}</h3>
-                      <p className="mt-1 text-sm font-light text-[#F5F0E8]/55 leading-relaxed">{p.desc}</p>
-                    </li>
-                  ))}
-                </ul>
+                <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden">
+                  <Image
+                    src={HOTEL_CHAOS_IMAGE}
+                    alt="Hotel and travel stress during a busy weekend"
+                    fill
+                    className="object-cover grayscale contrast-110"
+                    sizes="(max-width:768px) 100vw, 50vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0D0B09]/85 via-red-950/25 to-amber-950/15" />
+                </div>
+                <div className="p-7 md:p-8 flex-1 flex flex-col">
+                  <span className="type-eyebrow text-[#F5EDE0]/80 block mb-5">Without a Plan</span>
+                  <ul className="space-y-5">
+                    {painPoints.map((p, i) => (
+                      <li key={i} className="border-l-2 border-[#B85A28]/50 pl-4">
+                        <h3 className="text-[15px] font-medium text-[#F5EDE0]">{p.title}</h3>
+                        <p className="mt-1 text-sm font-light text-[#F5EDE0]/70 leading-relaxed">{p.desc}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </motion.div>
 
               <motion.div
                 {...fadeUpDelay(0.2)}
-                className="bg-[#1A1510] border border-[#D4A853]/20 rounded-lg p-7 md:p-8 overflow-hidden relative"
+                className="flex h-full flex-col bg-[#1A1510] border border-[#D4A853]/20 rounded-lg p-7 md:p-8 overflow-hidden relative"
                 style={{ boxShadow: "var(--shadow-card-gold)" }}
               >
                 <div
@@ -475,14 +491,7 @@ function HomeBody() {
               </p>
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.6, ease }}
-            >
-              <PremiumImageGallery items={FLEET_MEDIA} />
-            </motion.div>
+            <FleetImageGrid />
 
             <motion.div {...fadeUpDelay(0.1)} className="mt-10 text-center">
               <a
@@ -543,17 +552,22 @@ function HomeBody() {
             <div className="grid md:grid-cols-[1.2fr_1fr] gap-6 md:gap-10 items-start">
               <motion.div
                 {...fadeUpDelay(0.1)}
-                className="bg-[#1A1510]/60 border border-[#F5F0E8]/8 rounded-lg p-7 md:p-9"
+                className="rounded-lg border border-[#D4A853]/25 bg-[#14110E] p-7 md:p-9 shadow-[inset_0_1px_0_rgba(212,168,83,0.08)]"
               >
-                <ul className="space-y-0 divide-y divide-[#D4A853]/8">
+                <ul className="space-y-6">
                   {valueStack.map(([text, value], i) => (
-                    <li key={i} className="flex items-start gap-4 py-4 first:pt-0 last:pb-0">
-                      <span className="mt-2 w-1 h-1 rounded-full bg-[#D4A853] shrink-0" />
-                      <div className="flex-1 flex flex-col md:flex-row md:items-baseline justify-between gap-1 md:gap-6">
-                        <span className="text-[15px] font-light leading-relaxed text-[#F5F0E8]/90">{text}</span>
-                        <span className="text-xs text-[#D4A853]/80 shrink-0 font-medium tracking-wider uppercase">
+                    <li key={i} className="flex gap-4">
+                      <span
+                        className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#D4A853]/50 bg-[#D4A853]/15 text-[11px] font-bold text-[#D4A853]"
+                        aria-hidden
+                      >
+                        ✓
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-[15px] font-semibold leading-snug text-[#F5EDE0]">{text}</p>
+                        <p className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-[#D4A853]">
                           {value}
-                        </span>
+                        </p>
                       </div>
                     </li>
                   ))}
@@ -562,36 +576,34 @@ function HomeBody() {
 
               <motion.div
                 {...fadeUpDelay(0.15)}
-                className="bg-[#1A1510] border border-[#D4A853]/25 rounded-lg p-8 text-center md:sticky md:top-32"
-                style={{ boxShadow: "var(--shadow-card-gold)" }}
+                className="rounded-lg border border-[#D4A853]/35 bg-[#12100C] p-8 text-center md:sticky md:top-32"
+                style={{ boxShadow: "0 0 0 1px rgba(212,168,83,0.12), 0 24px 60px rgba(0,0,0,0.45)" }}
               >
-                <span className="type-eyebrow text-[#D4A853]/80 block mb-4">Weekend Packages</span>
-                <div className="font-[var(--font-cormorant)] leading-none">
-                  <span className="text-[#F5F0E8]/80 text-xl">From</span>
-                  <div className="mt-1">
-                    <span className="text-6xl text-[#D4A853]">$200</span>
-                    <span className="text-xl text-[#F5F0E8]/60">/night</span>
-                  </div>
+                <span className="type-eyebrow mb-3 block text-[#D4A853] tracking-[0.25em]">From</span>
+                <div className="font-[var(--font-cormorant)] leading-none text-[#F5EDE0]">
+                  <span className="block text-6xl md:text-7xl font-medium text-[#F5EDE0]">$200</span>
+                  <span className="mt-2 block font-[var(--font-cormorant)] text-xl italic text-[#F5EDE0]/65">
+                    /night
+                  </span>
                 </div>
-                <p className="mt-5 text-sm text-[#F5F0E8]/70 leading-relaxed">
-                  A 4-night trip for 6 runs about <strong className="text-[#F5F0E8] font-medium">$133/person/night</strong>.
-                  Less than a downtown hotel &mdash; six minutes from Turn 6.
+                <p className="mt-6 text-sm leading-relaxed text-[#F5EDE0]/85">
+                  <span className="font-semibold text-[#F5EDE0]">$133/person/night</span> for 6 on a 4-night
+                  stay.
+                  <br />
+                  <span className="text-[#F5EDE0]/75">Less than a downtown hotel — six minutes from Turn 6.</span>
                 </p>
-                <PhoneLink
-                  className="block mt-6 bg-[#D4A853] text-[#0D0B09] font-semibold uppercase tracking-wider px-6 py-3.5 rounded-sm hover:brightness-105 active:scale-[0.98] transition-all text-sm shadow-[0_8px_24px_rgba(212,168,83,0.2)] text-center"
-                >
-                  Call for a Quote
+                <PhoneLink className="mt-8 block w-full rounded-sm bg-[#D4A853] py-3.5 text-center text-sm font-semibold uppercase tracking-wider text-[#0D0B09] shadow-[0_10px_30px_rgba(212,168,83,0.25)] transition-all hover:brightness-105 active:scale-[0.99]">
+                  Call the Team · (972) 965-6901
                 </PhoneLink>
-                <div className="mt-3 text-xs text-[#F5F0E8]/50">
-                  (972) 965-6901 &nbsp;&middot;&nbsp;{" "}
+                <div className="mt-4 text-xs text-[#F5EDE0]/55">
                   <a
                     href="#request-a-quote"
-                    className="text-[#D4A853]/80 hover:text-[#D4A853] transition-colors underline underline-offset-4"
+                    className="text-[#D4A853] underline underline-offset-4 hover:text-[#e0b964]"
                   >
-                    request online
+                    Request online
                   </a>
                 </div>
-                <p className="mt-5 text-xs text-[#F5F0E8]/45 leading-relaxed">
+                <p className="mt-6 text-xs italic leading-relaxed text-[#F5EDE0]/50">
                   Race weekend books out by August. 14 units.
                 </p>
               </motion.div>
@@ -600,16 +612,31 @@ function HomeBody() {
         </section>
 
         {/* ─── PRICING ANCHOR CALLOUT ─── */}
-        <section className="relative bg-[#0D0B09] border-t border-[#D4A853]/8 py-8 md:py-10 px-6 overflow-hidden">
-          <div className="relative max-w-3xl mx-auto text-center">
-            <motion.p
+        <section className="relative border-y border-[#D4A853]/25 bg-[#0D0B09] py-20 md:py-28 px-6 overflow-hidden">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-70"
+            style={{
+              background: "radial-gradient(ellipse at 50% 40%, rgba(212,168,83,0.14), transparent 55%)",
+            }}
+          />
+          <div className="relative z-[1] mx-auto max-w-2xl text-center">
+            <motion.div
               {...fadeUp}
-              className="text-[#F5F0E8]/80 text-sm md:text-base leading-relaxed"
+              className="rounded-2xl border border-[#D4A853]/30 bg-[#14110E]/90 px-8 py-12 md:px-14 md:py-16 shadow-[0_24px_80px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(212,168,83,0.12)]"
             >
-              A 4-night trip for 6 runs about{" "}
-              <span className="text-[#D4A853] font-semibold">$133 per person, per night</span>.
-              Less than a downtown hotel &mdash; six minutes from Turn 6.
-            </motion.p>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.35em] text-[#D4A853]">The math</p>
+              <p className="mt-6 font-[var(--font-cormorant)] text-5xl md:text-6xl text-[#D4A853] leading-none">
+                $133 per person, per night
+              </p>
+              <p className="mt-6 mx-auto max-w-[560px] text-base leading-relaxed text-[#F5EDE0]/90">
+                A 4-night trip for 6 people. Less than a downtown Austin hotel — and six minutes from Turn 6
+                instead of 25 miles out.
+              </p>
+              <PhoneLink className="mt-10 inline-flex w-full sm:w-auto justify-center rounded-sm bg-[#D4A853] px-10 py-4 text-sm font-semibold uppercase tracking-wider text-[#0D0B09] shadow-[0_12px_40px_rgba(212,168,83,0.3)] transition-all hover:brightness-105">
+                Call the Team · (972) 965-6901
+              </PhoneLink>
+            </motion.div>
           </div>
         </section>
 
@@ -651,8 +678,11 @@ function HomeBody() {
                 "radial-gradient(ellipse at 50% 50%, rgba(212,168,83,0.08) 0%, transparent 70%)",
             }}
           />
-          <div className="relative z-[1] max-w-5xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+          <div className="relative z-[1] max-w-5xl mx-auto text-center">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.3em] text-[#D4A853]/90 mb-10">
+              The numbers
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-0 md:divide-x md:divide-[#D4A853]/20">
               {trustPoints.map((tp, i) => (
                 <motion.div
                   key={i}
@@ -660,7 +690,7 @@ function HomeBody() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.4, ease, delay: i * 0.07 }}
-                  className="text-center"
+                  className="text-center px-2 md:px-6"
                 >
                   <div className="font-[var(--font-cormorant)] text-3xl md:text-4xl text-[#D4A853] leading-none">
                     {tp.value}
@@ -673,7 +703,7 @@ function HomeBody() {
         </section>
 
         {/* ─── FINAL CTA ─── */}
-        <section className="relative bg-[#0D0B09] py-20 md:py-28 px-6 overflow-hidden texture-grain">
+        <section className="relative bg-[#0D0B09] py-24 md:py-32 px-6 overflow-hidden texture-grain">
           <div
             aria-hidden="true"
             className="absolute inset-0"
@@ -683,69 +713,77 @@ function HomeBody() {
             aria-hidden="true"
             className="glow-spot"
             style={{
-              width: "600px",
-              height: "500px",
-              top: "20%",
+              width: "720px",
+              height: "560px",
+              top: "15%",
               left: "50%",
               transform: "translateX(-50%)",
-              background: "radial-gradient(ellipse, #D4A853 0%, transparent 65%)",
-              opacity: 0.22,
+              background: "radial-gradient(ellipse, #D4A853 0%, transparent 62%)",
+              opacity: 0.2,
             }}
           />
           <div
             aria-hidden="true"
             className="glow-spot"
             style={{
-              width: "400px",
-              height: "300px",
-              bottom: "-50px",
-              right: "-100px",
+              width: "420px",
+              height: "320px",
+              bottom: "-80px",
+              right: "-120px",
               background: "radial-gradient(circle, #A85A28 0%, transparent 70%)",
-              opacity: 0.2,
+              opacity: 0.16,
             }}
           />
-          <div className="relative z-[1] max-w-3xl mx-auto text-center">
-            <motion.span
+          <div className="relative z-[1] mx-auto max-w-3xl text-center">
+            <motion.p
               {...fadeUp}
-              animate={{ opacity: [0.7, 1, 0.7] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="inline-block type-eyebrow text-[#D4A853] border border-[#D4A853]/30 rounded-full px-4 py-1.5 mb-8"
+              className="text-[11px] font-semibold uppercase tracking-[0.32em] text-[#D4A853]"
             >
-              Only 14 Units &middot; Books Out by August
-            </motion.span>
+              Only 14 units · Books out by August
+            </motion.p>
 
-            <motion.h2 {...fadeUpDelay(0.1)} className="type-h2 text-[#F5F0E8]">
-              Race weekend is closer than it looks.
+            <motion.h2
+              {...fadeUpDelay(0.08)}
+              className="mt-8 font-[var(--font-cormorant)] text-5xl font-normal leading-[1.05] text-[#F5EDE0] md:text-7xl"
+            >
+              Race weekend is closer
               <br />
-              <span className="text-[#D4A853]">Reserve your unit now.</span>
+              than it looks.
             </motion.h2>
-            <motion.p {...fadeUpDelay(0.15)} className="mt-6 type-body-sm text-[#F5F0E8]/70 max-w-xl mx-auto">
-              One call locks your RV. We deliver it to your COTA site, level it, hook it up, and walk your group through every system.
-              <span className="text-[#F5F0E8]/95 font-medium"> Starting at $200/night.</span>
+            <motion.p
+              {...fadeUpDelay(0.12)}
+              className="mt-6 font-[var(--font-cormorant)] text-2xl italic text-[#D4A853] md:text-3xl"
+            >
+              Reserve your unit now.
+            </motion.p>
+            <motion.p
+              {...fadeUpDelay(0.16)}
+              className="mx-auto mt-8 max-w-[560px] text-base leading-relaxed text-[#F5EDE0]/88"
+            >
+              One call locks your RV. We deliver it to your COTA site, level it, hook it up, and walk your group
+              through every system. <span className="font-medium text-[#F5EDE0]">Starting at $200/night.</span>
             </motion.p>
 
             <motion.div
               {...fadeUpDelay(0.2)}
-              className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
+              className="mt-12 flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:items-center"
             >
-              <PhoneLink
-                className="w-full sm:w-auto bg-[#D4A853] text-[#0D0B09] font-semibold uppercase tracking-wider px-8 py-4 rounded-sm hover:brightness-105 active:scale-[0.98] transition-all text-sm shadow-[0_10px_40px_rgba(212,168,83,0.25)] text-center"
-              >
-                Call the Team &middot; (972) 965-6901
+              <PhoneLink className="inline-flex w-full justify-center rounded-sm bg-[#D4A853] px-10 py-4 text-center text-sm font-semibold uppercase tracking-wider text-[#0D0B09] shadow-[0_14px_48px_rgba(212,168,83,0.28)] transition-all hover:brightness-105 active:scale-[0.99] sm:w-auto sm:min-w-[280px]">
+                Call the Team · (972) 965-6901
               </PhoneLink>
               <a
                 href="#request-a-quote"
-                className="text-sm text-[#D4A853]/80 hover:text-[#D4A853] transition-colors underline underline-offset-4"
+                className="text-center text-sm text-[#F5EDE0]/70 underline decoration-[#D4A853]/50 underline-offset-4 transition-colors hover:text-[#D4A853]"
               >
-                Request a callback &rarr;
+                Request a callback
               </a>
             </motion.div>
 
             <motion.p
-              {...fadeUpDelay(0.25)}
-              className="mt-8 text-xs text-[#F5F0E8]/50 max-w-md mx-auto leading-relaxed"
+              {...fadeUpDelay(0.24)}
+              className="mx-auto mt-14 max-w-md text-xs italic leading-relaxed text-[#F5EDE0]/45"
             >
-              Owned and operated by Weston and the Triple W team &mdash; based in Tyler, Texas.
+              Owned and operated by Weston and the team — Tyler, Texas.
             </motion.p>
           </div>
         </section>

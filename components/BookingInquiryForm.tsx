@@ -43,7 +43,6 @@ export default function BookingInquiryForm({
   const [state, formAction, isPending] = useActionState(submitInquiry, initialState);
   const [range, setRange] = useState<DateRange | null>(F1_WEEKEND_RANGE);
   const [groupSize, setGroupSize] = useState(6);
-  const [includeGroupSize, setIncludeGroupSize] = useState(true);
   const conversionFired = useRef(false);
 
   useEffect(() => {
@@ -171,15 +170,13 @@ export default function BookingInquiryForm({
             <span className="block text-xs uppercase tracking-wider text-[#F5F0E8]/60 mb-2">
               Group size
             </span>
-            {includeGroupSize ? (
-              <input type="hidden" name="groupSize" value={groupSize} readOnly />
-            ) : null}
+            <input type="hidden" name="groupSize" value={groupSize} readOnly />
             <div className="flex items-center gap-2">
               <button
                 type="button"
                 aria-label="Decrease group size"
                 className="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm border border-[#F5F0E8]/15 text-[#F5F0E8] hover:border-[#D4A853]/50 hover:text-[#D4A853] transition-colors disabled:opacity-40"
-                disabled={!includeGroupSize || groupSize <= 2}
+                disabled={groupSize <= 2}
                 onClick={() => setGroupSize((n) => Math.max(2, n - 1))}
               >
                 <Minus className="w-5 h-5" strokeWidth={2} />
@@ -188,50 +185,25 @@ export default function BookingInquiryForm({
                 type="text"
                 inputMode="numeric"
                 aria-label="Group size"
-                value={includeGroupSize ? String(groupSize) : ""}
-                placeholder="—"
+                value={String(groupSize)}
                 onChange={(e) => {
-                  if (!includeGroupSize) return;
                   const raw = e.target.value.replace(/\D/g, "");
                   if (raw === "") return;
                   const v = parseInt(raw, 10);
                   if (Number.isNaN(v)) return;
                   setGroupSize(Math.min(12, Math.max(2, v)));
                 }}
-                className="min-w-0 flex-1 bg-[#0D0B09] border border-[#F5F0E8]/15 text-[#F5F0E8] px-3 py-3 rounded-sm text-center text-sm focus:outline-none focus:border-[#D4A853] disabled:opacity-50"
-                disabled={!includeGroupSize}
+                className="min-w-0 flex-1 bg-[#0D0B09] border border-[#F5F0E8]/15 text-[#F5F0E8] px-3 py-3 rounded-sm text-center text-sm focus:outline-none focus:border-[#D4A853]"
               />
               <button
                 type="button"
                 aria-label="Increase group size"
                 className="flex h-11 w-11 shrink-0 items-center justify-center rounded-sm border border-[#F5F0E8]/15 text-[#F5F0E8] hover:border-[#D4A853]/50 hover:text-[#D4A853] transition-colors disabled:opacity-40"
-                disabled={!includeGroupSize || groupSize >= 12}
+                disabled={groupSize >= 12}
                 onClick={() => setGroupSize((n) => Math.min(12, n + 1))}
               >
                 <Plus className="w-5 h-5" strokeWidth={2} />
               </button>
-            </div>
-            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
-              {!includeGroupSize ? (
-                <button
-                  type="button"
-                  className="text-xs text-[#D4A853]/90 hover:text-[#D4A853] underline underline-offset-4"
-                  onClick={() => {
-                    setIncludeGroupSize(true);
-                    setGroupSize(6);
-                  }}
-                >
-                  Add group size (defaults to 6)
-                </button>
-              ) : (
-                <button
-                  type="button"
-                  className="text-xs text-[#F5F0E8]/45 hover:text-[#F5F0E8]/70 underline underline-offset-4"
-                  onClick={() => setIncludeGroupSize(false)}
-                >
-                  Skip — not sure yet
-                </button>
-              )}
             </div>
             {state.errors?.groupSize ? (
               <p className="mt-2 text-xs text-[#B8732E]">{state.errors.groupSize}</p>
