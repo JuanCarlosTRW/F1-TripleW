@@ -18,7 +18,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "RV Rental for F1 Austin 2026 | Triple W Rentals — Delivered to COTA",
+  title: "RV Rental for F1 Austin 2026 | Triple W Rentals - Delivered to COTA",
   description:
     "Premium RV rentals delivered and set up at Circuit of The Americas for the 2026 United States Grand Prix. Skip the hotels. Wake up trackside. Call (972) 965-6901.",
   openGraph: {

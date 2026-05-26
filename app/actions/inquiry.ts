@@ -40,7 +40,7 @@ function buildOwnerEmailBody(data: InquiryParsed): string {
     data.message ? `Message: ${data.message}` : "",
     data.source ? `Lead source: ${data.source}` : "",
     "",
-    "— Sent from the Triple W F1 landing page",
+    "- Sent from the Triple W F1 landing page",
   ];
   return lines.filter((l) => l !== "").join("\n");
 }
@@ -108,7 +108,7 @@ export async function submitInquiry(
     return {
       ok: false,
       message:
-        "Something went wrong. Please call us directly at (972) 965-6901 — we'll take care of you.",
+        "Something went wrong. Please call us directly at (972) 965-6901 - we'll take care of you.",
       values,
     };
   }
@@ -119,7 +119,7 @@ export async function submitInquiry(
     return {
       ok: false,
       message:
-        "Something went wrong. Please call us directly at (972) 965-6901 — we'll take care of you.",
+        "Something went wrong. Please call us directly at (972) 965-6901 - we'll take care of you.",
       values,
     };
   }
@@ -133,7 +133,7 @@ export async function submitInquiry(
       from: `Triple W Inquiry <${fromEmail}>`,
       to: toList,
       replyTo: data.email,
-      subject: `New F1 inquiry — ${data.fullName}`,
+      subject: `New F1 inquiry - ${data.fullName}`,
       text: emailBody,
     });
 
@@ -142,7 +142,7 @@ export async function submitInquiry(
       return {
         ok: false,
         message:
-          "Something went wrong. Please call us directly at (972) 965-6901 — we'll take care of you.",
+          "Something went wrong. Please call us directly at (972) 965-6901 - we'll take care of you.",
         values,
       };
     }
@@ -151,7 +151,7 @@ export async function submitInquiry(
     return {
       ok: false,
       message:
-        "Something went wrong. Please call us directly at (972) 965-6901 — we'll take care of you.",
+        "Something went wrong. Please call us directly at (972) 965-6901 - we'll take care of you.",
       values,
     };
   }
@@ -184,7 +184,7 @@ I'll check F1 weekend availability for you and call you back at ${data.phone} wi
 
 If it's easier, feel free to call or text me directly at (972) 965-6901.
 
-— Weston & the Triple W team
+- Weston & the Triple W team
    Tyler, Texas
 `.trim(),
       });

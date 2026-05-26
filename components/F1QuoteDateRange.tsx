@@ -167,7 +167,7 @@ export default function F1QuoteDateRange({
               ) : null}
             </RangeCalendar>
           </I18nProvider>
-          <p className="mt-2 text-xs text-[#F5F0E8]/45">Required — tap your arrival and departure</p>
+          <p className="mt-2 text-xs text-[#F5F0E8]/45">Required - tap your arrival and departure</p>
         </div>
       </div>
 

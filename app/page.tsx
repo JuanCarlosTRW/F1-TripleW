@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
@@ -10,12 +9,14 @@ import SiteHeader from "@/components/SiteHeader";
 import PhoneLink from "@/components/PhoneLink";
 import PremiumImageGallery, { type GalleryItem } from "@/components/ui/PremiumImageGallery";
 import Reviews from "@/components/Reviews";
-import IntroAnimation from "@/components/ui/IntroAnimation";
 import BookingInquiryForm from "@/components/BookingInquiryForm";
 import UrgencyStrip from "@/components/ui/UrgencyStrip";
 import StickyMobileCTA from "@/components/ui/StickyMobileCTA";
 
-const Hyperspeed = dynamic(() => import("@/components/ui/Hyperspeed"), { ssr: false });
+const HERO_VIDEO_SRC =
+  "https://video.wixstatic.com/video/62f926_8ff76b0555c04f32acb69a68ef4633af/480p/mp4/file.mp4";
+const HERO_VIDEO_POSTER =
+  "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp";
 
 const ease = [0.25, 0.1, 0.25, 1] as const;
 
@@ -82,7 +83,7 @@ const steps = [
     num: "03",
     icon: PartyPopper,
     title: "Walk to the Track",
-    desc: "Minutes from the track. Grill between sessions. Sleep through the night. Check out Monday \u2014 we handle cleanup.",
+    desc: "Minutes from the track. Grill between sessions. Sleep through the night. Check out Monday - we handle cleanup.",
   },
 ];
 
@@ -107,7 +108,7 @@ const FLEET_MEDIA: GalleryItem[] = [
 const DREAM_IMAGE = "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp";
 
 const valueStack: Array<[string, string]> = [
-  ["Premium RV (Class A, Fifth Wheel, Travel Trailer \u2014 sleeps 4\u201312)", "From $200/night"],
+  ["Premium RV (Class A, Fifth Wheel, Travel Trailer - sleeps 4\u201312)", "From $200/night"],
   ["White-glove delivery to any COTA lot or Austin campground", "$500 value"],
   ["Full setup: leveling, slide-outs, water, electric, sewer", "$200 value"],
   ["60-minute walkthrough on arrival", "Included"],
@@ -138,7 +139,7 @@ function heroCopy(src: string): HeroVariant {
         <>
           COTA RV Camping{" "}
           <span className="text-[#D4A853]">
-            {"\u2014"} Delivered and Set Up for You.
+            {"-"} Delivered and Set Up for You.
           </span>
         </>
       ),
@@ -154,21 +155,19 @@ function heroCopy(src: string): HeroVariant {
           <span className="text-[#D4A853]">$600/Night Austin Hotels.</span>
         </>
       ),
-      sub: "Your whole group under one roof, at the track \u2014 for less per person than a Holiday Inn 25 miles away. We deliver the RV. You just show up.",
+      sub: "Your whole group under one roof, at the track - for less per person than a Holiday Inn 25 miles away. We deliver the RV. You just show up.",
     };
   }
   return {
-    eyebrow: "October 23\u201325, 2026 · Circuit of The Americas",
+    eyebrow: "USGP 2026 · Oct 23–25 · Circuit of The Americas",
     h1: (
       <>
-        RV Rental for F1 at COTA
+        We deliver the RV.
         <br />
-        <span className="text-[#D4A853]">
-          {"\u2014"} Delivered to Your Site.
-        </span>
+        <span className="text-[#D4A853]">You just show up.</span>
       </>
     ),
-    sub: "We tow your unit to Circuit of The Americas, level it, hook up power and water, and hand you the keys. You land Thursday with coffee in hand and you\u2019re at the place before first practice.",
+    sub: "Pick your dates. We tow your RV to your COTA site, level it, hook up power and water, and hand you the keys. Your whole crew under one roof - for less per person than a $600/night downtown hotel.",
   };
 }
 
@@ -178,100 +177,59 @@ function Hero({ src }: { src: string }) {
   const copy = heroCopy(src);
   return (
     <section className="relative min-h-screen flex items-center justify-center bg-[#0D0B09] px-6 text-center overflow-hidden">
-      <div className="absolute inset-0 z-0">
-        <Hyperspeed
-          effectOptions={{
-            distortion: "turbulentDistortion",
-            length: 400,
-            roadWidth: 10,
-            islandWidth: 2,
-            lanesPerRoad: 3,
-            fov: 90,
-            fovSpeedUp: 150,
-            speedUp: 2,
-            carLightsFade: 0.4,
-            totalSideLightSticks: 20,
-            lightPairsPerRoadWay: 40,
-            shoulderLinesWidthPercentage: 0.05,
-            brokenLinesWidthPercentage: 0.1,
-            brokenLinesLengthPercentage: 0.5,
-            lightStickWidth: [0.12, 0.5],
-            lightStickHeight: [1.3, 1.7],
-            movingAwaySpeed: [60, 80],
-            movingCloserSpeed: [-120, -160],
-            carLightsLength: [400 * 0.03, 400 * 0.2],
-            carLightsRadius: [0.05, 0.14],
-            carWidthPercentage: [0.3, 0.5],
-            carShiftX: [-0.8, 0.8],
-            carFloorSeparation: [0, 5],
-            colors: {
-              roadColor: 0x080808,
-              islandColor: 0x0a0a0a,
-              background: 0x000000,
-              shoulderLines: 0x131318,
-              brokenLines: 0x131318,
-              leftCars: [0xd856bf, 0x6750a2, 0xc247ac],
-              rightCars: [0x03b3c3, 0x0e5ea5, 0x324555],
-              sticks: 0x03b3c3,
-            },
-          }}
-        />
-      </div>
-      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-[#0D0B09]/50 via-transparent to-[#0D0B09]/70" />
+      {/* Video background - muted autoplay loop, real product imagery */}
+      <video
+        className="absolute inset-0 z-0 w-full h-full object-cover"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        poster={HERO_VIDEO_POSTER}
+        aria-hidden="true"
+      >
+        <source src={HERO_VIDEO_SRC} type="video/mp4" />
+      </video>
+
+      {/* Dark overlay for legibility over moving footage */}
+      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-[#0D0B09]/80 via-[#0D0B09]/55 to-[#0D0B09]/90" />
 
       <div className="relative z-[2] max-w-4xl mx-auto pt-32 md:pt-36 pb-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease }}
-          className="inline-block border border-[#D4A853]/40 rounded-full px-4 py-1.5 mb-8"
-        >
+        <div className="inline-block border border-[#D4A853]/40 rounded-full px-4 py-1.5 mb-8">
           <span className="type-eyebrow text-[#D4A853]">{copy.eyebrow}</span>
-        </motion.div>
+        </div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 40, filter: "blur(10px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ duration: 1, delay: 0.2, ease }}
-          className="type-display text-[#F5F0E8]"
-        >
-          {copy.h1}
-        </motion.h1>
+        <h1 className="type-display text-[#F5F0E8]">{copy.h1}</h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease, delay: 0.4 }}
-          className="mt-8 type-body text-[#F5F0E8]/80 max-w-2xl mx-auto"
-        >
+        <p className="mt-8 type-body text-[#F5F0E8]/85 max-w-2xl mx-auto">
           {copy.sub}
-        </motion.p>
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease, delay: 0.6 }}
-          className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          <PhoneLink
-            className="w-full sm:w-auto bg-[#D4A853] text-[#0D0B09] font-semibold uppercase tracking-wider px-8 py-4 rounded-sm hover:brightness-105 active:scale-[0.98] transition-all text-sm shadow-[0_10px_40px_rgba(212,168,83,0.25)] text-center"
-          >
-            Call (972) 965-6901 &middot; Reserve Now
-          </PhoneLink>
+        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <a
             href="#request-a-quote"
-            className="w-full sm:w-auto border border-[#D4A853]/50 text-[#D4A853] font-semibold uppercase tracking-wider px-8 py-4 rounded-sm hover:bg-[#D4A853]/10 hover:border-[#D4A853] active:scale-[0.98] transition-all text-sm"
+            className="w-full sm:w-auto bg-[#D4A853] text-[#0D0B09] font-semibold uppercase tracking-wider px-8 py-4 rounded-sm hover:brightness-105 active:scale-[0.98] transition-all text-sm shadow-[0_10px_40px_rgba(212,168,83,0.25)] text-center"
           >
-            Request a Callback &rarr;
+            Check Availability for My Dates &rarr;
           </a>
-        </motion.div>
+          <PhoneLink
+            className="w-full sm:w-auto border border-[#D4A853]/50 text-[#D4A853] font-semibold uppercase tracking-wider px-8 py-4 rounded-sm hover:bg-[#D4A853]/10 hover:border-[#D4A853] active:scale-[0.98] transition-all text-sm text-center"
+          >
+            Or Call (972) 965-6901
+          </PhoneLink>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease, delay: 0.8 }}
-          className="mt-14 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs text-[#F5F0E8]/60 uppercase tracking-[0.15em]"
-        >
+        <p className="mt-4 text-xs text-[#F5F0E8]/55 max-w-md mx-auto leading-relaxed">
+          60-second form &middot; We reply same day &middot; No deposit to check availability
+        </p>
+
+        <p className="mt-6 text-xs md:text-sm text-[#F5F0E8]/70 max-w-md mx-auto leading-relaxed">
+          Group of 6, 4 nights ={" "}
+          <span className="text-[#D4A853] font-medium">$133/person/night</span>.
+          Less than a downtown hotel - right at the track.
+        </p>
+
+        <div className="mt-14 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs text-[#F5F0E8]/60 uppercase tracking-[0.15em]">
           <span>200+ Deliveries</span>
           <span className="hidden md:inline-block w-px h-3 bg-[#F5F0E8]/20" />
           <span>4.7&#9733; Google</span>
@@ -279,7 +237,7 @@ function Hero({ src }: { src: string }) {
           <span>Owner-Operated</span>
           <span className="hidden md:inline-block w-px h-3 bg-[#F5F0E8]/20" />
           <span className="text-[#D4A853]/80">Books Out by August</span>
-        </motion.div>
+        </div>
       </div>
     </section>
   );
@@ -450,7 +408,7 @@ function HomeBody() {
               <span className="type-eyebrow text-[#8B6B1F] block mb-3">The Fleet</span>
               <h2 className="type-h2 text-[#1A1510]">Fourteen units. All delivered by us.</h2>
               <p className="mt-3 type-body-sm text-[#1A1510]/60 max-w-xl mx-auto">
-                Every unit is owned, maintained, and delivered by Triple W &mdash; whether it sleeps 4 or 12.
+                Every unit is owned, maintained, and delivered by Triple W - whether it sleeps 4 or 12.
               </p>
             </motion.div>
 
@@ -514,7 +472,7 @@ function HomeBody() {
             <motion.div {...fadeUp} className="text-center mb-14">
               <span className="type-eyebrow text-[#D4A853] block mb-3">The Weekend Package</span>
               <h2 className="type-h2 text-[#F5F0E8] leading-[1.1]">
-                The full F1 weekend &mdash;
+                The full F1 weekend -
                 <br className="hidden md:block" /> delivered to your site.
               </h2>
             </motion.div>
@@ -554,7 +512,7 @@ function HomeBody() {
                 </div>
                 <p className="mt-5 text-sm text-[#F5F0E8]/70 leading-relaxed">
                   A 4-night trip for 6 runs about <strong className="text-[#F5F0E8] font-medium">$133/person/night</strong>.
-                  Less than a downtown hotel &mdash; right at the track.
+                  Less than a downtown hotel - right at the track.
                 </p>
                 <PhoneLink
                   className="block mt-6 bg-[#D4A853] text-[#0D0B09] font-semibold uppercase tracking-wider px-6 py-3.5 rounded-sm hover:brightness-105 active:scale-[0.98] transition-all text-sm shadow-[0_8px_24px_rgba(212,168,83,0.2)] text-center"
@@ -575,20 +533,6 @@ function HomeBody() {
                 </p>
               </motion.div>
             </div>
-          </div>
-        </section>
-
-        {/* ─── PRICING ANCHOR CALLOUT ─── */}
-        <section className="relative bg-[#0D0B09] border-t border-[#D4A853]/8 py-8 md:py-10 px-6 overflow-hidden">
-          <div className="relative max-w-3xl mx-auto text-center">
-            <motion.p
-              {...fadeUp}
-              className="text-[#F5F0E8]/80 text-sm md:text-base leading-relaxed"
-            >
-              A 4-night trip for 6 runs about{" "}
-              <span className="text-[#D4A853] font-semibold">$133 per person, per night</span>.
-              Less than a downtown hotel &mdash; right at the track.
-            </motion.p>
           </div>
         </section>
 
@@ -724,7 +668,7 @@ function HomeBody() {
               {...fadeUpDelay(0.25)}
               className="mt-8 text-xs text-[#F5F0E8]/50 max-w-md mx-auto leading-relaxed"
             >
-              Owned and operated by Weston and the Triple W team &mdash; based in Tyler, Texas.
+              Owned and operated by Weston and the Triple W team - based in Tyler, Texas.
             </motion.p>
           </div>
         </section>
@@ -759,16 +703,8 @@ function HomeBody() {
 
 export default function Home() {
   return (
-    <IntroAnimation>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <Suspense fallback={null}>
-          <HomeBody />
-        </Suspense>
-      </motion.div>
-    </IntroAnimation>
+    <Suspense fallback={null}>
+      <HomeBody />
+    </Suspense>
   );
 }

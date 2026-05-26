@@ -228,14 +228,14 @@ export default function BookingInquiryForm({
           className="mb-8 rounded-sm border border-[#B8732E]/40 bg-[#0D0B09] px-4 py-4 text-center text-sm text-[#F5F0E8]/85"
           role="alert"
         >
-          Something went wrong. Please call us directly at (972) 965-6901 — we&apos;ll take care of
+          Something went wrong. Please call us directly at (972) 965-6901 - we&apos;ll take care of
           you.
         </div>
       ) : null}
 
       <div className="mb-10 rounded-sm border border-[#F5F0E8]/10 bg-[#0D0B09]/40 p-5 md:p-6">
         <p className="text-xs uppercase tracking-[0.15em] text-[#D4A853]/90 mb-4">
-          Step 1 — When and how many
+          Step 1 - When and how many
         </p>
         <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
           <F1QuoteDateRange
@@ -265,7 +265,7 @@ export default function BookingInquiryForm({
                 inputMode="numeric"
                 aria-label="Group size"
                 value={includeGroupSize ? String(groupSize) : ""}
-                placeholder="—"
+                placeholder="-"
                 onChange={(e) => {
                   if (!includeGroupSize) return;
                   const raw = e.target.value.replace(/\D/g, "");
@@ -305,7 +305,7 @@ export default function BookingInquiryForm({
                   className="text-xs text-[#F5F0E8]/45 hover:text-[#F5F0E8]/70 underline underline-offset-4"
                   onClick={() => setIncludeGroupSize(false)}
                 >
-                  Skip — not sure yet
+                  Skip - not sure yet
                 </button>
               )}
             </div>
@@ -320,7 +320,7 @@ export default function BookingInquiryForm({
 
       <div className="mb-8 rounded-sm border border-[#F5F0E8]/10 bg-[#0D0B09]/40 p-5 md:p-6">
         <p className="text-xs uppercase tracking-[0.15em] text-[#D4A853]/90 mb-4">
-          Step 2 — How to reach you
+          Step 2 - How to reach you
         </p>
         <div className="grid md:grid-cols-2 gap-5">
           <Field
@@ -428,7 +428,7 @@ export default function BookingInquiryForm({
             Sending…
           </span>
         ) : (
-          "Send Request — We Call You Back in 2 Hours"
+          "Send Request - We Call You Back in 2 Hours"
         )}
       </button>
 
@@ -437,7 +437,7 @@ export default function BookingInquiryForm({
         <PhoneLink className="text-[#D4A853] hover:underline underline-offset-4">
           (972) 965-6901
         </PhoneLink>{" "}
-        — Weston answers directly.
+        - Weston answers directly.
       </p>
       </form>
     </motion.div>
