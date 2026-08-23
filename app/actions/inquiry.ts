@@ -1,7 +1,7 @@
 "use server";
 
 import { Resend } from "resend";
-import { formatDateRangeLine } from "@/lib/format-date-range";
+import { formatDateRangeLine, formatStaySummary } from "@/lib/format-date-range";
 import {
   isQualifiedLead,
   validateInquiry,
@@ -14,17 +14,22 @@ const DEFAULT_INQUIRY_TO_EMAIL =
   "jcpl-07@hotmail.com,triplewrentals@gmail.com";
 
 const CAMPSITE_LABELS: Record<string, string> = {
-  premium: "COTA Premium RV site",
-  "lot-n": "COTA Lot N (dry camping)",
-  other: "Another campground near Austin",
-  none: "No campsite yet",
+  coordinated: "Coordinated placement through Triple W",
+  own: "Customer already has a campsite",
+  // Legacy values from the previous form version (no longer emitted by the UI).
+  premium: "Customer already has a campsite (legacy: premium)",
+  "lot-n": "Customer already has a campsite (legacy: lot-n)",
+  other: "Customer already has a campsite (legacy: other)",
+  none: "No campsite yet (legacy)",
 };
 
 const POWER_NOTE: Record<string, string> = {
-  premium: "Premium RV site: water and electric hookups (per COTA 2026 pages)",
-  "lot-n": "Lot N: no hookups, generator and fuel plan required",
-  other: "Other campground: confirm hookups with the campground",
-  none: "No campsite yet: nurture lead, campsite must be reserved first",
+  coordinated: "Confirm utilities for the assigned placement (hookups vs generator plan)",
+  own: "Customer's own site: confirm hookups, dimensions and access with them",
+  premium: "Customer's own site: confirm hookups, dimensions and access with them",
+  "lot-n": "Customer's own site: confirm hookups, dimensions and access with them",
+  other: "Customer's own site: confirm hookups, dimensions and access with them",
+  none: "No campsite yet: nurture lead",
 };
 
 const BEDS_LABELS: Record<string, string> = {
@@ -38,11 +43,15 @@ const BEDS_LABELS: Record<string, string> = {
 };
 
 const BUDGET_LABELS: Record<string, string> = {
-  "under-2000": "Under $2,000 total",
-  "2000-3500": "$2,000 to $3,500 total",
-  "3500-5000": "$3,500 to $5,000 total",
+  "under-1000": "Under $1,000 total",
+  "1000-2500": "$1,000 to $2,500 total",
+  "2500-5000": "$2,500 to $5,000 total",
   "5000-plus": "$5,000+ total",
   "not-sure": "Budget not set yet",
+};
+
+const ADD_ON_LABELS: Record<string, string> = {
+  "wifi-starlink": "Wi-Fi Starlink (paid add-on, quote the price)",
 };
 
 const CONTACT_LABELS: Record<string, string> = {
@@ -61,11 +70,11 @@ function buildOwnerEmailBody(data: InquiryParsed, qualified: boolean): string {
 
   const lines = [
     qualified
-      ? "QUALIFIED F1 2026 availability request (site + dates + group + contact)"
-      : "F1 2026 availability request",
+      ? "QUALIFIED COTA 2026 availability request (dates + group + contact)"
+      : "COTA 2026 availability request",
     "",
     "CAMPSITE",
-    line("Campsite", CAMPSITE_LABELS[data.campsite] ?? data.campsite),
+    line("Placement", CAMPSITE_LABELS[data.campsite] ?? data.campsite),
     line("Site number", data.siteNumber),
     line("Dates", datesLine),
     line("Power", POWER_NOTE[data.campsite]),
@@ -74,6 +83,10 @@ function buildOwnerEmailBody(data: InquiryParsed, qualified: boolean): string {
     line("Group", groupLine),
     line("Real beds wanted", data.beds ? BEDS_LABELS[data.beds] : ""),
     line("Budget", data.budget ? BUDGET_LABELS[data.budget] : ""),
+    line(
+      "Add-ons",
+      data.addOns.length > 0 ? data.addOns.map((a) => ADD_ON_LABELS[a] ?? a).join(", ") : ""
+    ),
     line("Notes", data.message),
     "",
     "CONTACT",
@@ -83,7 +96,7 @@ function buildOwnerEmailBody(data: InquiryParsed, qualified: boolean): string {
     line("Prefers", data.contactMethod ? CONTACT_LABELS[data.contactMethod] : ""),
     line("Lead source", data.source),
     "",
-    "Next: verify site compatibility, delivery access and unit fit before quoting.",
+    "Next: confirm the campsite, unit fit and delivery access before quoting.",
     "Sent from the Triple W F1 landing page",
   ];
   return lines.filter((l) => l !== "").join("\n");
@@ -124,6 +137,7 @@ export async function submitInquiry(
     kids: formData.get("kids"),
     beds: formData.get("beds"),
     budget: formData.get("budget"),
+    addOns: formData.getAll("addOns"),
     fullName: formData.get("fullName"),
     email: formData.get("email"),
     phone: formData.get("phone"),
@@ -192,7 +206,7 @@ export async function submitInquiry(
 
   const hasVerifiedDomain = !fromEmail.endsWith("@resend.dev");
   if (hasVerifiedDomain) {
-    const datesLine = formatDateRangeLine(data.arrivalDate, data.departureDate);
+    const staySummary = formatStaySummary(data.arrivalDate, data.departureDate);
     try {
       await resend.emails.send({
         from: `Triple W Rentals <${fromEmail}>`,
@@ -202,20 +216,18 @@ export async function submitInquiry(
         text: `
 Hi ${data.fullName.split(" ")[0]},
 
-Got your request for race weekend (${datesLine}).
+Got your request for race weekend. ${staySummary}.
 
-Here's what happens next:
-1. We check which units fit your site and group.
-2. We verify delivery access and the setup/pickup windows for your exact spot.
+${data.addOns.includes("wifi-starlink") ? "Noted: you asked about Wi-Fi (Starlink). It's a paid add-on and the price will be in your quote.\n\n" : ""}Here's what happens next:
+1. We check which units fit your group and confirm your campsite.
+2. We confirm we can get the rig on your site and lock the setup and pickup windows.
 3. We ${data.contactMethod === "email" ? "email" : data.contactMethod === "text" ? "text" : "call"} you back with an itemized weekend quote, usually within two hours during business hours or first thing the next morning.
 
-Helpful to have ready: your campsite confirmation or pass details, and your site number if it's assigned.
-
-Heads up: the RV rental doesn't include your campsite or race tickets. Campsites are reserved directly through COTA or your campground.
+Heads up: race tickets are sold separately. The RV and your campsite are confirmed in writing before any payment.
 
 Need us sooner? Call or text (972) 965-6901.
 
-- Weston & the Triple W team
+- Westin & the Triple W team
   Tyler, Texas
 `.trim(),
       });
@@ -236,6 +248,7 @@ Need us sooner? Call or text (972) 965-6901.
       kids: String(data.kids),
       beds: data.beds,
       budget: data.budget,
+      addOns: data.addOns,
       message: data.message,
       fullName: data.fullName,
       phone: data.phone,

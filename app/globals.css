@@ -1,30 +1,35 @@
 @import "tailwindcss";
 
+/*
+  Design tokens (UI brief §5). One display family (Barlow Condensed) and one
+  body family (Outfit); no third family.
+*/
 @theme inline {
-  --color-background: #FAF8F4;
-  --color-foreground: #182236;
+  --color-background: #F5F1E8;
+  --color-foreground: #151922;
   --font-sans: var(--font-outfit);
   --font-display: var(--font-barlow);
 
   /* Foundation */
-  --color-navy: #101B2D;
-  --color-navy-deep: #0A1220;
-  --color-navy-soft: #1A2740;
+  --color-navy: #0B1728;
+  --color-navy-deep: #081120;
+  --color-navy-soft: #14233A;
 
   /* Light surfaces */
-  --color-paper: #FAF8F4;
-  --color-paper-warm: #F2EEE7;
+  --color-paper: #F5F1E8;
+  --color-paper-warm: #ECE6DA;
 
   /* Text */
-  --color-ink: #182236;
-  --color-slate: #4A5462;
+  --color-ink: #151922;
+  --color-slate: #626A78;
 
   /* Lines */
-  --color-line: #E3DED4;
+  --color-line: #D7D2C8;
 
   /* Single controlled action accent */
-  --color-action: #B42B23;
-  --color-action-deep: #9A241D;
+  --color-action: #C62B23;
+  --color-action-deep: #A8231C;
+  --color-action-tint: #FBEDEB;
 }
 
 html {
@@ -34,13 +39,13 @@ html {
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #FAF8F4;
-  color: #182236;
+  background: #F5F1E8;
+  color: #151922;
 }
 
 ::selection {
-  background: #182236;
-  color: #FAF8F4;
+  background: #151922;
+  color: #F5F1E8;
 }
 
 /* ─── TYPOGRAPHY ─── */
@@ -48,59 +53,121 @@ body {
 @layer components {
   .type-display {
     font-family: var(--font-barlow);
-    font-weight: 600;
-    font-size: clamp(2.75rem, 7.5vw, 5rem);
-    line-height: 0.98;
+    font-weight: 700;
+    font-size: clamp(2.75rem, 7vw, 4.75rem);
+    line-height: 0.96;
     letter-spacing: 0.005em;
     text-wrap: balance;
   }
 
   .type-h2 {
     font-family: var(--font-barlow);
-    font-weight: 600;
-    font-size: clamp(2rem, 4.5vw, 3.25rem);
-    line-height: 1.02;
+    font-weight: 700;
+    font-size: clamp(2rem, 4.2vw, 3.1rem);
+    line-height: 1;
     letter-spacing: 0.005em;
     text-wrap: balance;
   }
 
   .type-h3 {
     font-family: var(--font-barlow);
-    font-weight: 600;
-    font-size: clamp(1.35rem, 2.4vw, 1.7rem);
-    line-height: 1.1;
+    font-weight: 700;
+    font-size: clamp(1.35rem, 2.2vw, 1.65rem);
+    line-height: 1.08;
     letter-spacing: 0.01em;
   }
 
   .type-body {
-    font-size: clamp(1rem, 1.2vw, 1.125rem);
-    line-height: 1.65;
+    font-size: clamp(1rem, 1.15vw, 1.125rem);
+    line-height: 1.6;
     font-weight: 400;
+    max-width: 65ch;
   }
 
   .type-body-sm {
-    font-size: 0.9375rem;
-    line-height: 1.6;
+    font-size: 1rem;
+    line-height: 1.55;
     font-weight: 400;
   }
 
-  /* Shared vertical rhythm: one section padding, one heading gap. */
-  .section {
-    padding-top: 3rem;
-    padding-bottom: 3rem;
-  }
-  @media (min-width: 768px) {
-    .section {
-      padding-top: 4.5rem;
-      padding-bottom: 4.5rem;
-    }
-  }
-
+  /* Small uppercase eyebrow: red text by default, .eyebrow-chip for red background. */
   .type-eyebrow {
     font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.22em;
-    font-weight: 600;
+    letter-spacing: 0.2em;
+    font-weight: 700;
+  }
+  .eyebrow-chip {
+    display: inline-block;
+    background: var(--color-action);
+    color: #fff;
+    padding: 0.35rem 0.7rem;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+  }
+
+  /* Shared vertical rhythm (8 px system). */
+  .section {
+    padding-top: 3.5rem;
+    padding-bottom: 3.5rem;
+  }
+  @media (min-width: 768px) {
+    .section {
+      padding-top: 5rem;
+      padding-bottom: 5rem;
+    }
+  }
+
+  /* 1220 px content width (brief: 1180-1240). */
+  .container-x {
+    width: 100%;
+    max-width: 1220px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  @media (min-width: 768px) {
+    .container-x {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+
+  /* Clipped upper-right corner: CTAs and selected product cards only. */
+  .clip-tr {
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  }
+
+  /* Diagonal section edges, used sparingly (one every two or three sections). */
+  .diag-bottom {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2.5vw), 0 100%);
+  }
+  .diag-top {
+    clip-path: polygon(0 2.5vw, 100% 0, 100% 100%, 0 100%);
+  }
+
+  /* Very subtle diagonal line texture on ivory sections (about 4% opacity). */
+  .texture-diag {
+    background-image: repeating-linear-gradient(
+      -45deg,
+      rgba(21, 25, 34, 0.04) 0,
+      rgba(21, 25, 34, 0.04) 1px,
+      transparent 1px,
+      transparent 14px
+    );
+  }
+
+  /* Oversized pale step numbers (background element, no animation). */
+  .big-num {
+    font-family: var(--font-barlow);
+    font-weight: 700;
+    font-size: clamp(6rem, 12vw, 9.5rem);
+    line-height: 0.8;
+    letter-spacing: -0.02em;
+    color: var(--color-line);
+    opacity: 0.9;
+    user-select: none;
+    pointer-events: none;
   }
 
   /* The single primary CTA style used across the page. */
@@ -109,15 +176,16 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    min-height: 52px;
     background: var(--color-action);
     color: #ffffff;
-    font-weight: 600;
-    font-size: 0.875rem;
+    font-weight: 700;
+    font-size: 0.9375rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    padding: 1rem 2rem;
-    border-radius: 0.25rem;
-    transition: background-color 150ms ease, transform 100ms ease;
+    padding: 0.9rem 1.75rem;
+    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+    transition: background-color 180ms ease, transform 120ms ease;
     text-align: center;
   }
   .btn-primary:hover {
@@ -133,14 +201,14 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    border: 1px solid currentColor;
-    font-weight: 600;
-    font-size: 0.875rem;
+    min-height: 52px;
+    border: 2px solid currentColor;
+    font-weight: 700;
+    font-size: 0.9375rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    padding: 1rem 2rem;
-    border-radius: 0.25rem;
-    transition: opacity 150ms ease, transform 100ms ease;
+    padding: 0.8rem 1.6rem;
+    transition: opacity 180ms ease, transform 120ms ease;
     text-align: center;
   }
   .btn-secondary:hover {
@@ -149,12 +217,21 @@ body {
   .btn-secondary:active {
     transform: scale(0.985);
   }
+
+  /* Card lift: subtle, 180 ms. */
+  .card-lift {
+    transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  }
+  .card-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(11, 23, 40, 0.08);
+  }
 }
 
 /* ─── ACCESSIBILITY ─── */
 
 :focus-visible {
-  outline: 2px solid #B42B23;
+  outline: 2px solid #C62B23;
   outline-offset: 2px;
 }
 
@@ -166,5 +243,8 @@ body {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  .card-lift:hover {
+    transform: none;
   }
 }

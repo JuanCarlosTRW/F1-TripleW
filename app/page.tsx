@@ -1,35 +1,28 @@
 import Image from "next/image";
-import {
-  CalendarCheck,
-  ClipboardCheck,
-  KeyRound,
-  PhoneCall,
-  Truck,
-} from "lucide-react";
+import { Check } from "lucide-react";
 import AvailabilityForm from "@/components/AvailabilityForm";
 import PhoneLink from "@/components/PhoneLink";
 import SiteHeader from "@/components/SiteHeader";
 import SmsLink from "@/components/SmsLink";
 import TrackedCtaLink from "@/components/TrackedCtaLink";
 import Faq from "@/components/sections/Faq";
-import FleetGallery from "@/components/sections/FleetGallery";
-import SiteCheck from "@/components/sections/SiteCheck";
-import UnitCards from "@/components/sections/UnitCards";
+import FleetCarousel from "@/components/sections/FleetCarousel";
 import StickyMobileCTA from "@/components/ui/StickyMobileCTA";
 import {
   BUSINESS,
-  COTA_CAMPING,
-  DISCLAIMER,
+  CAMPSITE,
   EVENT,
-  FLEET_CATEGORIES,
-  GALLERY,
+  DISCLAIMER,
+  FLEET_FIT,
+  HERO,
   HERO_IMAGE,
-  INCLUSIONS,
-  INCLUSIONS_NOTE,
-  PRICING,
+  PAIN_POINTS,
+  QUOTE,
   REVIEWS,
+  STEPS,
+  TIMELINE,
   TRUST_STATS,
-  UNITS,
+  TRUST_STRIP,
 } from "@/content/site";
 
 /* ─── Small server-side building blocks ─── */
@@ -39,108 +32,126 @@ function SectionHeading({
   title,
   sub,
   light,
+  center,
 }: {
   eyebrow: string;
   title: string;
   sub?: string;
   light?: boolean;
+  center?: boolean;
 }) {
   return (
-    <div className="mb-7 max-w-2xl md:mb-9">
-      <p className={`type-eyebrow ${light ? "text-white/70" : "text-action"}`}>{eyebrow}</p>
-      <h2 className={`type-h2 mt-3 ${light ? "text-white" : "text-ink"}`}>{title}</h2>
+    <div className={`mb-8 max-w-2xl md:mb-10 ${center ? "mx-auto text-center" : ""}`}>
+      <p className={`type-eyebrow ${light ? "text-white/75" : "eyebrow-chip"}`}>{eyebrow}</p>
+      <h2 className={`type-h2 mt-4 uppercase ${light ? "text-white" : "text-ink"}`}>{title}</h2>
       {sub ? (
-        <p className={`type-body mt-3 ${light ? "text-white/80" : "text-slate"}`}>{sub}</p>
+        <p className={`type-body mt-4 ${center ? "mx-auto" : ""} ${light ? "text-white/85" : "text-slate"}`}>
+          {sub}
+        </p>
       ) : null}
     </div>
   );
 }
 
-/* ─── 1. HERO (control version, no blocking motion) ─── */
+/* ─── 02. HERO: asymmetrical 60/40, no blocking motion ─── */
 
 function Hero() {
   return (
-    <section className="relative flex min-h-[88svh] items-center overflow-hidden bg-navy-deep">
+    <section className="relative overflow-hidden bg-navy">
       <Image
         src={HERO_IMAGE}
         alt="Kitchen and living area inside a Triple W rental RV"
         fill
         priority
         sizes="100vw"
-        className="object-cover"
+        className="object-cover opacity-35"
       />
       <div
         aria-hidden
-        className="absolute inset-0 bg-gradient-to-r from-navy-deep/95 via-navy-deep/80 to-navy-deep/40"
-      />
-      <div
-        aria-hidden
-        className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-navy-deep to-transparent"
+        className="absolute inset-0 bg-gradient-to-r from-navy via-navy/90 to-navy/55"
       />
 
-      <div className="relative z-[1] mx-auto w-full max-w-6xl px-4 pb-16 pt-28 md:px-6 md:pt-32">
-        <p className="type-eyebrow text-white/75">
-          {EVENT.kickerLabel.split(" · ").map((part, i, all) => (
-            <span key={part} className="inline-block whitespace-nowrap">
-              {part}
-              {i < all.length - 1 ? (
-                <span aria-hidden className="mx-2">
-                  &middot;
-                </span>
-              ) : null}
-            </span>
-          ))}
-        </p>
+      <div className="container-x relative z-[1] grid items-center gap-10 pb-14 pt-36 md:pt-40 lg:grid-cols-[3fr_2fr] lg:gap-14 lg:pb-20 lg:pt-44">
+        <div>
+          <p className="type-eyebrow text-white/75">
+            {EVENT.kickerParts.map((part, i, all) => (
+              <span key={part} className="inline-block whitespace-nowrap">
+                {part}
+                {i < all.length - 1 ? (
+                  <span aria-hidden className="mx-2">
+                    &middot;
+                  </span>
+                ) : null}
+              </span>
+            ))}
+          </p>
 
-        <h1 className="type-display mt-5 max-w-3xl text-white">
-          Your Private, Air-Conditioned RV Basecamp for COTA Weekend
-        </h1>
+          <h1 className="type-display mt-5 max-w-3xl uppercase text-white">{HERO.h1}</h1>
 
-        <p className="type-body mt-5 max-w-xl text-white/90">
-          Tell us your campsite status and group size. We&apos;ll match the right RV, confirm
-          access, deliver and set it up, then collect it after the weekend.
-        </p>
+          <p className="type-body mt-5 text-white/90">{HERO.sub}</p>
 
-        <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <TrackedCtaLink
-            href="#check-availability"
-            eventName="hero_cta_click"
-            className="btn-primary"
-          >
-            Check My Site &amp; RV Options
-          </TrackedCtaLink>
-          <PhoneLink location="hero" className="btn-secondary text-white">
-            Call or Text {BUSINESS.phoneDisplay}
-          </PhoneLink>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <TrackedCtaLink
+              href="#check-availability"
+              eventName="hero_cta_click"
+              className="btn-primary"
+            >
+              {HERO.primaryCta}
+            </TrackedCtaLink>
+            <PhoneLink location="hero" className="btn-secondary text-white">
+              {HERO.secondaryCta}
+            </PhoneLink>
+            <SmsLink location="hero" className="btn-secondary text-white">
+              {HERO.secondaryCtaSms}
+            </SmsLink>
+          </div>
+
+          <p className="mt-5 max-w-md text-sm leading-relaxed text-white/70">{HERO.microcopy}</p>
         </div>
 
-        <p className="mt-5 max-w-md text-xs leading-relaxed text-white/70">
-          No obligation. Race tickets and campsite reservations are separate. Delivery is
-          confirmed after site and access review.
-        </p>
+        {/* Compact package summary card */}
+        <aside
+          aria-label="Your race-weekend package"
+          className="clip-tr border border-white/15 bg-paper p-6 text-ink md:p-7"
+        >
+          <p className="type-eyebrow eyebrow-chip">{HERO.packageTitle}</p>
+          <ul className="mt-5 space-y-3.5">
+            {HERO.packageItems.map((item) => (
+              <li key={item} className="flex items-start gap-3">
+                <span
+                  aria-hidden
+                  className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center bg-navy text-white"
+                >
+                  <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                </span>
+                <span className="text-base font-medium leading-snug">{item}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-5 border-t border-line pt-4 text-sm leading-relaxed text-slate">
+            {EVENT.venue}, {EVENT.city}. Race days {EVENT.raceDaysLabel}. RV stay{" "}
+            {EVENT.stayWindowLabel}. {EVENT.arrivalNote}
+          </p>
+        </aside>
       </div>
     </section>
   );
 }
 
-/* ─── 2. PROOF STRIP ─── */
+/* ─── 03. TRUST STRIP ─── */
 
-function ProofStrip() {
-  const items = [
-    "Delivered & Set Up",
-    "Clean, Stocked Units",
-    "Group-Friendly Floorplans",
-    "Race-Weekend Support",
-  ];
+function TrustStrip() {
   return (
-    <section aria-label="What Triple W handles" className="border-b border-white/10 bg-navy">
-      <ul className="mx-auto grid max-w-6xl grid-cols-2 gap-x-4 gap-y-2.5 px-4 py-4 md:flex md:items-center md:justify-between md:px-6">
-        {items.map((item) => (
-          <li
-            key={item}
-            className="text-center text-xs font-semibold uppercase tracking-[0.15em] text-white/85 md:text-[13px]"
-          >
-            {item}
+    <section aria-label="What Triple W handles" className="bg-navy-deep">
+      <ul className="container-x grid grid-cols-2 gap-y-3 py-4 md:flex md:items-center md:justify-between md:py-5">
+        {TRUST_STRIP.map((item, i) => (
+          <li key={item} className="flex items-center justify-center gap-4 md:justify-start">
+            {i > 0 ? (
+              <span aria-hidden className="hidden h-5 w-px rotate-[20deg] bg-white/30 md:block" />
+            ) : null}
+            <span className="text-center text-xs font-bold uppercase tracking-[0.16em] text-white/90 md:text-[13px]">
+              {item}
+            </span>
           </li>
         ))}
       </ul>
@@ -148,40 +159,60 @@ function ProofStrip() {
   );
 }
 
-/* ─── 4. PROBLEM ─── */
+/* ─── 04. CAMPSITE COORDINATION (one accurate partnership section) ─── */
 
-const PAIN_POINTS = [
-  {
-    title: "Hotels scatter the group",
-    desc: "Race-weekend hotel blocks split your crew across rooms, floors and properties. One trip becomes several.",
-  },
-  {
-    title: "The commute eats the weekend",
-    desc: "More than 100,000 fans move in and out of the circuit each day. Staying far away means prime hours in a car.",
-  },
-  {
-    title: "Towing it yourself is a second job",
-    desc: "Renting a trailer is easy. Towing it into a race-weekend lot, leveling it and getting power right the first time is not.",
-  },
-  {
-    title: "Dry camping punishes guesswork",
-    desc: "Lot N has no hookups. Without a real generator, fuel, water and waste plan, a warm October afternoon gets long fast.",
-  },
-];
-
-function Problem() {
+function CampsiteCoordination() {
   return (
-    <section className="section bg-paper px-4 md:px-6">
-      <div className="mx-auto max-w-6xl">
+    <section id="campsite" className="section texture-diag scroll-mt-32 bg-paper">
+      <div className="container-x grid items-start gap-8 lg:grid-cols-[1.2fr_1fr] lg:gap-14">
+        <div>
+          <SectionHeading eyebrow={CAMPSITE.eyebrow} title={CAMPSITE.headline} />
+          <p className="type-body text-ink/90">{CAMPSITE.body}</p>
+          <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-3">
+            {CAMPSITE.proof.map((p) => (
+              <li key={p} className="flex items-center gap-2 text-base font-semibold text-ink">
+                <span aria-hidden className="h-2.5 w-2.5 bg-action" />
+                {p}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="clip-tr border border-line bg-white p-6 md:p-7">
+          <p className="type-eyebrow text-action">Next step</p>
+          <p className="type-h3 mt-3 text-ink">Tell us your group size and dates.</p>
+          <TrackedCtaLink
+            href="#check-availability"
+            eventName="campsite_cta_click"
+            className="btn-primary mt-5 w-full"
+          >
+            {CAMPSITE.cta}
+          </TrackedCtaLink>
+          <p className="mt-4 text-sm leading-relaxed text-slate">{CAMPSITE.disclosure}</p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── 05. WHY NOT A HOTEL ─── */
+
+function WhyBasecamp() {
+  return (
+    <section className="section diag-top bg-navy pt-[calc(3.5rem+2.5vw)] md:pt-[calc(5rem+2.5vw)]">
+      <div className="container-x">
         <SectionHeading
-          eyebrow="The usual race-weekend plan"
-          title="Race weekend is already complicated enough."
+          light
+          eyebrow="Why not a hotel"
+          title="Everything else costs you race hours."
         />
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {PAIN_POINTS.map((p) => (
-            <div key={p.title} className="rounded-md border border-line bg-white p-5">
-              <h3 className="text-[17px] font-semibold leading-snug text-ink">{p.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate">{p.desc}</p>
+        <div className="grid gap-4 md:grid-cols-2">
+          {PAIN_POINTS.map((p, i) => (
+            <div key={p.title} className="relative overflow-hidden border border-white/10 bg-navy-soft p-6">
+              <span aria-hidden className="big-num absolute -right-2 -top-4 !text-white/5">
+                0{i + 1}
+              </span>
+              <h3 className="relative text-xl font-bold leading-snug text-white">{p.title}</h3>
+              <p className="relative mt-2 text-base leading-relaxed text-white/80">{p.desc}</p>
             </div>
           ))}
         </div>
@@ -190,358 +221,155 @@ function Problem() {
   );
 }
 
-/* ─── 5. OUTCOME ─── */
-
-const BENEFITS = [
-  {
-    title: "Arrive, don't assemble",
-    desc: "No towing, leveling or hookup guesswork. The setup plan is confirmed before you arrive.",
-  },
-  {
-    title: "Give the crew a real reset",
-    desc: "Cold A/C, real beds, a private bathroom, a kitchen and a place to sit together between sessions.",
-  },
-  {
-    title: "Stay inside the weekend",
-    desc: "Practice, qualifying, the race, the concerts. Then walk back to your own spot instead of organizing rides.",
-  },
-  {
-    title: "Know exactly what you booked",
-    desc: "The exact unit, the real bed layout, the inclusions, the fees and the power plan, in writing, before you pay.",
-  },
-];
-
-function Outcome() {
-  const photo = GALLERY[1];
-  return (
-    <section className="section bg-navy px-4 md:px-6">
-      <div className="mx-auto max-w-6xl">
-        <SectionHeading
-          light
-          eyebrow="With Triple W"
-          title="One private basecamp. Your whole crew. The full race weekend."
-        />
-        <div className="grid items-start gap-6 lg:grid-cols-[1.1fr_1fr] lg:gap-10">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-md">
-            <Image
-              src={photo.src}
-              alt={photo.alt}
-              fill
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              className="object-cover"
-            />
-          </div>
-          <ul className="space-y-4">
-            {BENEFITS.map((b) => (
-              <li key={b.title} className="border-l-2 border-action pl-4">
-                <h3 className="text-[17px] font-semibold leading-snug text-white">{b.title}</h3>
-                <p className="mt-1 text-sm leading-relaxed text-white/80">{b.desc}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── 6. RV OPTIONS / FLEET ─── */
+/* ─── 06. THE RVS: rotating real photos, no model names ─── */
 
 function Fleet() {
   return (
-    <section id="rv-options" className="section scroll-mt-24 bg-paper px-4 md:px-6">
-      <div className="mx-auto max-w-6xl">
+    <section id="rv-options" className="section scroll-mt-32 bg-paper">
+      <div className="container-x">
         <SectionHeading
           eyebrow="The RVs"
-          title="Real units, matched to your site. Not a stock-photo fleet."
-          sub="Fourteen units we own, maintain and deliver ourselves. Which one fits your weekend depends on your site's length, surface and power, so the match starts with your campsite."
+          title="The RV your group actually fits in."
+          sub="Fourteen units we own, maintain and deliver ourselves, from premium group setups to family-friendly layouts and smaller rigs for couples or solo travelers. Tell us your group size and how many actually need a bed; the exact unit for your weekend is confirmed in your written quote."
         />
+        <FleetCarousel />
 
-        {UNITS.length > 0 ? (
-          <UnitCards />
-        ) : (
-          <>
-            <div className="mb-6 grid gap-4 md:grid-cols-3">
-              {FLEET_CATEGORIES.map((cat) => (
-                <div key={cat.name} className="rounded-md border border-line bg-white p-5">
-                  <h3 className="text-[17px] font-semibold leading-snug text-ink">
-                    {cat.name}
-                    <span className="ml-2 text-sm font-normal text-slate">
-                      {cat.units.length} units
-                    </span>
-                  </h3>
-                  <p className="mt-1.5 text-sm text-ink/85">{cat.units.join(" · ")}</p>
-                  <p className="mt-2.5 text-sm leading-relaxed text-slate">{cat.fitNote}</p>
-                </div>
-              ))}
-            </div>
-
-            <FleetGallery />
-
-            <div className="mt-6 flex flex-col items-start gap-4 rounded-md border border-line bg-white p-5 md:flex-row md:items-center md:justify-between">
-              <p className="max-w-2xl text-sm leading-relaxed text-slate">
-                <span className="font-semibold text-ink">Want the exact unit?</span> Send your
-                site and group and we reply with the two or three units that fit it: photos,
-                length, real bed count and the power plan, before any deposit.
-              </p>
-              <TrackedCtaLink
-                href="#check-availability"
-                eventName="fleet_cta_click"
-                className="btn-primary shrink-0"
+        <div className="mt-6 grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
+          <ul className="flex flex-wrap gap-2">
+            {FLEET_FIT.map((label) => (
+              <li
+                key={label}
+                className="border border-line bg-white px-3.5 py-2 text-sm font-bold uppercase tracking-wider text-ink"
               >
-                See Which Units Fit My Site
-              </TrackedCtaLink>
-            </div>
-          </>
-        )}
+                {label}
+              </li>
+            ))}
+          </ul>
+          <TrackedCtaLink
+            href="#check-availability"
+            eventName="fleet_cta_click"
+            className="btn-primary"
+          >
+            Check Which RV Fits My Group
+          </TrackedCtaLink>
+        </div>
+        <p className="mt-4 max-w-3xl text-sm leading-relaxed text-slate">
+          Bed counts in your quote are the real permanent sleeping arrangements, not a
+          manufacturer&apos;s maximum. Cold A/C, a private bathroom and a kitchen come standard.
+        </p>
       </div>
     </section>
   );
 }
 
-/* ─── 7. HOW IT WORKS ─── */
-
-const STEPS = [
-  {
-    icon: PhoneCall,
-    title: "Tell us your site and your group",
-    desc: "Fill out the form or call. Campsite first: Premium RV, Lot N, another campground, or not booked yet.",
-  },
-  {
-    icon: ClipboardCheck,
-    title: "We verify before you pay",
-    desc: "Site dimensions, unit fit, access windows and COTA's current vendor rules. No deposit until the plan checks out.",
-  },
-  {
-    icon: CalendarCheck,
-    title: "Reserve with an itemized quote",
-    desc: "Rental, delivery, setup, pickup, power plan, taxes and deposit in one written quote. Campsite and race tickets stay separate.",
-  },
-  {
-    icon: Truck,
-    title: "Arrive to a finished setup",
-    desc: "We deliver in the confirmed window, level the unit, deploy the slides, set up the power plan and walk you through every system.",
-  },
-  {
-    icon: KeyRound,
-    title: "Drive home, we handle the rest",
-    desc: "When the weekend ends, you leave. We collect the RV in the confirmed pickup window and deal with the cleanup.",
-  },
-];
+/* ─── 07. HOW IT WORKS: three steps, oversized pale numbers ─── */
 
 function HowItWorks() {
   return (
-    <section id="how-it-works" className="section scroll-mt-24 bg-paper-warm px-4 md:px-6">
-      <div className="mx-auto max-w-6xl">
-        <SectionHeading
-          eyebrow="How it works"
-          title="Verified first. Delivered second. Zero guesswork."
-        />
-        <ol className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-          {STEPS.map((s, i) => {
-            const Icon = s.icon;
-            return (
-              <li key={s.title} className="rounded-md border border-line bg-white p-5">
-                <div className="flex items-center justify-between">
-                  <span className="font-[var(--font-barlow)] text-3xl font-semibold text-line">
-                    0{i + 1}
-                  </span>
-                  <Icon className="h-5 w-5 text-action" strokeWidth={2} aria-hidden />
-                </div>
-                <h3 className="mt-3 text-[15px] font-semibold leading-snug text-ink">
-                  {s.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate">{s.desc}</p>
-              </li>
-            );
-          })}
+    <section id="how-it-works" className="section scroll-mt-32 bg-paper-warm">
+      <div className="container-x">
+        <SectionHeading eyebrow="How it works" title="Three steps between you and a ready basecamp." />
+        <ol className="grid gap-5 md:grid-cols-3">
+          {STEPS.map((s, i) => (
+            <li key={s.title} className="relative overflow-hidden border border-line bg-white p-6 pt-8">
+              <span aria-hidden className="big-num absolute -right-3 -top-6">
+                {i + 1}
+              </span>
+              <h3 className="relative type-h3 uppercase text-ink">{s.title}</h3>
+              <p className="relative mt-3 text-base leading-relaxed text-slate">{s.desc}</p>
+            </li>
+          ))}
         </ol>
       </div>
     </section>
   );
 }
 
-/* ─── 8. PREMIUM VS LOT N ─── */
+/* ─── 08. WEEKEND TIMELINE ─── */
 
-function CompareRow({
-  label,
-  premium,
-  lotN,
-}: {
-  label: string;
-  premium: string;
-  lotN: string;
-}) {
+function Timeline() {
   return (
-    <tr className="border-b border-line last:border-b-0">
-      <th
-        scope="row"
-        className="py-3 pr-4 text-left align-top text-xs font-semibold uppercase tracking-wider text-slate"
-      >
-        {label}
-      </th>
-      <td className="px-4 py-3 align-top text-sm text-ink">{premium}</td>
-      <td className="px-4 py-3 align-top text-sm text-ink">{lotN}</td>
-    </tr>
-  );
-}
-
-function PremiumVsLotN() {
-  const p = COTA_CAMPING.premium;
-  const n = COTA_CAMPING.lotN;
-  return (
-    <section id="lot-n-guide" className="section scroll-mt-24 bg-paper px-4 md:px-6">
-      <div className="mx-auto max-w-6xl">
-        <SectionHeading
-          eyebrow="Know your lot"
-          title="Premium RV vs. Lot N: two very different campsites."
-          sub="Your campsite decides the unit, the power plan and the delivery logistics. Here's what COTA's 2026 pages list for each area."
-        />
-
-        <div className="overflow-x-auto rounded-md border border-line bg-white">
-          <table className="w-full min-w-[640px] border-collapse text-left">
-            <thead>
-              <tr className="border-b border-line">
-                <th className="w-40 py-3.5 pl-4 pr-4 md:pl-6" aria-label="Attribute" />
-                <th className="px-4 py-3.5 font-[var(--font-barlow)] text-xl font-semibold text-ink">
-                  {p.label}
-                </th>
-                <th className="px-4 py-3.5 font-[var(--font-barlow)] text-xl font-semibold text-ink">
-                  {n.label}
-                </th>
-              </tr>
-            </thead>
-            <tbody className="[&>tr>th]:pl-4 md:[&>tr>th]:pl-6">
-              <CompareRow label="Site size" premium={p.siteSize} lotN={n.siteSize} />
-              <CompareRow label="Surface" premium={p.surface} lotN={n.surface} />
-              <CompareRow label="Utilities" premium={p.hookups} lotN={n.hookups} />
-              <CompareRow label="Assignment" premium={p.assignment} lotN={n.assignment} />
-              <CompareRow label="Access window" premium={p.accessWindow} lotN={n.accessWindow} />
-              <CompareRow
-                label="Availability / services"
-                premium={p.availabilityNote}
-                lotN={n.services}
-              />
-            </tbody>
-          </table>
-        </div>
-
-        <div className="mt-4 grid gap-4 md:grid-cols-2">
-          <div className="rounded-md border border-line bg-white p-5">
-            <h3 className="text-sm font-semibold text-ink">What Lot N means for your rental</h3>
-            <p className="mt-2 text-sm leading-relaxed text-slate">
-              No hookups means power comes from a generator sized to the unit, water comes
-              from full tanks, and waste capacity is planned for your group. That plan
-              (generator, fuel, water, waste) is built into your quote, along with COTA&apos;s
-              quiet-hour and safety rules.
-            </p>
-          </div>
-          <div className="rounded-md border border-line bg-white p-5">
-            <h3 className="text-sm font-semibold text-ink">Rules change. Verify with COTA.</h3>
-            <p className="mt-2 text-sm leading-relaxed text-slate">
-              Campsite availability, services and access windows are COTA&apos;s to set and can
-              change. Confirm current details on{" "}
-              <a
-                href={COTA_CAMPING.officialUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium text-ink underline underline-offset-4 hover:text-action"
-              >
-                COTA&apos;s official RV camping page
-              </a>
-              . We re-verify everything for your exact site before you pay.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── 9. INCLUSIONS + PRICING POSTURE ─── */
-
-function Inclusions() {
-  return (
-    <section className="section bg-navy px-4 md:px-6">
-      <div className="mx-auto max-w-6xl">
+    <section
+      id="weekend-guide"
+      className="section diag-bottom scroll-mt-32 bg-navy pb-[calc(3.5rem+2.5vw)] md:pb-[calc(5rem+2.5vw)]"
+    >
+      <div className="container-x">
         <SectionHeading
           light
-          eyebrow="What you're actually buying"
-          title="A solved weekend, priced in one itemized quote."
-          sub={
-            PRICING.mode === "custom-quote"
-              ? "Every group, site and unit combination is different, so we quote the weekend as one itemized package instead of hiding behind a teaser rate."
-              : undefined
-          }
+          eyebrow="Weekend guide"
+          title="You show up. The work is already done."
+          sub={`Race days are ${EVENT.raceDaysLabel}. The RV stay runs ${EVENT.stayWindowLabel}: ${EVENT.arrivalNote} Monday is departure and pickup day, not a race day.`}
         />
+        <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {TIMELINE.map((t) => (
+            <li key={t.date} className="border border-white/10 bg-navy-soft p-5">
+              <p className="font-[var(--font-barlow)] text-sm font-bold uppercase tracking-[0.16em] text-white/70">
+                {t.day}
+              </p>
+              <p className="font-[var(--font-barlow)] text-5xl font-bold leading-none text-white">
+                {t.date}
+              </p>
+              <p className="mt-3 text-sm font-bold uppercase tracking-wider text-action">
+                {t.label}
+              </p>
+              <p className="mt-1.5 text-sm leading-relaxed text-white/80">{t.desc}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
 
-        <div className="grid gap-4 lg:grid-cols-3">
-          <div className="rounded-md border border-white/10 bg-navy-soft p-5">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
-              Every rental includes
+/* ─── 09. WHAT IS INCLUDED ─── */
+
+function Included() {
+  return (
+    <section className="section texture-diag bg-paper">
+      <div className="container-x">
+        <SectionHeading
+          eyebrow="What is included"
+          title="One written price, confirmed before you pay."
+          sub="Every group and unit combination is different, so we quote the weekend as one written package and confirm it before payment."
+        />
+        <div className="grid gap-5 lg:grid-cols-2">
+          <div className="clip-tr border border-line bg-white p-6">
+            <h3 className="text-sm font-bold uppercase tracking-[0.16em] text-ink">
+              The quote confirms
             </h3>
-            <ul className="mt-3 space-y-2.5">
-              {INCLUSIONS.map((item) => (
-                <li key={item} className="flex gap-3 text-sm leading-relaxed text-white/85">
-                  <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-action" />
+            <ul className="mt-4 space-y-2.5">
+              {QUOTE.confirms.map((item) => (
+                <li key={item} className="flex gap-3 text-base leading-relaxed text-ink/90">
+                  <Check className="mt-1 h-4 w-4 shrink-0 text-action" strokeWidth={3} aria-hidden />
                   {item}
                 </li>
               ))}
             </ul>
-            <p className="mt-4 border-t border-white/10 pt-3 text-xs leading-relaxed text-white/70">
-              {INCLUSIONS_NOTE}
-            </p>
           </div>
-
-          <div className="rounded-md border border-white/10 bg-navy-soft p-5">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
-              Your quote itemizes
+          <div className="border border-line bg-paper-warm/60 p-6">
+            <h3 className="text-sm font-bold uppercase tracking-[0.16em] text-ink">
+              Always separate
             </h3>
-            <ul className="mt-3 space-y-2.5">
-              {PRICING.quoteLineItems.map((item) => (
-                <li key={item} className="flex gap-3 text-sm leading-relaxed text-white/85">
-                  <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-action" />
+            <ul className="mt-4 space-y-2.5">
+              {QUOTE.alwaysSeparate.map((item) => (
+                <li key={item} className="flex gap-3 text-base leading-relaxed text-slate">
+                  <span aria-hidden className="mt-2.5 h-1.5 w-1.5 shrink-0 bg-slate" />
                   {item}
                 </li>
               ))}
             </ul>
-          </div>
-
-          <div className="rounded-md border border-action/40 bg-navy-soft p-5">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
-              Separate purchases, not included
-            </h3>
-            <ul className="mt-3 space-y-2.5">
-              {PRICING.separatePurchases.map((item) => (
-                <li key={item} className="flex gap-3 text-sm leading-relaxed text-white/85">
-                  <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-white/40" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-            <p className="mt-4 border-t border-white/10 pt-3 text-xs leading-relaxed text-white/70">
-              Every attendee needs valid circuit admission. The RV is your accommodation.
-              The campsite and tickets stay with COTA.
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-5 flex flex-col items-start gap-4 rounded-md border border-white/10 bg-navy-soft p-5 md:flex-row md:items-center md:justify-between">
-          <p className="type-body-sm max-w-xl text-white/85">
-            Want the number for your exact weekend? Two minutes in the form, or one call,
-            gets you an itemized quote with nothing hidden.
-          </p>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <TrackedCtaLink
-              href="#check-availability"
-              eventName="pricing_cta_click"
-              className="btn-primary"
-            >
-              Get My Weekend Quote
-            </TrackedCtaLink>
-            <PhoneLink location="pricing" className="btn-secondary text-white">
-              {BUSINESS.phoneDisplay}
-            </PhoneLink>
+            <div className="mt-6 flex flex-col gap-3 border-t border-line pt-5 sm:flex-row">
+              <TrackedCtaLink
+                href="#check-availability"
+                eventName="pricing_cta_click"
+                className="btn-primary flex-1"
+              >
+                Get My Weekend Quote
+              </TrackedCtaLink>
+              <PhoneLink location="pricing" className="btn-secondary flex-1 text-ink">
+                {BUSINESS.phoneDisplay}
+              </PhoneLink>
+            </div>
           </div>
         </div>
       </div>
@@ -549,106 +377,94 @@ function Inclusions() {
   );
 }
 
-/* ─── 10. REVIEWS ─── */
+/* ─── 10. PROOF ─── */
 
-function Reviews() {
+function Proof() {
+  const visible = REVIEWS.slice(0, 3);
+  const more = REVIEWS.slice(3);
   return (
-    <section className="section bg-paper px-4 md:px-6">
-      <div className="mx-auto max-w-6xl">
+    <section className="section bg-paper-warm">
+      <div className="container-x">
         <SectionHeading
-          eyebrow="What renters say"
-          title="Delivered, set up, and clean. In their words."
-          sub="From Triple W's Google reviews across Texas deliveries: the same crew and the same units that run race weekend."
+          eyebrow="Proof"
+          title="The same words come up in every review: delivered, set up, clean."
+          sub="Real Google reviews from Triple W renters across Texas deliveries: the same crew and the same units that run race weekend."
         />
-        <div className="grid gap-4 md:grid-cols-2">
-          {REVIEWS.map((r) => (
-            <figure key={r.name} className="flex flex-col rounded-md border border-line bg-white p-5">
-              <blockquote className="flex-1 text-[15px] leading-relaxed text-ink/90">
+        <div className="grid gap-4 md:grid-cols-3">
+          {visible.map((r) => (
+            <figure key={r.name} className="card-lift flex flex-col border border-line bg-white p-5">
+              <blockquote className="flex-1 text-base leading-relaxed text-ink/90">
                 &ldquo;{r.text}&rdquo;
               </blockquote>
-              <figcaption className="mt-3 border-t border-line pt-3 text-sm font-semibold text-ink">
+              <figcaption className="mt-4 border-t border-line pt-3 text-sm font-bold text-ink">
                 {r.name}
-                <span className="ml-2 font-normal text-slate">Google review</span>
+                <span className="ml-2 font-medium text-slate">Google review</span>
               </figcaption>
             </figure>
           ))}
         </div>
 
-        {TRUST_STATS.items.length > 0 ? (
-          <dl className="mt-6 grid grid-cols-2 gap-4 rounded-md border border-line bg-white px-4 py-5 md:grid-cols-4">
-            {TRUST_STATS.items.map((tp) => (
-              <div key={tp.label} className="text-center">
-                <dd className="font-[var(--font-barlow)] text-3xl font-semibold text-ink">
-                  {tp.value}
-                  {tp.suffix}
-                </dd>
-                <dt className="mt-1 text-xs uppercase tracking-[0.15em] text-slate">
-                  {tp.label}
-                </dt>
-              </div>
-            ))}
-          </dl>
+        {more.length > 0 ? (
+          <details className="group mt-4 border border-line bg-white">
+            <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-5 py-3 marker:content-none [&::-webkit-details-marker]:hidden">
+              <span className="text-[15px] font-bold uppercase tracking-wider text-ink">
+                More reviews ({more.length})
+              </span>
+              <span
+                aria-hidden
+                className="shrink-0 text-2xl leading-none text-action transition-transform group-open:rotate-45"
+              >
+                +
+              </span>
+            </summary>
+            <div className="grid gap-4 border-t border-line p-5 md:grid-cols-3">
+              {more.map((r) => (
+                <figure key={r.name} className="flex flex-col border border-line bg-paper p-5">
+                  <blockquote className="flex-1 text-base leading-relaxed text-ink/90">
+                    &ldquo;{r.text}&rdquo;
+                  </blockquote>
+                  <figcaption className="mt-4 border-t border-line pt-3 text-sm font-bold text-ink">
+                    {r.name}
+                    <span className="ml-2 font-medium text-slate">Google review</span>
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </details>
         ) : null}
+
+        <dl className="mt-6 grid grid-cols-2 gap-4 border border-line bg-navy px-4 py-6 md:grid-cols-4">
+          {TRUST_STATS.map((tp) => (
+            <div key={tp.label} className="text-center">
+              <dd className="font-[var(--font-barlow)] text-4xl font-bold text-white">
+                {tp.value}
+                {tp.suffix}
+              </dd>
+              <dt className="mt-1 text-xs font-bold uppercase tracking-[0.16em] text-white/70">
+                {tp.label}
+              </dt>
+            </div>
+          ))}
+        </dl>
       </div>
     </section>
   );
 }
 
-/* ─── 11. GROUP VALUE ─── */
-
-function GroupValue() {
-  return (
-    <section className="section bg-paper-warm px-4 md:px-6">
-      <div className="mx-auto max-w-6xl">
-        <SectionHeading
-          eyebrow="Do the group math"
-          title="One basecamp, split by the whole crew."
-        />
-        <div className="grid gap-4 md:grid-cols-2">
-          <div className="rounded-md border border-line bg-white p-5 md:p-6">
-            <h3 className="text-[17px] font-semibold text-ink">The hotel version</h3>
-            <ul className="mt-3 space-y-2 text-sm leading-relaxed text-slate">
-              <li>Multiple rooms at race-weekend rates, usually with minimum-night stays</li>
-              <li>The group split across floors, buildings or towns</li>
-              <li>Rides or parking for every single track day</li>
-              <li>Nowhere to regroup between sessions or after the concerts</li>
-            </ul>
-          </div>
-          <div className="rounded-md border border-navy/20 bg-navy p-5 md:p-6">
-            <h3 className="text-[17px] font-semibold text-white">The basecamp version</h3>
-            <ul className="mt-3 space-y-2 text-sm leading-relaxed text-white/85">
-              <li>One itemized quote, split across everyone staying</li>
-              <li>Beds, bathroom, kitchen and A/C in one private spot</li>
-              <li>At COTA&apos;s RV areas: walk to the gates instead of commuting</li>
-              <li>The RV is the meeting point before, between and after sessions</li>
-            </ul>
-            <p className="mt-4 border-t border-white/15 pt-3 text-xs leading-relaxed text-white/70">
-              Run your own numbers: price the rooms and rides for your group, then ask us for
-              the itemized weekend quote and compare.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ─── 13. FINAL CTA + FORM ─── */
+/* ─── 12. FORM + FINAL CTA ─── */
 
 function FinalCta() {
   return (
-    <section className="section bg-paper px-4 md:px-6">
-      <div className="mx-auto max-w-6xl">
-        <div className="mx-auto mb-7 max-w-2xl text-center md:mb-9">
-          <p className="type-eyebrow text-action">Final step</p>
-          <h2 className="type-h2 mt-3 text-ink">
-            Your tickets are the exciting part.
-            <br />
-            Your lodging should be the easy part.
+    <section className="section texture-diag bg-paper">
+      <div className="container-x">
+        <div className="mx-auto mb-8 max-w-2xl text-center md:mb-10">
+          <p className="type-eyebrow eyebrow-chip">Final step</p>
+          <h2 className="type-h2 mt-4 uppercase text-ink">
+            Your Tickets Are the Exciting Part. Your Lodging Should Be the Easy Part.
           </h2>
-          <p className="type-body mt-3 text-slate">
-            Tell us where you&apos;re staying and how many people are coming. We&apos;ll confirm
-            availability, campsite compatibility and the best Triple W option for your weekend.
+          <p className="type-body mx-auto mt-4 text-slate">
+            Tell us your group size and dates. We&apos;ll confirm the RV-and-campsite plan
+            before you pay.
           </p>
         </div>
 
@@ -669,30 +485,35 @@ function FinalCta() {
           >
             send a text
           </SmsLink>
-          . {BUSINESS.ownerLine}, {BUSINESS.base}.
+          .
         </p>
       </div>
     </section>
   );
 }
 
-/* ─── 14. FOOTER ─── */
+/* ─── 13. FOOTER ─── */
 
 function SiteFooter() {
   return (
-    <footer className="bg-navy-deep px-4 py-10 md:px-6">
-      <div className="mx-auto max-w-6xl">
-        <div className="flex flex-col gap-4 border-b border-white/10 pb-6 md:flex-row md:items-start md:justify-between">
+    <footer className="bg-navy-deep py-10">
+      <div className="container-x">
+        <div className="flex flex-col gap-5 border-b border-white/10 pb-6 md:flex-row md:items-start md:justify-between">
           <div>
-            <p className="font-[var(--font-barlow)] text-2xl font-semibold text-white">
+            <p className="font-[var(--font-barlow)] text-2xl font-bold uppercase text-white">
               Triple W Rentals
             </p>
             <p className="mt-1 text-sm text-white/70">
               {BUSINESS.base} &middot; RV rentals, delivered and set up
             </p>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-white/70">
+              We provide the RV, delivery, setup and pickup, and coordinate your campsite
+              through our race-weekend partner. Race admission, travel and food are
+              separate.
+            </p>
           </div>
           <div className="flex flex-col gap-2 text-sm md:items-end">
-            <PhoneLink location="footer" className="text-white/85 transition-colors hover:text-white">
+            <PhoneLink location="footer" className="font-semibold text-white transition-colors hover:text-action">
               {BUSINESS.phoneDisplay}
             </PhoneLink>
             <a
@@ -729,40 +550,22 @@ export default function Home() {
       <SiteHeader />
       <main className="bg-paper text-ink">
         <Hero />
-        <ProofStrip />
-
-        {/* 3. Campsite compatibility check */}
-        <section id="site-check" className="section scroll-mt-24 bg-paper-warm px-4 md:px-6">
-          <div className="mx-auto max-w-6xl">
-            <SectionHeading
-              eyebrow="First things first"
-              title="Where are you staying? Start there."
-              sub="An RV rental doesn't come with a legal place to park it. Your campsite decides which units fit, how power works and how delivery happens, so it's the first question we ask."
-            />
-            <SiteCheck />
-            <p className="mt-4 text-xs leading-relaxed text-slate">
-              {EVENT.name} &middot; {EVENT.venue}, {EVENT.city} &middot; Race days{" "}
-              {EVENT.raceDaysLabel} &middot; RV areas open {EVENT.stayWindowLabel}. Campsites
-              are reserved directly with COTA or your campground, never through us.
-            </p>
-          </div>
-        </section>
-
-        <Problem />
-        <Outcome />
+        <TrustStrip />
+        <CampsiteCoordination />
+        <WhyBasecamp />
         <Fleet />
         <HowItWorks />
-        <PremiumVsLotN />
-        <Inclusions />
-        <Reviews />
-        <GroupValue />
+        <Timeline />
+        <Included />
+        <Proof />
 
-        {/* 12. FAQ */}
-        <section id="faq" className="section scroll-mt-24 bg-paper px-4 md:px-6">
-          <div className="mx-auto max-w-6xl">
+        {/* 11. Selected FAQ */}
+        <section id="faq" className="section scroll-mt-32 bg-paper">
+          <div className="container-x">
             <SectionHeading
-              eyebrow="Answers before you ask"
-              title="The questions that actually decide this booking."
+              center
+              eyebrow="Selected FAQ"
+              title="What people ask before they book."
             />
             <Faq />
           </div>

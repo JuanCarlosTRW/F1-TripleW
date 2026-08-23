@@ -20,17 +20,17 @@ const outfit = Outfit({
 export const metadata: Metadata = {
   title: "Private RV Basecamp for COTA Race Weekend 2026 | Triple W Rentals",
   description:
-    "Air-conditioned RV accommodations for the 2026 United States Grand Prix at Circuit of The Americas, Oct 22-26. Tell us your campsite status and group size. We match the RV, confirm access, deliver, set up and collect it. Call or text (972) 965-6901.",
+    "Air-conditioned RV basecamp for the 2026 United States Grand Prix at Circuit of The Americas, Oct 22-26. Your campsite coordinated with the RV, delivered and set up, collected after the weekend. Race tickets sold separately. Call or text (972) 965-6901.",
   openGraph: {
-    title: "Your Private, Air-Conditioned RV Basecamp for COTA Weekend",
+    title: "Your own RV at COTA. Set up before you arrive.",
     description:
-      "Tell us your campsite status and group size. Triple W matches the right RV, confirms access, delivers and sets it up, then collects it after the weekend.",
+      "Tell us your group size. Triple W confirms RV-and-campsite availability, matches the right unit, delivers and sets it up, then collects it after the weekend.",
     type: "website",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#101B2D",
+  themeColor: "#0B1728",
 };
 
 export default function RootLayout({

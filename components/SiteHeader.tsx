@@ -1,65 +1,139 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-import { Phone } from "lucide-react";
+import { Menu, Phone, X } from "lucide-react";
+import { useState } from "react";
 import PhoneLink from "@/components/PhoneLink";
-import { BUSINESS, LOGO_IMAGE } from "@/content/site";
+import TrackedCtaLink from "@/components/TrackedCtaLink";
+import { BUSINESS, EVENT, LOGO_IMAGE } from "@/content/site";
 
 const NAV = [
   { href: "#rv-options", label: "RV Options" },
   { href: "#how-it-works", label: "How It Works" },
-  { href: "#lot-n-guide", label: "Lot N Guide" },
+  { href: "#weekend-guide", label: "Weekend Guide" },
   { href: "#faq", label: "FAQ" },
 ] as const;
 
+/**
+ * Event bar + sticky navigation (brief §7.1). Ivory nav, 68-76 px, light
+ * bottom border, red clipped-corner primary CTA. Mobile: logo, phone icon,
+ * menu. The fixed bottom CTA lives in StickyMobileCTA.
+ */
 export default function SiteHeader() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <header className="fixed left-0 right-0 top-0 z-40 border-b border-line bg-paper/95 backdrop-blur-md [padding-top:env(safe-area-inset-top)]">
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6">
-        <Link href="/" className="flex shrink-0 items-center" aria-label="Triple W Rentals home">
-          <Image
-            src={LOGO_IMAGE}
-            alt="Triple W Rentals"
-            width={180}
-            height={54}
-            priority
-            className="h-10 w-auto object-contain md:h-12"
-          />
-        </Link>
-
-        <nav aria-label="Page sections" className="hidden items-center gap-6 lg:flex">
-          {NAV.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="text-sm font-medium tracking-wide text-slate transition-colors hover:text-ink"
+    <header className="fixed left-0 right-0 top-0 z-40 [padding-top:env(safe-area-inset-top)]">
+      {/* Event bar */}
+      <div className="bg-navy text-white">
+        <p className="container-x flex h-8 items-center justify-center gap-2 overflow-hidden whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.18em] md:h-9 md:text-xs">
+          {EVENT.eventBarParts.map((part, i) => (
+            <span
+              key={part}
+              className={`items-center gap-2 ${i === 1 || i === 2 ? "hidden sm:flex" : "flex"}`}
             >
-              {item.label}
-            </a>
+              {i > 0 ? (
+                <span aria-hidden className="h-3 w-px rotate-[20deg] bg-white/40" />
+              ) : null}
+              <span>{part}</span>
+            </span>
           ))}
-        </nav>
+        </p>
+      </div>
 
-        <div className="flex items-center gap-3">
-          <PhoneLink
-            location="header"
-            className="hidden items-center gap-2 text-sm font-semibold tracking-wide text-ink transition-colors hover:text-action md:inline-flex"
-          >
-            <Phone className="h-4 w-4 shrink-0" strokeWidth={2.5} aria-hidden />
-            <span>{BUSINESS.phoneDisplay}</span>
-          </PhoneLink>
-          <a
-            href="#check-availability"
-            className="hidden rounded-sm bg-action px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-white transition-colors hover:bg-action-deep md:inline-block"
-          >
-            Check Availability
-          </a>
-          <PhoneLink
-            location="header_mobile"
-            aria-label={`Call ${BUSINESS.phoneDisplay}`}
-            className="inline-flex min-h-11 min-w-11 flex-col items-center justify-center gap-0.5 rounded-sm border border-navy/25 bg-white px-3 py-2 font-semibold text-ink transition-colors hover:bg-paper-warm md:hidden"
-          >
-            <Phone className="h-5 w-5" strokeWidth={2.5} aria-hidden />
-            <span className="text-[10px] uppercase leading-none tracking-wider">Call</span>
-          </PhoneLink>
+      {/* Navigation */}
+      <div className="border-b border-line bg-paper/95 backdrop-blur-md">
+        <div className="container-x flex h-[68px] items-center justify-between gap-4 md:h-[72px]">
+          <Link href="/" className="flex shrink-0 items-center" aria-label="Triple W Rentals home">
+            <Image
+              src={LOGO_IMAGE}
+              alt="Triple W Rentals"
+              width={180}
+              height={54}
+              priority
+              className="h-10 w-auto object-contain md:h-11"
+            />
+          </Link>
+
+          <nav aria-label="Page sections" className="hidden items-center gap-7 lg:flex">
+            {NAV.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="text-sm font-semibold tracking-wide text-ink/80 transition-colors hover:text-action"
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-2 md:gap-4">
+            <PhoneLink
+              location="header"
+              className="hidden items-center gap-2 text-sm font-bold text-ink transition-colors hover:text-action md:inline-flex"
+            >
+              <Phone className="h-4 w-4" strokeWidth={2.5} aria-hidden />
+              <span>{BUSINESS.phoneDisplay}</span>
+            </PhoneLink>
+            <TrackedCtaLink
+              href="#check-availability"
+              eventName="header_cta_click"
+              className="btn-primary hidden !min-h-11 !px-5 !py-2.5 !text-[13px] md:inline-flex"
+            >
+              Get My Weekend Quote
+            </TrackedCtaLink>
+
+            {/* Mobile: phone icon + menu */}
+            <PhoneLink
+              location="header"
+              aria-label={`Call ${BUSINESS.phoneDisplay}`}
+              className="inline-flex h-11 w-11 items-center justify-center border border-line text-ink md:hidden"
+            >
+              <Phone className="h-5 w-5" strokeWidth={2.5} aria-hidden />
+            </PhoneLink>
+            <button
+              type="button"
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              aria-label={open ? "Close menu" : "Open menu"}
+              onClick={() => setOpen((v) => !v)}
+              className="inline-flex h-11 w-11 items-center justify-center border border-line text-ink lg:hidden"
+            >
+              {open ? (
+                <X className="h-5 w-5" strokeWidth={2.5} aria-hidden />
+              ) : (
+                <Menu className="h-5 w-5" strokeWidth={2.5} aria-hidden />
+              )}
+            </button>
+          </div>
+        </div>
+
+        <div
+          id="mobile-menu"
+          hidden={!open}
+          className="border-t border-line bg-paper lg:hidden"
+        >
+          <nav aria-label="Page sections" className="container-x flex flex-col py-2">
+            {NAV.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className="flex min-h-12 items-center border-b border-line/70 text-base font-semibold text-ink last:border-b-0"
+              >
+                {item.label}
+              </a>
+            ))}
+            <TrackedCtaLink
+              href="#check-availability"
+              eventName="header_cta_click"
+              onClick={() => setOpen(false)}
+              className="btn-primary my-3 w-full"
+            >
+              Get My Weekend Quote
+            </TrackedCtaLink>
+          </nav>
         </div>
       </div>
     </header>

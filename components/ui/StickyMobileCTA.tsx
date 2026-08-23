@@ -14,7 +14,7 @@ export default function StickyMobileCTA() {
   const [formInView, setFormInView] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 500);
+    const onScroll = () => setScrolled(window.scrollY > 560);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -50,7 +50,7 @@ export default function StickyMobileCTA() {
         onClick={() => trackEvent("sticky_cta_click", { action: "form" })}
         className="flex flex-1 basis-[62%] items-center justify-center gap-1.5 bg-action py-4 text-[13px] font-semibold uppercase tracking-wide text-white active:brightness-95"
       >
-        Check Availability
+        Get My Weekend Quote
       </a>
       <PhoneLink
         location="sticky_bar"

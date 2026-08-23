@@ -1,56 +1,55 @@
-import { FAQ_CORE, FAQ_SECONDARY } from "@/content/site";
+import { FAQ_CORE, FAQ_MORE } from "@/content/site";
 
 function Item({ q, a, open }: { q: string; a: string; open?: boolean }) {
   return (
     <details
       open={open}
-      className="group border-b border-line transition-colors last:border-b-0 open:bg-white"
+      className="group border-b border-line last:border-b-0 open:bg-white"
     >
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-3 py-3.5 marker:content-none [&::-webkit-details-marker]:hidden">
-        <span className="text-[15px] font-semibold leading-snug text-ink">{q}</span>
+      <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-4 py-3.5 marker:content-none [&::-webkit-details-marker]:hidden">
+        <span className="text-base font-semibold leading-snug text-ink">{q}</span>
         <span
           aria-hidden
-          className="shrink-0 text-xl leading-none text-action transition-transform group-open:rotate-45"
+          className="shrink-0 text-2xl leading-none text-action transition-transform group-open:rotate-45"
         >
           +
         </span>
       </summary>
-      <div className="px-3 pb-4">
-        <p className="text-sm leading-relaxed text-slate">{a}</p>
+      <div className="px-4 pb-4">
+        <p className="text-base leading-relaxed text-slate">{a}</p>
       </div>
     </details>
   );
 }
 
 /**
- * Prioritized FAQ (audit §13). The top five booking blockers are also answered
- * up-page in their own sections; this is the consolidated reference. Secondary
- * planning questions sit in one collapsed group to keep the page short.
+ * Decisive FAQ (brief §7.11): eight questions, then the expanded list behind
+ * "View all questions". Native <details> keeps accordions keyboard operable
+ * and exposes expanded state.
  */
 export default function Faq() {
   return (
     <div className="mx-auto max-w-3xl">
-      <div className="rounded-md border border-line bg-paper-warm/60">
+      <div className="border border-line bg-paper-warm/50">
         {FAQ_CORE.map((item, i) => (
           <Item key={item.q} q={item.q} a={item.a} open={i === 0} />
         ))}
       </div>
 
-      <details className="group mt-4 rounded-md border border-line bg-paper-warm/60">
-        <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-3 py-3.5 marker:content-none [&::-webkit-details-marker]:hidden">
-          <span className="text-[15px] font-semibold leading-snug text-ink">
-            More planning details ({FAQ_SECONDARY.length} questions: distance, noise, pets, cell
-            service, ADA)
+      <details className="group mt-4 border border-line bg-paper-warm/50">
+        <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-4 py-3.5 marker:content-none [&::-webkit-details-marker]:hidden">
+          <span className="text-[15px] font-bold uppercase tracking-wider text-ink">
+            View all questions ({FAQ_MORE.length} more)
           </span>
           <span
             aria-hidden
-            className="shrink-0 text-xl leading-none text-action transition-transform group-open:rotate-45"
+            className="shrink-0 text-2xl leading-none text-action transition-transform group-open:rotate-45"
           >
             +
           </span>
         </summary>
         <div className="border-t border-line">
-          {FAQ_SECONDARY.map((item) => (
+          {FAQ_MORE.map((item) => (
             <Item key={item.q} q={item.q} a={item.a} />
           ))}
         </div>

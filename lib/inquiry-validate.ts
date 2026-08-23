@@ -2,18 +2,31 @@ import { parseDate } from "@internationalized/date";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export const CAMPSITE_VALUES = ["premium", "lot-n", "other", "none"] as const;
+/**
+ * "coordinated" (default: Triple W coordinates the placement) or "own" (the
+ * visitor already holds a campsite). The older lot-specific values stay
+ * accepted so the submission contract remains backward compatible.
+ */
+export const CAMPSITE_VALUES = [
+  "coordinated",
+  "own",
+  "premium",
+  "lot-n",
+  "other",
+  "none",
+] as const;
 export type CampsiteValue = (typeof CAMPSITE_VALUES)[number];
 
 export const BEDS_VALUES = ["1", "2", "3", "4", "5", "6-plus", "not-sure"] as const;
 export const BUDGET_VALUES = [
-  "under-2000",
-  "2000-3500",
-  "3500-5000",
+  "under-1000",
+  "1000-2500",
+  "2500-5000",
   "5000-plus",
   "not-sure",
 ] as const;
 export const CONTACT_METHOD_VALUES = ["call", "text", "email"] as const;
+export const ADD_ON_VALUES = ["wifi-starlink"] as const;
 
 function oneOf<T extends readonly string[]>(
   list: T,
@@ -39,6 +52,7 @@ export type InquiryParsed = {
   kids: number;
   beds: string;
   budget: string;
+  addOns: string[];
   // Step 3: contact
   fullName: string;
   email: string;
@@ -63,10 +77,8 @@ export function validateInquiry(raw: Record<string, unknown>):
   | { ok: false; errors: InquiryFieldErrors } {
   const errors: InquiryFieldErrors = {};
 
-  const campsite = oneOf(CAMPSITE_VALUES, raw.campsite);
-  if (!campsite) {
-    errors.campsite = "Tell us where you're planning to stay";
-  }
+  // Missing or unknown value means the default coordinated placement.
+  const campsite: CampsiteValue = oneOf(CAMPSITE_VALUES, raw.campsite) || "coordinated";
 
   const siteNumber =
     typeof raw.siteNumber === "string" ? raw.siteNumber.trim().slice(0, 40) : "";
@@ -99,6 +111,15 @@ export function validateInquiry(raw: Record<string, unknown>):
 
   const beds = oneOf(BEDS_VALUES, raw.beds);
   const budget = oneOf(BUDGET_VALUES, raw.budget);
+  const addOnsRaw = Array.isArray(raw.addOns) ? raw.addOns : raw.addOns ? [raw.addOns] : [];
+  const addOns = Array.from(
+    new Set(
+      addOnsRaw.filter(
+        (v): v is (typeof ADD_ON_VALUES)[number] =>
+          typeof v === "string" && (ADD_ON_VALUES as readonly string[]).includes(v)
+      )
+    )
+  );
   const contactMethod = oneOf(CONTACT_METHOD_VALUES, raw.contactMethod);
 
   const fullName = typeof raw.fullName === "string" ? raw.fullName.trim() : "";
@@ -129,7 +150,7 @@ export function validateInquiry(raw: Record<string, unknown>):
   return {
     ok: true,
     data: {
-      campsite: campsite as CampsiteValue,
+      campsite,
       siteNumber,
       arrivalDate,
       departureDate,
@@ -137,6 +158,7 @@ export function validateInquiry(raw: Record<string, unknown>):
       kids: kids ?? 0,
       beds,
       budget,
+      addOns,
       fullName,
       email,
       phone,
@@ -149,13 +171,12 @@ export function validateInquiry(raw: Record<string, unknown>):
 }
 
 /**
- * Qualified lead = holds a campsite type the fleet can be delivered to, dates
- * inside the event window, at least one adult, and a reachable contact
- * (audit §14). "No campsite yet" is a nurture lead, not a qualified one.
+ * Qualified lead = dates inside the event window, at least one adult and a
+ * reachable contact. Placement is coordinated by Triple W, so the campsite no
+ * longer gates qualification (legacy "none" stays a nurture lead).
  */
 export function isQualifiedLead(data: InquiryParsed): boolean {
-  const hasSite =
-    data.campsite === "premium" || data.campsite === "lot-n" || data.campsite === "other";
+  const hasSite = data.campsite !== "none";
   const hasGroup = data.adults >= 1;
 
   let datesInWindow = false;

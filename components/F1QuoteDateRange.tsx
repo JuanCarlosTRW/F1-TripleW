@@ -47,7 +47,7 @@ const minDate = new CalendarDate(2026, 1, 1);
 const maxDate = new CalendarDate(2027, 12, 31);
 
 const chip =
-  "rounded-sm px-3 py-2 text-xs font-semibold uppercase tracking-wider border transition-colors";
+  "min-h-11 px-3.5 py-2 text-xs font-bold uppercase tracking-wider border transition-colors";
 
 export default function F1QuoteDateRange({
   value,
@@ -77,7 +77,7 @@ export default function F1QuoteDateRange({
             aria-pressed={preset === p.key}
             className={`${chip} ${
               preset === p.key
-                ? "border-navy bg-navy text-white"
+                ? "border-action bg-action-tint text-ink"
                 : "border-line text-slate hover:border-navy/50"
             }`}
             onClick={() => setFromPreset(p.key, p.range ?? range ?? F1_WEEKEND_RANGE)}
@@ -90,7 +90,7 @@ export default function F1QuoteDateRange({
       <div>
         <p className="mb-1 text-sm font-medium text-ink">{rangeSummary(range)}</p>
         <p className="mb-3 text-xs text-slate">
-          Race days are Fri Oct 23 to Sun Oct 25. Monday Oct 26 is departure and pickup day.
+          Race days are Fri Oct 23 to Sun Oct 25. Monday Oct 26 is departure and pickup day. Setup is done before you arrive.
         </p>
         <I18nProvider locale="en-US">
           <RangeCalendar
@@ -107,19 +107,19 @@ export default function F1QuoteDateRange({
             <header className="flex items-center gap-2 mb-3 px-1">
               <Button
                 slot="previous"
-                className="h-10 w-10 flex items-center justify-center rounded-sm border border-line text-ink hover:bg-paper-warm outline-none focus-visible:ring-2 focus-visible:ring-action"
+                className="h-10 w-10 flex items-center justify-center border border-line text-ink hover:bg-paper-warm outline-none focus-visible:ring-2 focus-visible:ring-action"
               >
                 <ChevronLeft className="w-5 h-5" aria-hidden />
               </Button>
               <Heading className="flex-1 text-center font-[var(--font-barlow)] font-semibold text-lg text-ink" />
               <Button
                 slot="next"
-                className="h-10 w-10 flex items-center justify-center rounded-sm border border-line text-ink hover:bg-paper-warm outline-none focus-visible:ring-2 focus-visible:ring-action"
+                className="h-10 w-10 flex items-center justify-center border border-line text-ink hover:bg-paper-warm outline-none focus-visible:ring-2 focus-visible:ring-action"
               >
                 <ChevronRight className="w-5 h-5" aria-hidden />
               </Button>
             </header>
-            <CalendarGrid className="w-full border-separate border-spacing-1">
+            <CalendarGrid className="w-full table-fixed border-separate border-spacing-0.5">
               <CalendarGridHeader>
                 {(day) => (
                   <CalendarHeaderCell className="p-1 text-center text-[10px] uppercase tracking-wider text-slate/70">
@@ -136,7 +136,7 @@ export default function F1QuoteDateRange({
                     {({ formattedDate, isSelected, isSelectionStart, isSelectionEnd }) => (
                       <span
                         className={[
-                          "flex h-9 w-9 items-center justify-center rounded-full text-sm",
+                          "mx-auto flex aspect-square w-full max-w-11 items-center justify-center rounded-full text-sm",
                           isSelected && (isSelectionStart || isSelectionEnd)
                             ? "bg-navy text-white font-semibold"
                             : isSelected
@@ -159,7 +159,7 @@ export default function F1QuoteDateRange({
           </RangeCalendar>
         </I18nProvider>
         <p className="mt-2 text-xs text-slate">
-          Both COTA RV areas open Thursday, Oct 22. Tap the calendar for custom dates.
+          Arrive Thursday, Friday or whenever your weekend starts. Tap the calendar for custom dates.
         </p>
       </div>
 
