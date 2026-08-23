@@ -18,13 +18,13 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "RV Basecamp Near COTA for F1 Austin 2026 | Triple W Rentals",
+  title: "Private RV Basecamp for COTA Race Weekend 2026 | Triple W Rentals",
   description:
-    "Private, air-conditioned RV accommodations for the 2026 United States Grand Prix at Circuit of The Americas, Oct 22-26. Tell us your campsite and group size. We verify fit, deliver, set up and pick up. Call or text (972) 965-6901.",
+    "Air-conditioned RV accommodations for the 2026 United States Grand Prix at Circuit of The Americas, Oct 22-26. Tell us your campsite status and group size. We match the RV, confirm access, deliver, set up and collect it. Call or text (972) 965-6901.",
   openGraph: {
-    title: "Your Private RV Basecamp Near COTA for F1 Austin 2026",
+    title: "Your Private, Air-Conditioned RV Basecamp for COTA Weekend",
     description:
-      "Tell us your approved campsite and group size. Triple W matches the RV, verifies delivery feasibility, sets it up and collects it after the weekend.",
+      "Tell us your campsite status and group size. Triple W matches the right RV, confirms access, delivers and sets it up, then collects it after the weekend.",
     type: "website",
   },
 };

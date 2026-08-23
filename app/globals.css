@@ -17,7 +17,7 @@
 
   /* Text */
   --color-ink: #182236;
-  --color-slate: #56606E;
+  --color-slate: #4A5462;
 
   /* Lines */
   --color-line: #E3DED4;
@@ -82,6 +82,18 @@ body {
     font-size: 0.9375rem;
     line-height: 1.6;
     font-weight: 400;
+  }
+
+  /* Shared vertical rhythm: one section padding, one heading gap. */
+  .section {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+  @media (min-width: 768px) {
+    .section {
+      padding-top: 4.5rem;
+      padding-bottom: 4.5rem;
+    }
   }
 
   .type-eyebrow {

@@ -11,7 +11,7 @@ const OPTIONS: Array<{
   {
     value: "premium",
     title: "I have a Premium RV site",
-    note: "Reserved, paved, water + electric. COTA listed these as sold out in Aug 2026. If you hold one, you're in a strong position.",
+    note: "Reserved, paved, water + electric. Premium RV availability is controlled by COTA and may change. We verify your campsite status before matching a unit.",
   },
   {
     value: "lot-n",
@@ -26,7 +26,7 @@ const OPTIONS: Array<{
   {
     value: "none",
     title: "I don't have a campsite yet",
-    note: "Start here anyway. We'll tell you what's realistically still available before you spend anything.",
+    note: "Start here anyway. We can explain which campsite types work with our fleet, but campsites must be reserved directly through COTA or another campground.",
   },
 ];
 
@@ -50,7 +50,7 @@ export default function SiteCheck() {
           key={opt.value}
           type="button"
           onClick={() => choose(opt.value)}
-          className="group flex flex-col items-start rounded-md border border-line bg-white p-5 text-left transition-colors hover:border-navy md:p-6"
+          className="group flex flex-col items-start rounded-md border border-line bg-white p-4 text-left transition-colors hover:border-navy md:p-5"
         >
           <span className="flex w-full items-center justify-between gap-3">
             <span className="type-h3 text-ink">{opt.title}</span>

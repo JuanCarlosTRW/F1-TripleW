@@ -5,11 +5,7 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export const CAMPSITE_VALUES = ["premium", "lot-n", "other", "none"] as const;
 export type CampsiteValue = (typeof CAMPSITE_VALUES)[number];
 
-export const PASS_STATUS_VALUES = ["purchased", "purchasing", "not-yet"] as const;
-export type PassStatusValue = (typeof PASS_STATUS_VALUES)[number];
-
-export const POWER_VALUES = ["hookups", "generator", "not-sure"] as const;
-export const SLEEPING_VALUES = ["real-beds", "mixed", "flexible"] as const;
+export const BEDS_VALUES = ["1", "2", "3", "4", "5", "6-plus", "not-sure"] as const;
 export const BUDGET_VALUES = [
   "under-2000",
   "2000-3500",
@@ -29,38 +25,26 @@ function oneOf<T extends readonly string[]>(
 }
 
 export type InquiryFieldErrors = Partial<
-  Record<
-    | "campsite"
-    | "passStatus"
-    | "dateRange"
-    | "groupTotal"
-    | "fullName"
-    | "phone"
-    | "email",
-    string
-  >
+  Record<"campsite" | "dateRange" | "adults" | "kids" | "fullName" | "phone" | "email", string>
 >;
 
 export type InquiryParsed = {
-  // Step 1 - campsite readiness
+  // Step 1: campsite
   campsite: CampsiteValue;
-  passStatus: PassStatusValue | "";
   siteNumber: string;
   arrivalDate: string;
   departureDate: string;
-  // Step 2 - RV fit
-  groupTotal?: number;
-  adults?: number;
-  kids?: number;
-  sleeping: string;
-  power: string;
+  // Step 2: group and RV fit
+  adults: number;
+  kids: number;
+  beds: string;
   budget: string;
-  message: string;
-  // Step 3 - contact
+  // Step 3: contact
   fullName: string;
   email: string;
   phone: string;
   contactMethod: string;
+  message: string;
   // Plumbing
   source: string;
   website: string;
@@ -84,11 +68,6 @@ export function validateInquiry(raw: Record<string, unknown>):
     errors.campsite = "Tell us where you're planning to stay";
   }
 
-  const passStatus = oneOf(PASS_STATUS_VALUES, raw.passStatus);
-  if (campsite && campsite !== "none" && !passStatus) {
-    errors.passStatus = "Tell us where your campsite pass stands";
-  }
-
   const siteNumber =
     typeof raw.siteNumber === "string" ? raw.siteNumber.trim().slice(0, 40) : "";
 
@@ -109,15 +88,16 @@ export function validateInquiry(raw: Record<string, unknown>):
     }
   }
 
-  const groupTotal = parseCount(raw.groupTotal, 1, 16);
-  if (groupTotal === null) {
-    errors.groupTotal = "Group size must be between 1 and 16";
+  const adults = parseCount(raw.adults, 1, 16);
+  if (adults === undefined || adults === null) {
+    errors.adults = "How many adults are coming? (1 to 16)";
   }
-  const adults = parseCount(raw.adults, 0, 16);
   const kids = parseCount(raw.kids, 0, 16);
+  if (kids === null) {
+    errors.kids = "Kids must be between 0 and 16";
+  }
 
-  const sleeping = oneOf(SLEEPING_VALUES, raw.sleeping);
-  const power = oneOf(POWER_VALUES, raw.power);
+  const beds = oneOf(BEDS_VALUES, raw.beds);
   const budget = oneOf(BUDGET_VALUES, raw.budget);
   const contactMethod = oneOf(CONTACT_METHOD_VALUES, raw.contactMethod);
 
@@ -150,21 +130,18 @@ export function validateInquiry(raw: Record<string, unknown>):
     ok: true,
     data: {
       campsite: campsite as CampsiteValue,
-      passStatus,
       siteNumber,
       arrivalDate,
       departureDate,
-      groupTotal: groupTotal ?? undefined,
-      adults: adults ?? undefined,
-      kids: kids ?? undefined,
-      sleeping,
-      power,
+      adults: adults as number,
+      kids: kids ?? 0,
+      beds,
       budget,
-      message,
       fullName,
       email,
       phone,
       contactMethod,
+      message,
       source,
       website,
     },
@@ -172,14 +149,14 @@ export function validateInquiry(raw: Record<string, unknown>):
 }
 
 /**
- * Qualified lead = has (or is buying) a compatible campsite, dates inside the
- * event window, a group size, and a reachable contact (audit §14).
+ * Qualified lead = holds a campsite type the fleet can be delivered to, dates
+ * inside the event window, at least one adult, and a reachable contact
+ * (audit §14). "No campsite yet" is a nurture lead, not a qualified one.
  */
 export function isQualifiedLead(data: InquiryParsed): boolean {
   const hasSite =
     data.campsite === "premium" || data.campsite === "lot-n" || data.campsite === "other";
-  const passOk = data.passStatus === "purchased" || data.passStatus === "purchasing";
-  const hasGroup = data.groupTotal !== undefined && data.groupTotal >= 1;
+  const hasGroup = data.adults >= 1;
 
   let datesInWindow = false;
   try {
@@ -192,5 +169,5 @@ export function isQualifiedLead(data: InquiryParsed): boolean {
     datesInWindow = false;
   }
 
-  return hasSite && passOk && hasGroup && datesInWindow;
+  return hasSite && hasGroup && datesInWindow;
 }

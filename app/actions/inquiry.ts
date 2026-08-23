@@ -20,28 +20,27 @@ const CAMPSITE_LABELS: Record<string, string> = {
   none: "No campsite yet",
 };
 
-const PASS_LABELS: Record<string, string> = {
-  purchased: "Campsite pass purchased",
-  purchasing: "Buying the pass now",
-  "not-yet": "Pass not purchased yet",
+const POWER_NOTE: Record<string, string> = {
+  premium: "Premium RV site: water and electric hookups (per COTA 2026 pages)",
+  "lot-n": "Lot N: no hookups, generator and fuel plan required",
+  other: "Other campground: confirm hookups with the campground",
+  none: "No campsite yet: nurture lead, campsite must be reserved first",
 };
 
-const POWER_LABELS: Record<string, string> = {
-  hookups: "Site has hookups",
-  generator: "Needs generator plan (no hookups)",
-  "not-sure": "Not sure about power yet",
-};
-
-const SLEEPING_LABELS: Record<string, string> = {
-  "real-beds": "Real bed for every adult",
-  mixed: "Couples + flexible for kids",
-  flexible: "Whatever fits the group",
+const BEDS_LABELS: Record<string, string> = {
+  "1": "1 real bed",
+  "2": "2 real beds",
+  "3": "3 real beds",
+  "4": "4 real beds",
+  "5": "5 real beds",
+  "6-plus": "6 or more real beds",
+  "not-sure": "Not sure how many real beds",
 };
 
 const BUDGET_LABELS: Record<string, string> = {
   "under-2000": "Under $2,000 total",
-  "2000-3500": "$2,000-$3,500 total",
-  "3500-5000": "$3,500-$5,000 total",
+  "2000-3500": "$2,000 to $3,500 total",
+  "3500-5000": "$3,500 to $5,000 total",
   "5000-plus": "$5,000+ total",
   "not-sure": "Budget not set yet",
 };
@@ -58,14 +57,7 @@ function line(label: string, value: string | undefined | null): string {
 
 function buildOwnerEmailBody(data: InquiryParsed, qualified: boolean): string {
   const datesLine = formatDateRangeLine(data.arrivalDate, data.departureDate);
-  const groupLine =
-    data.groupTotal != null
-      ? `${data.groupTotal} guests${
-          data.adults != null || data.kids != null
-            ? ` (${data.adults ?? "?"} adults, ${data.kids ?? "?"} kids)`
-            : ""
-        }`
-      : "";
+  const groupLine = `${data.adults} adults, ${data.kids} kids (${data.adults + data.kids} total)`;
 
   const lines = [
     qualified
@@ -74,14 +66,13 @@ function buildOwnerEmailBody(data: InquiryParsed, qualified: boolean): string {
     "",
     "CAMPSITE",
     line("Campsite", CAMPSITE_LABELS[data.campsite] ?? data.campsite),
-    line("Pass status", data.passStatus ? PASS_LABELS[data.passStatus] : ""),
     line("Site number", data.siteNumber),
     line("Dates", datesLine),
+    line("Power", POWER_NOTE[data.campsite]),
     "",
     "GROUP & RV FIT",
     line("Group", groupLine),
-    line("Sleeping", data.sleeping ? SLEEPING_LABELS[data.sleeping] : ""),
-    line("Power", data.power ? POWER_LABELS[data.power] : ""),
+    line("Real beds wanted", data.beds ? BEDS_LABELS[data.beds] : ""),
     line("Budget", data.budget ? BUDGET_LABELS[data.budget] : ""),
     line("Notes", data.message),
     "",
@@ -93,7 +84,7 @@ function buildOwnerEmailBody(data: InquiryParsed, qualified: boolean): string {
     line("Lead source", data.source),
     "",
     "Next: verify site compatibility, delivery access and unit fit before quoting.",
-    "- Sent from the Triple W F1 landing page",
+    "Sent from the Triple W F1 landing page",
   ];
   return lines.filter((l) => l !== "").join("\n");
 }
@@ -126,21 +117,18 @@ export async function submitInquiry(
 ): Promise<InquiryState> {
   const raw: Record<string, unknown> = {
     campsite: pickField(formData, "campsite"),
-    passStatus: pickField(formData, "passStatus"),
     siteNumber: formData.get("siteNumber"),
     arrivalDate: formData.get("arrivalDate"),
     departureDate: formData.get("departureDate"),
-    groupTotal: formData.get("groupTotal"),
     adults: formData.get("adults"),
     kids: formData.get("kids"),
-    sleeping: pickField(formData, "sleeping"),
-    power: pickField(formData, "power"),
+    beds: formData.get("beds"),
     budget: formData.get("budget"),
-    message: formData.get("message"),
     fullName: formData.get("fullName"),
     email: formData.get("email"),
     phone: formData.get("phone"),
     contactMethod: pickField(formData, "contactMethod"),
+    message: formData.get("message"),
     source: formData.get("source"),
     website: formData.get("website"),
   };
@@ -219,11 +207,11 @@ Got your request for race weekend (${datesLine}).
 Here's what happens next:
 1. We check which units fit your site and group.
 2. We verify delivery access and the setup/pickup windows for your exact spot.
-3. We ${data.contactMethod === "email" ? "email" : data.contactMethod === "text" ? "text" : "call"} you back with an itemized weekend quote, usually within two hours during business hours.
+3. We ${data.contactMethod === "email" ? "email" : data.contactMethod === "text" ? "text" : "call"} you back with an itemized weekend quote, usually within two hours during business hours or first thing the next morning.
 
 Helpful to have ready: your campsite confirmation or pass details, and your site number if it's assigned.
 
-Heads up: the RV rental doesn't include your COTA campsite or race tickets. Those stay with COTA.
+Heads up: the RV rental doesn't include your campsite or race tickets. Campsites are reserved directly through COTA or your campground.
 
 Need us sooner? Call or text (972) 965-6901.
 
@@ -241,15 +229,12 @@ Need us sooner? Call or text (972) 965-6901.
     qualified,
     values: {
       campsite: data.campsite,
-      passStatus: data.passStatus,
       siteNumber: data.siteNumber,
       arrivalDate: data.arrivalDate,
       departureDate: data.departureDate,
-      groupTotal: data.groupTotal != null ? String(data.groupTotal) : "",
-      adults: data.adults != null ? String(data.adults) : "",
-      kids: data.kids != null ? String(data.kids) : "",
-      sleeping: data.sleeping,
-      power: data.power,
+      adults: String(data.adults),
+      kids: String(data.kids),
+      beds: data.beds,
       budget: data.budget,
       message: data.message,
       fullName: data.fullName,

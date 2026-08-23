@@ -25,6 +25,21 @@ export function formatDateRangeLine(arrivalIso: string, departureIso: string): s
   return `${fmt.format(start.toDate(tz))} → ${fmt.format(end.toDate(tz))} (${nights} ${nightWord})`;
 }
 
+/** "Check in Fri, Oct 23 · Check out Mon, Oct 26 · 3 nights" */
+export function formatStaySummary(arrivalIso: string, departureIso: string): string {
+  const tz = getLocalTimeZone();
+  const start = parseDate(arrivalIso);
+  const end = parseDate(departureIso);
+  const fmt = new Intl.DateTimeFormat("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  });
+  const nights = countNightsBetween(arrivalIso, departureIso);
+  const nightWord = nights === 1 ? "night" : "nights";
+  return `Check in ${fmt.format(start.toDate(tz))} · Check out ${fmt.format(end.toDate(tz))} · ${nights} ${nightWord}`;
+}
+
 export function isoFromDateValue(d: DateValue): string {
   return `${d.year}-${String(d.month).padStart(2, "0")}-${String(d.day).padStart(2, "0")}`;
 }

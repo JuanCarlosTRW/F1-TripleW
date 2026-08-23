@@ -50,6 +50,7 @@ function Card({ unit }: { unit: UnitCard }) {
           <SpecRow label="Bathroom" value={unit.bathroom} />
           <SpecRow label="Kitchen" value={unit.kitchen} />
           <SpecRow label="Power" value={unit.power} />
+          <SpecRow label="Compatible sites" value={unit.compatibleSites} />
         </dl>
 
         {unit.included.length > 0 ? (
@@ -61,7 +62,7 @@ function Card({ unit }: { unit: UnitCard }) {
         <div className="mt-auto pt-5">
           <p className="text-sm font-medium text-ink">{unit.priceContext}</p>
           <a href="#check-availability" className="btn-primary mt-3 w-full">
-            Check This Unit for My Site
+            Check This RV for My Site
           </a>
         </div>
       </div>

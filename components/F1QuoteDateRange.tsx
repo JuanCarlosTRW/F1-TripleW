@@ -16,13 +16,15 @@ import {
   Text,
 } from "react-aria-components";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { formatDateRangeLine, isoFromDateValue } from "@/lib/format-date-range";
+import { formatStaySummary, isoFromDateValue } from "@/lib/format-date-range";
 
+/** Full stay: arrive Thu Oct 22, leave Mon Oct 26 (the COTA RV access window). */
 export const F1_WEEKEND_RANGE: DateRange = {
   start: new CalendarDate(2026, 10, 22),
   end: new CalendarDate(2026, 10, 26),
 };
 
+/** Race days only (Fri Oct 23 to Sun Oct 25): arrive Fri, leave Mon Oct 26 at pickup. */
 export const RACE_ONLY_RANGE: DateRange = {
   start: new CalendarDate(2026, 10, 23),
   end: new CalendarDate(2026, 10, 26),
@@ -30,9 +32,15 @@ export const RACE_ONLY_RANGE: DateRange = {
 
 type Preset = "f1" | "race" | "custom";
 
+const PRESETS: ReadonlyArray<{ key: Preset; label: string; range: DateRange | null }> = [
+  { key: "f1", label: "Full stay · Oct 22-26", range: F1_WEEKEND_RANGE },
+  { key: "race", label: "Race weekend · Oct 23-25", range: RACE_ONLY_RANGE },
+  { key: "custom", label: "Custom dates", range: null },
+];
+
 function rangeSummary(range: DateRange | null): string {
-  if (!range?.start || !range?.end) return "Select dates";
-  return formatDateRangeLine(isoFromDateValue(range.start), isoFromDateValue(range.end));
+  if (!range?.start || !range?.end) return "Select your arrival and departure dates";
+  return formatStaySummary(isoFromDateValue(range.start), isoFromDateValue(range.end));
 }
 
 const minDate = new CalendarDate(2026, 1, 1);
@@ -62,43 +70,28 @@ export default function F1QuoteDateRange({
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
-        <button
-          type="button"
-          className={`${chip} ${
-            preset === "f1"
-              ? "border-navy bg-navy text-white"
-              : "border-line text-slate hover:border-navy/50"
-          }`}
-          onClick={() => setFromPreset("f1", F1_WEEKEND_RANGE)}
-        >
-          Full Weekend · Oct 22-26
-        </button>
-        <button
-          type="button"
-          className={`${chip} ${
-            preset === "race"
-              ? "border-navy bg-navy text-white"
-              : "border-line text-slate hover:border-navy/50"
-          }`}
-          onClick={() => setFromPreset("race", RACE_ONLY_RANGE)}
-        >
-          Race Days · Oct 23-26
-        </button>
-        <button
-          type="button"
-          className={`${chip} ${
-            preset === "custom"
-              ? "border-navy bg-navy text-white"
-              : "border-line text-slate hover:border-navy/50"
-          }`}
-          onClick={() => setFromPreset("custom", range ?? F1_WEEKEND_RANGE)}
-        >
-          Custom
-        </button>
+        {PRESETS.map((p) => (
+          <button
+            key={p.key}
+            type="button"
+            aria-pressed={preset === p.key}
+            className={`${chip} ${
+              preset === p.key
+                ? "border-navy bg-navy text-white"
+                : "border-line text-slate hover:border-navy/50"
+            }`}
+            onClick={() => setFromPreset(p.key, p.range ?? range ?? F1_WEEKEND_RANGE)}
+          >
+            {p.label}
+          </button>
+        ))}
       </div>
 
       <div>
-        <p className="text-sm font-medium text-ink mb-2">{rangeSummary(range)}</p>
+        <p className="mb-1 text-sm font-medium text-ink">{rangeSummary(range)}</p>
+        <p className="mb-3 text-xs text-slate">
+          Race days are Fri Oct 23 to Sun Oct 25. Monday Oct 26 is departure and pickup day.
+        </p>
         <I18nProvider locale="en-US">
           <RangeCalendar
             aria-label="Arrival and departure dates"
@@ -166,7 +159,7 @@ export default function F1QuoteDateRange({
           </RangeCalendar>
         </I18nProvider>
         <p className="mt-2 text-xs text-slate">
-          Race days are Fri-Sun, Oct 23-25. Both COTA RV areas open Thursday, Oct 22.
+          Both COTA RV areas open Thursday, Oct 22. Tap the calendar for custom dates.
         </p>
       </div>
 
