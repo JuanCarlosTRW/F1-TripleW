@@ -1,701 +1,722 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
-import { Phone, Truck, PartyPopper } from "lucide-react";
-import SiteHeader from "@/components/SiteHeader";
+import {
+  CalendarCheck,
+  ClipboardCheck,
+  KeyRound,
+  PhoneCall,
+  Truck,
+} from "lucide-react";
+import AvailabilityForm from "@/components/AvailabilityForm";
 import PhoneLink from "@/components/PhoneLink";
+import SiteHeader from "@/components/SiteHeader";
+import SmsLink from "@/components/SmsLink";
+import TrackedCtaLink from "@/components/TrackedCtaLink";
+import Faq from "@/components/sections/Faq";
+import SiteCheck from "@/components/sections/SiteCheck";
+import UnitCards from "@/components/sections/UnitCards";
 import PremiumImageGallery, { type GalleryItem } from "@/components/ui/PremiumImageGallery";
-import Reviews from "@/components/Reviews";
-import BookingInquiryForm from "@/components/BookingInquiryForm";
-import UrgencyStrip from "@/components/ui/UrgencyStrip";
 import StickyMobileCTA from "@/components/ui/StickyMobileCTA";
+import {
+  BUSINESS,
+  COTA_CAMPING,
+  DISCLAIMER,
+  EVENT,
+  FLEET_CATEGORIES,
+  GALLERY_IMAGES,
+  HERO_IMAGE,
+  INCLUSIONS,
+  PRICING,
+  REVIEWS,
+  TRUST_STATS,
+  UNITS,
+} from "@/content/site";
 
-const HERO_VIDEO_SRC =
-  "https://video.wixstatic.com/video/62f926_8ff76b0555c04f32acb69a68ef4633af/480p/mp4/file.mp4";
-const HERO_VIDEO_POSTER =
-  "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp";
+const GALLERY_ITEMS: GalleryItem[] = GALLERY_IMAGES.map((src) => ({
+  type: "image",
+  src,
+}));
 
-const ease = [0.25, 0.1, 0.25, 1] as const;
+/* ─── Small server-side building blocks ─── */
 
-const fadeUp = {
-  initial: { opacity: 0, y: 24 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true, amount: 0.2 },
-  transition: { duration: 0.6, ease },
-};
-
-function fadeUpDelay(delay: number) {
-  return {
-    ...fadeUp,
-    transition: { duration: 0.6, ease, delay },
-  };
-}
-
-/* ─── DATA ─── */
-
-const painPoints = [
-  {
-    title: "$600/Night Hotel Rooms",
-    desc: "Austin hotels triple their rates during race weekend. You\u2019re paying resort prices for a Holiday Inn 25 miles from the track.",
-  },
-  {
-    title: "2-Hour Traffic Each Way",
-    desc: "100,000+ fans on the same roads. You\u2019ll spend more time commuting than watching the race.",
-  },
-  {
-    title: "Split Across 3 Hotel Rooms",
-    desc: "Your group of 8 is scattered across different floors, different hotels. The trip you planned together becomes separate trips.",
-  },
-];
-
-const desirePoints = [
-  {
-    title: "Wake Up at the Track",
-    desc: "Step outside, grab your coffee, walk to the gates. No commute.",
-  },
-  {
-    title: "Right at the track",
-    desc: "Full kitchen, king beds, outdoor lounge. Your crew under one roof.",
-  },
-  {
-    title: "Stay for Everything",
-    desc: "Concerts, qualifying, the race. Walk back to the RV whenever.",
-  },
-];
-
-const steps = [
-  {
-    num: "01",
-    icon: Phone,
-    title: "Call or Text",
-    desc: "Tell us your dates, group size, and which RV catches your eye. We confirm availability on the spot.",
-  },
-  {
-    num: "02",
-    icon: Truck,
-    title: "We Deliver. Level. Hook Up.",
-    desc: "Your unit is towed to your reserved COTA site, leveled, slide-outs deployed, water and power connected, generator installed if you\u2019re in Lot N.",
-  },
-  {
-    num: "03",
-    icon: PartyPopper,
-    title: "Walk to the Track",
-    desc: "Minutes from the track. Grill between sessions. Sleep through the night. Check out Monday - we handle cleanup.",
-  },
-];
-
-const FLEET_MEDIA: GalleryItem[] = [
-  {
-    type: "video",
-    src: "https://video.wixstatic.com/video/62f926_8ff76b0555c04f32acb69a68ef4633af/480p/mp4/file.mp4",
-    poster: "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp",
-  },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_72984415dae543f5a93113defc3976a4~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_6081972934c541bf9b8aaa703b74f585~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_69694ee7940c4fe4985b984e4067343e~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_26b6714d0a0d4937b73e45668ce44bd9~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_d5db0126f18a4cc0884f4308913f9362~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_e4c918f468b243d89371fa40f6424fce~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_b833defbf81b455991760bc1f4c878ff~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_1ba23ff81e904ae2b5feae14ed4754fb~mv2.webp" },
-  { type: "image", src: "https://static.wixstatic.com/media/62f926_cf6fafa3b7184f93b149c98ee96c783f~mv2.webp" },
-];
-
-const DREAM_IMAGE = "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp";
-
-const valueStack: Array<[string, string]> = [
-  ["Premium RV (Class A, Fifth Wheel, Travel Trailer - sleeps 4\u201312)", "From $200/night"],
-  ["White-glove delivery to any COTA lot or Austin campground", "$500 value"],
-  ["Full setup: leveling, slide-outs, water, electric, sewer", "$200 value"],
-  ["60-minute walkthrough on arrival", "Included"],
-  ["Generator rental (required for Lot N dry camping)", "$150/day"],
-  ["24/7 on-call support through race weekend", "Included"],
-];
-
-const trustPoints = [
-  { value: "4.7\u2605", label: "Google Rating" },
-  { value: "200+", label: "Deliveries" },
-  { value: "14", label: "Unit Fleet" },
-  { value: "24/7", label: "Support" },
-];
-
-/* ─── HERO COPY VARIANTS ─── */
-
-type HeroVariant = {
+function SectionHeading({
+  eyebrow,
+  title,
+  sub,
+  light,
+}: {
   eyebrow: string;
-  h1: React.ReactNode;
-  sub: string;
-};
-
-function heroCopy(src: string): HeroVariant {
-  if (src === "camping") {
-    return {
-      eyebrow: "Premium RV + Lot N · COTA Race Weekend",
-      h1: (
-        <>
-          COTA RV Camping{" "}
-          <span className="text-[#D4A853]">
-            {"-"} Delivered and Set Up for You.
-          </span>
-        </>
-      ),
-      sub: "We deliver your RV to Premium Lot or Lot N, level it, deploy the slides, and install your generator if required. You\u2019re right at the track.",
-    };
-  }
-  if (src === "hotel") {
-    return {
-      eyebrow: "October 23\u201325, 2026 · Circuit of The Americas",
-      h1: (
-        <>
-          The Smarter Alternative to{" "}
-          <span className="text-[#D4A853]">$600/Night Austin Hotels.</span>
-        </>
-      ),
-      sub: "Your whole group under one roof, at the track - for less per person than a Holiday Inn 25 miles away. We deliver the RV. You just show up.",
-    };
-  }
-  return {
-    eyebrow: "USGP 2026 · Oct 23–25 · Circuit of The Americas",
-    h1: (
-      <>
-        We deliver the RV.
-        <br />
-        <span className="text-[#D4A853]">You just show up.</span>
-      </>
-    ),
-    sub: "Pick your dates. We tow your RV to your COTA site, level it, hook up power and water, and hand you the keys. Your whole crew under one roof - for less per person than a $600/night downtown hotel.",
-  };
+  title: string;
+  sub?: string;
+  light?: boolean;
+}) {
+  return (
+    <div className="mb-10 max-w-2xl md:mb-14">
+      <p className={`type-eyebrow ${light ? "text-white/60" : "text-action"}`}>{eyebrow}</p>
+      <h2 className={`type-h2 mt-3 ${light ? "text-white" : "text-ink"}`}>{title}</h2>
+      {sub ? (
+        <p className={`type-body mt-4 ${light ? "text-white/75" : "text-slate"}`}>{sub}</p>
+      ) : null}
+    </div>
+  );
 }
 
-/* ─── HERO ─── */
+/* ─── 1. HERO (control version, no blocking motion) ─── */
 
-function Hero({ src }: { src: string }) {
-  const copy = heroCopy(src);
+function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-[#0D0B09] px-6 text-center overflow-hidden">
-      {/* Video background - muted autoplay loop, real product imagery */}
-      <video
-        className="absolute inset-0 z-0 w-full h-full object-cover"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        poster={HERO_VIDEO_POSTER}
-        aria-hidden="true"
-      >
-        <source src={HERO_VIDEO_SRC} type="video/mp4" />
-      </video>
+    <section className="relative flex min-h-[92svh] items-center overflow-hidden bg-navy-deep">
+      <Image
+        src={HERO_IMAGE}
+        alt="A Triple W travel trailer set up at a campsite"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-gradient-to-r from-navy-deep/95 via-navy-deep/80 to-navy-deep/40"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-navy-deep to-transparent"
+      />
 
-      {/* Dark overlay for legibility over moving footage */}
-      <div className="absolute inset-0 z-[1] bg-gradient-to-b from-[#0D0B09]/80 via-[#0D0B09]/55 to-[#0D0B09]/90" />
+      <div className="relative z-[1] mx-auto w-full max-w-6xl px-4 pb-20 pt-32 md:px-6 md:pt-36">
+        <p className="type-eyebrow text-white/70">
+          {EVENT.kickerLabel}
+        </p>
 
-      <div className="relative z-[2] max-w-4xl mx-auto pt-32 md:pt-36 pb-10">
-        <div className="inline-block border border-[#D4A853]/40 rounded-full px-4 py-1.5 mb-8">
-          <span className="type-eyebrow text-[#D4A853]">{copy.eyebrow}</span>
+        <h1 className="type-display mt-5 max-w-3xl text-white">
+          Your Private, Air-Conditioned RV Basecamp Near COTA
+        </h1>
+
+        <p className="type-body mt-6 max-w-xl text-white/85">
+          Tell us your approved campsite and group size. Triple W matches you with a
+          clean, fully equipped RV, verifies delivery feasibility, sets it up and
+          collects it after the weekend.
+        </p>
+
+        <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
+          <TrackedCtaLink
+            href="#check-availability"
+            eventName="hero_cta_click"
+            className="btn-primary"
+          >
+            Check My Site &amp; RV Options
+          </TrackedCtaLink>
+          <span className="flex items-center justify-center gap-2 text-sm text-white/85 sm:justify-start">
+            <PhoneLink
+              location="hero"
+              className="btn-secondary text-white"
+            >
+              Call {BUSINESS.phoneDisplay}
+            </PhoneLink>
+            <SmsLink
+              location="hero"
+              className="px-2 py-3 text-sm font-medium text-white/80 underline underline-offset-4 transition-colors hover:text-white"
+            >
+              or text us
+            </SmsLink>
+          </span>
         </div>
 
-        <h1 className="type-display text-[#F5F0E8]">{copy.h1}</h1>
-
-        <p className="mt-8 type-body text-[#F5F0E8]/85 max-w-2xl mx-auto">
-          {copy.sub}
+        <p className="mt-5 max-w-md text-xs leading-relaxed text-white/60">
+          No obligation. Race tickets and campsite reservations are separate. Delivery is
+          confirmed after site and access review.
         </p>
+      </div>
+    </section>
+  );
+}
 
-        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a
-            href="#request-a-quote"
-            className="w-full sm:w-auto bg-[#D4A853] text-[#0D0B09] font-semibold uppercase tracking-wider px-8 py-4 rounded-sm hover:brightness-105 active:scale-[0.98] transition-all text-sm shadow-[0_10px_40px_rgba(212,168,83,0.25)] text-center"
+/* ─── 2. PROOF STRIP ─── */
+
+function ProofStrip() {
+  const items = [
+    "Delivered & Set Up",
+    "Clean, Stocked Units",
+    "Group-Friendly Floorplans",
+    "Race-Weekend Support",
+  ];
+  return (
+    <section aria-label="What Triple W handles" className="border-b border-white/10 bg-navy">
+      <ul className="mx-auto grid max-w-6xl grid-cols-2 gap-x-4 gap-y-3 px-4 py-5 md:flex md:items-center md:justify-between md:px-6">
+        {items.map((item) => (
+          <li
+            key={item}
+            className="text-center text-xs font-semibold uppercase tracking-[0.15em] text-white/80 md:text-[13px]"
           >
-            Check Availability for My Dates &rarr;
-          </a>
-          <PhoneLink
-            className="w-full sm:w-auto border border-[#D4A853]/50 text-[#D4A853] font-semibold uppercase tracking-wider px-8 py-4 rounded-sm hover:bg-[#D4A853]/10 hover:border-[#D4A853] active:scale-[0.98] transition-all text-sm text-center"
-          >
-            Or Call (972) 965-6901
-          </PhoneLink>
-        </div>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}
 
-        <p className="mt-4 text-xs text-[#F5F0E8]/55 max-w-md mx-auto leading-relaxed">
-          60-second form &middot; We reply same day &middot; No deposit to check availability
-        </p>
+/* ─── 4. PROBLEM ─── */
 
-        <p className="mt-6 text-xs md:text-sm text-[#F5F0E8]/70 max-w-md mx-auto leading-relaxed">
-          Group of 6, 4 nights ={" "}
-          <span className="text-[#D4A853] font-medium">$133/person/night</span>.
-          Less than a downtown hotel - right at the track.
-        </p>
+const PAIN_POINTS = [
+  {
+    title: "Hotels scatter the group",
+    desc: "Race-weekend hotel blocks split your crew across rooms, floors and properties. The trip you planned together turns into separate trips.",
+  },
+  {
+    title: "The daily commute eats the weekend",
+    desc: "More than 100,000 fans move in and out of the circuit each day. Staying far away means spending prime hours in a car instead of at the track.",
+  },
+  {
+    title: "Towing an RV yourself is a second job",
+    desc: "Renting a trailer is easy. Towing it into a race-weekend lot, leveling it, and getting the power and water right on your first try is not.",
+  },
+  {
+    title: "Dry camping punishes guesswork",
+    desc: "Lot N has no hookups. Without a real generator, fuel, water and waste plan, a hot October afternoon gets long fast.",
+  },
+];
 
-        <div className="mt-14 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-xs text-[#F5F0E8]/60 uppercase tracking-[0.15em]">
-          <span>200+ Deliveries</span>
-          <span className="hidden md:inline-block w-px h-3 bg-[#F5F0E8]/20" />
-          <span>4.7&#9733; Google</span>
-          <span className="hidden md:inline-block w-px h-3 bg-[#F5F0E8]/20" />
-          <span>Owner-Operated</span>
-          <span className="hidden md:inline-block w-px h-3 bg-[#F5F0E8]/20" />
-          <span className="text-[#D4A853]/80">Books Out by August</span>
+function Problem() {
+  return (
+    <section className="bg-paper px-4 py-16 md:px-6 md:py-24">
+      <div className="mx-auto max-w-6xl">
+        <SectionHeading
+          eyebrow="The usual race-weekend plan"
+          title="Race weekend is already complicated enough."
+          sub="Hotels separate the group. Traffic steals hours. Towing and setting up an unfamiliar RV creates a second job. There's a simpler way to stay close to the racing."
+        />
+        <div className="grid gap-5 md:grid-cols-2">
+          {PAIN_POINTS.map((p) => (
+            <div key={p.title} className="rounded-md border border-line bg-white p-6">
+              <h3 className="type-h3 text-ink">{p.title}</h3>
+              <p className="type-body-sm mt-2 text-slate">{p.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-/* ─── PAGE BODY ─── */
+/* ─── 5. OUTCOME ─── */
 
-function HomeBody() {
-  const searchParams = useSearchParams();
-  const src = (searchParams.get("src") ?? "").toLowerCase();
+const BENEFITS = [
+  {
+    title: "Arrive, don't assemble",
+    desc: "No towing, leveling or hookup guesswork. The setup plan is confirmed before your arrival, and the walkthrough happens on your schedule.",
+  },
+  {
+    title: "Give the crew a real reset",
+    desc: "Cold A/C, real beds, a private bathroom, a kitchen and a place to sit together between sessions.",
+  },
+  {
+    title: "Stay inside the weekend",
+    desc: "Practice, qualifying, the race, the concerts. Then walk back to your own spot instead of organizing rides and restaurant runs.",
+  },
+  {
+    title: "Know exactly what you booked",
+    desc: "The exact unit, the real bed layout, the inclusions, the fees and the power plan, in writing, before you pay.",
+  },
+];
 
+function Outcome() {
   return (
-    <>
-      <div className="fixed top-0 left-0 right-0 z-50 flex flex-col [padding-top:env(safe-area-inset-top)]">
-        <UrgencyStrip layout="stacked" />
-        <SiteHeader layout="stacked" />
+    <section className="bg-navy px-4 py-16 md:px-6 md:py-24">
+      <div className="mx-auto max-w-6xl">
+        <SectionHeading
+          light
+          eyebrow="With Triple W"
+          title="One private basecamp. Your whole crew. Four days of racing."
+        />
+        <div className="grid items-start gap-8 lg:grid-cols-[1.1fr_1fr]">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-md">
+            <Image
+              src={GALLERY_IMAGES[1]}
+              alt="Interior of a Triple W rental RV"
+              fill
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover"
+            />
+          </div>
+          <ul className="space-y-6">
+            {BENEFITS.map((b) => (
+              <li key={b.title} className="border-l-2 border-action pl-4">
+                <h3 className="type-h3 text-white">{b.title}</h3>
+                <p className="type-body-sm mt-1.5 text-white/70">{b.desc}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
+    </section>
+  );
+}
 
-      <main className="font-[var(--font-outfit)] bg-[#0D0B09] text-[#F5F0E8]">
-        {/* ─── HERO ─── */}
-        <Hero src={src} />
+/* ─── 7. HOW IT WORKS ─── */
 
-        {/* ─── HOW IT WORKS ─── */}
-        <section className="relative border-t border-[#D4A853]/8 bg-[#0D0B09] py-20 md:py-28 px-6 overflow-hidden texture-grain">
-          <div
-            aria-hidden="true"
-            className="glow-spot"
-            style={{
-              width: "600px",
-              height: "400px",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              background: "radial-gradient(circle, #D4A853 0%, transparent 70%)",
-              opacity: 0.12,
-            }}
-          />
-          <div className="relative z-[1] max-w-5xl mx-auto">
-            <motion.div {...fadeUp} className="text-center mb-14">
-              <span className="type-eyebrow text-[#D4A853] block mb-3">How It Works</span>
-              <h2 className="type-h2 text-[#F5F0E8]">Three steps. Zero stress.</h2>
-              <p className="mt-3 type-body-sm text-[#F5F0E8]/60 max-w-xl mx-auto">
-                We handle the logistics. Your crew handles the weekend.
-              </p>
-            </motion.div>
+const STEPS = [
+  {
+    icon: PhoneCall,
+    title: "Tell us your site and your group",
+    desc: "Fill out the form or call. Campsite first: Premium RV, Lot N, another campground, or not booked yet.",
+  },
+  {
+    icon: ClipboardCheck,
+    title: "We verify before you pay",
+    desc: "Site dimensions, campsite pass, unit fit, access windows and COTA's current vendor rules. No deposit until the plan checks out.",
+  },
+  {
+    icon: CalendarCheck,
+    title: "Reserve with an itemized quote",
+    desc: "Rental, delivery, setup, pickup, power plan, taxes and deposit in one written quote. Campsite and race tickets stay separate.",
+  },
+  {
+    icon: Truck,
+    title: "Arrive to a finished setup",
+    desc: "We deliver in the confirmed window, level the unit, deploy the slides, connect or install the power plan, and walk you through every system.",
+  },
+  {
+    icon: KeyRound,
+    title: "Drive home, we handle the rest",
+    desc: "When the weekend ends, you leave. We collect the RV in the confirmed pickup window and deal with the cleanup.",
+  },
+];
 
-            <div className="grid md:grid-cols-3 gap-5 md:gap-6">
-              {steps.map((s, i) => {
-                const Icon = s.icon;
-                return (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 24 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.2 }}
-                    transition={{ duration: 0.5, ease, delay: i * 0.1 }}
-                    className="relative bg-[#1A1510]/60 border border-[#D4A853]/12 rounded-lg p-7 md:p-8 hover:border-[#D4A853]/30 transition-colors"
-                  >
-                    <div className="flex items-center justify-between mb-6">
-                      <span className="font-[var(--font-cormorant)] text-4xl text-[#D4A853]/30 leading-none">
-                        {s.num}
-                      </span>
-                      <div className="w-11 h-11 rounded-full bg-[#D4A853]/10 border border-[#D4A853]/40 flex items-center justify-center">
-                        <Icon className="w-5 h-5 text-[#D4A853]" />
-                      </div>
-                    </div>
-                    <h3 className="type-h3 text-[#F5F0E8] mb-2">{s.title}</h3>
-                    <p className="type-body-sm text-[#F5F0E8]/65">{s.desc}</p>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* ─── TWO VERY DIFFERENT TRIPS (moved up) ─── */}
-        <section className="relative bg-[#0D0B09] py-20 md:py-28 px-6 overflow-hidden texture-grain border-t border-[#D4A853]/8">
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 opacity-60"
-            style={{ background: "var(--gradient-charcoal-warm)" }}
-          />
-          <div
-            aria-hidden="true"
-            className="glow-spot"
-            style={{
-              width: "420px",
-              height: "420px",
-              top: "-120px",
-              right: "-120px",
-              background: "radial-gradient(circle, #D4A853 0%, transparent 70%)",
-            }}
-          />
-          <div
-            aria-hidden="true"
-            className="glow-spot"
-            style={{
-              width: "500px",
-              height: "500px",
-              bottom: "-180px",
-              left: "-150px",
-              background: "radial-gradient(circle, #A85A28 0%, transparent 70%)",
-              opacity: 0.15,
-            }}
-          />
-          <div className="relative z-[1] max-w-5xl mx-auto">
-            <motion.div {...fadeUp} className="text-center mb-14">
-              <span className="type-eyebrow text-[#D4A853] block mb-3">The Same Weekend</span>
-              <h2 className="type-h2 text-[#F5F0E8]">Two Very Different Trips.</h2>
-            </motion.div>
-
-            <div className="grid md:grid-cols-2 gap-5 md:gap-6">
-              <motion.div
-                {...fadeUpDelay(0.1)}
-                className="bg-[#1A1510]/60 backdrop-blur-sm border border-[#F5F0E8]/5 rounded-lg p-7 md:p-8"
-              >
-                <span className="type-eyebrow text-[#A8A29E]/80 block mb-5">Without a Plan</span>
-                <ul className="space-y-5">
-                  {painPoints.map((p, i) => (
-                    <li key={i} className="border-l-2 border-[#8B4513]/30 pl-4">
-                      <h3 className="text-[15px] font-medium text-[#F5F0E8]/90">{p.title}</h3>
-                      <p className="mt-1 text-sm font-light text-[#F5F0E8]/55 leading-relaxed">{p.desc}</p>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-
-              <motion.div
-                {...fadeUpDelay(0.2)}
-                className="bg-[#1A1510] border border-[#D4A853]/20 rounded-lg p-7 md:p-8 overflow-hidden relative"
-                style={{ boxShadow: "var(--shadow-card-gold)" }}
-              >
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 opacity-40"
-                  style={{ background: "var(--gradient-gold-glow)" }}
-                />
-                <div className="relative">
-                  <span className="type-eyebrow text-[#D4A853] block mb-5">With Triple W</span>
-                  <div className="relative w-full aspect-[16/10] rounded-md overflow-hidden mb-6">
-                    <Image
-                      src={DREAM_IMAGE}
-                      alt="Triple W RV set up at Circuit of the Americas"
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 50vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#1A1510]/40 to-transparent" />
-                  </div>
-                  <ul className="space-y-5">
-                    {desirePoints.map((d, i) => (
-                      <li key={i} className="border-l-2 border-[#D4A853] pl-4">
-                        <h3 className="text-[15px] font-medium text-[#F5F0E8]">{d.title}</h3>
-                        <p className="mt-1 text-sm font-light text-[#F5F0E8]/70 leading-relaxed">{d.desc}</p>
-                      </li>
-                    ))}
-                  </ul>
+function HowItWorks() {
+  return (
+    <section id="how-it-works" className="scroll-mt-24 bg-paper px-4 py-16 md:px-6 md:py-24">
+      <div className="mx-auto max-w-6xl">
+        <SectionHeading
+          eyebrow="How it works"
+          title="Verified first. Delivered second. Zero guesswork."
+        />
+        <ol className="grid gap-5 md:grid-cols-2 lg:grid-cols-5">
+          {STEPS.map((s, i) => {
+            const Icon = s.icon;
+            return (
+              <li key={s.title} className="rounded-md border border-line bg-white p-5">
+                <div className="flex items-center justify-between">
+                  <span className="font-[var(--font-barlow)] text-3xl font-semibold text-line">
+                    0{i + 1}
+                  </span>
+                  <Icon className="h-5 w-5 text-action" strokeWidth={2} aria-hidden />
                 </div>
-              </motion.div>
-            </div>
+                <h3 className="mt-4 text-[15px] font-semibold leading-snug text-ink">
+                  {s.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate">{s.desc}</p>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+/* ─── 8. PREMIUM VS LOT N ─── */
+
+function CompareRow({
+  label,
+  premium,
+  lotN,
+}: {
+  label: string;
+  premium: string;
+  lotN: string;
+}) {
+  return (
+    <tr className="border-b border-line last:border-b-0">
+      <th
+        scope="row"
+        className="py-3.5 pr-4 text-left align-top text-xs font-semibold uppercase tracking-wider text-slate"
+      >
+        {label}
+      </th>
+      <td className="px-4 py-3.5 align-top text-sm text-ink">{premium}</td>
+      <td className="px-4 py-3.5 align-top text-sm text-ink">{lotN}</td>
+    </tr>
+  );
+}
+
+function PremiumVsLotN() {
+  const p = COTA_CAMPING.premium;
+  const n = COTA_CAMPING.lotN;
+  return (
+    <section id="lot-n-guide" className="scroll-mt-24 bg-paper-warm px-4 py-16 md:px-6 md:py-24">
+      <div className="mx-auto max-w-6xl">
+        <SectionHeading
+          eyebrow="Know your lot"
+          title="Premium RV vs. Lot N: two very different campsites."
+          sub="Your campsite decides the unit, the power plan and the delivery logistics. Here's what COTA's 2026 pages list for each area."
+        />
+
+        <div className="overflow-x-auto rounded-md border border-line bg-white">
+          <table className="w-full min-w-[640px] border-collapse p-2 text-left">
+            <thead>
+              <tr className="border-b border-line">
+                <th className="w-40 py-4 pl-4 pr-4 md:pl-6" aria-label="Attribute" />
+                <th className="px-4 py-4 font-[var(--font-barlow)] text-xl font-semibold text-ink">
+                  {p.label}
+                </th>
+                <th className="px-4 py-4 font-[var(--font-barlow)] text-xl font-semibold text-ink">
+                  {n.label}
+                </th>
+              </tr>
+            </thead>
+            <tbody className="[&>tr>th]:pl-4 md:[&>tr>th]:pl-6">
+              <CompareRow label="Site size" premium={p.siteSize} lotN={n.siteSize} />
+              <CompareRow label="Surface" premium={p.surface} lotN={n.surface} />
+              <CompareRow label="Utilities" premium={p.hookups} lotN={n.hookups} />
+              <CompareRow label="Assignment" premium={p.assignment} lotN={n.assignment} />
+              <CompareRow label="Access window" premium={p.accessWindow} lotN={n.accessWindow} />
+              <CompareRow
+                label="Status / services"
+                premium={p.availabilityNote}
+                lotN={n.services}
+              />
+            </tbody>
+          </table>
+        </div>
+
+        <div className="mt-6 grid gap-4 md:grid-cols-2">
+          <div className="rounded-md border border-line bg-white p-5">
+            <h3 className="text-sm font-semibold text-ink">What Lot N means for your rental</h3>
+            <p className="mt-2 text-sm leading-relaxed text-slate">
+              No hookups means power comes from a generator sized to the unit, water comes
+              from full tanks, and waste capacity is planned for your group. That plan
+              (generator, fuel, water, waste) is built into your quote, along with COTA&apos;s
+              quiet-hour and safety rules.
+            </p>
           </div>
-        </section>
-
-        {/* ─── FLEET GALLERY ─── */}
-        <section className="bg-[#F7F4F0] py-20 md:py-28 px-6">
-          <div className="max-w-5xl mx-auto">
-            <motion.div {...fadeUp} className="text-center mb-12">
-              <span className="type-eyebrow text-[#8B6B1F] block mb-3">The Fleet</span>
-              <h2 className="type-h2 text-[#1A1510]">Fourteen units. All delivered by us.</h2>
-              <p className="mt-3 type-body-sm text-[#1A1510]/60 max-w-xl mx-auto">
-                Every unit is owned, maintained, and delivered by Triple W - whether it sleeps 4 or 12.
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.6, ease }}
-            >
-              <PremiumImageGallery items={FLEET_MEDIA} />
-            </motion.div>
-
-            <motion.div {...fadeUpDelay(0.1)} className="mt-10 text-center">
+          <div className="rounded-md border border-line bg-white p-5">
+            <h3 className="text-sm font-semibold text-ink">Rules change. Verify with COTA</h3>
+            <p className="mt-2 text-sm leading-relaxed text-slate">
+              Campsite availability, services and access rules are COTA&apos;s to set and can
+              change. Confirm current details on{" "}
               <a
-                href="https://triple-w-rentals.vercel.app"
+                href={COTA_CAMPING.officialUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block text-sm font-medium tracking-wide text-[#8B6B1F] hover:text-[#1A1510] transition-colors underline underline-offset-4"
+                className="font-medium text-ink underline underline-offset-4 hover:text-action"
               >
-                See the full 14-unit lineup &rarr;
+                COTA&apos;s official RV camping page
               </a>
-            </motion.div>
+              , and we re-verify everything for your exact site before you pay.
+            </p>
           </div>
-        </section>
+        </div>
+      </div>
+    </section>
+  );
+}
 
-        {/* ─── THE OFFER ─── */}
-        <section
-          id="the-offer"
-          className="relative bg-[#0D0B09] py-20 md:py-28 px-6 overflow-hidden border-t border-[#D4A853]/10 texture-grain"
-        >
-          <div
-            aria-hidden="true"
-            className="absolute inset-0"
-            style={{ background: "var(--gradient-gold-glow-strong)" }}
-          />
-          <div
-            aria-hidden="true"
-            className="glow-spot"
-            style={{
-              width: "500px",
-              height: "500px",
-              top: "10%",
-              left: "-150px",
-              background: "radial-gradient(circle, #D4A853 0%, transparent 70%)",
-              opacity: 0.18,
-            }}
-          />
-          <div
-            aria-hidden="true"
-            className="glow-spot"
-            style={{
-              width: "420px",
-              height: "420px",
-              bottom: "-10%",
-              right: "-120px",
-              background: "radial-gradient(circle, #A85A28 0%, transparent 70%)",
-              opacity: 0.15,
-            }}
-          />
-          <div className="relative z-[1] max-w-5xl mx-auto">
-            <motion.div {...fadeUp} className="text-center mb-14">
-              <span className="type-eyebrow text-[#D4A853] block mb-3">The Weekend Package</span>
-              <h2 className="type-h2 text-[#F5F0E8] leading-[1.1]">
-                The full F1 weekend -
-                <br className="hidden md:block" /> delivered to your site.
-              </h2>
-            </motion.div>
+/* ─── 6. RV OPTIONS / FLEET ─── */
 
-            <div className="grid md:grid-cols-[1.2fr_1fr] gap-6 md:gap-10 items-start">
-              <motion.div
-                {...fadeUpDelay(0.1)}
-                className="bg-[#1A1510]/60 border border-[#F5F0E8]/8 rounded-lg p-7 md:p-9"
-              >
-                <ul className="space-y-0 divide-y divide-[#D4A853]/8">
-                  {valueStack.map(([text, value], i) => (
-                    <li key={i} className="flex items-start gap-4 py-4 first:pt-0 last:pb-0">
-                      <span className="mt-2 w-1 h-1 rounded-full bg-[#D4A853] shrink-0" />
-                      <div className="flex-1 flex flex-col md:flex-row md:items-baseline justify-between gap-1 md:gap-6">
-                        <span className="text-[15px] font-light leading-relaxed text-[#F5F0E8]/90">{text}</span>
-                        <span className="text-xs text-[#D4A853]/80 shrink-0 font-medium tracking-wider uppercase">
-                          {value}
-                        </span>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
+function Fleet() {
+  return (
+    <section id="rv-options" className="scroll-mt-24 bg-paper px-4 py-16 md:px-6 md:py-24">
+      <div className="mx-auto max-w-6xl">
+        <SectionHeading
+          eyebrow="The RVs"
+          title="Real units, matched to your site. Not a stock-photo fleet."
+          sub="Every rental is a unit we own, maintain and deliver ourselves. Which one fits your weekend depends on your site's length, surface and power. That's why the match starts with your campsite."
+        />
 
-              <motion.div
-                {...fadeUpDelay(0.15)}
-                className="bg-[#1A1510] border border-[#D4A853]/25 rounded-lg p-8 text-center md:sticky md:top-32"
-                style={{ boxShadow: "var(--shadow-card-gold)" }}
-              >
-                <span className="type-eyebrow text-[#D4A853]/80 block mb-4">Weekend Packages</span>
-                <div className="font-[var(--font-cormorant)] leading-none">
-                  <span className="text-[#F5F0E8]/80 text-xl">From</span>
-                  <div className="mt-1">
-                    <span className="text-6xl text-[#D4A853]">$200</span>
-                    <span className="text-xl text-[#F5F0E8]/60">/night</span>
-                  </div>
-                </div>
-                <p className="mt-5 text-sm text-[#F5F0E8]/70 leading-relaxed">
-                  A 4-night trip for 6 runs about <strong className="text-[#F5F0E8] font-medium">$133/person/night</strong>.
-                  Less than a downtown hotel - right at the track.
-                </p>
-                <PhoneLink
-                  className="block mt-6 bg-[#D4A853] text-[#0D0B09] font-semibold uppercase tracking-wider px-6 py-3.5 rounded-sm hover:brightness-105 active:scale-[0.98] transition-all text-sm shadow-[0_8px_24px_rgba(212,168,83,0.2)] text-center"
-                >
-                  Call for a Quote
-                </PhoneLink>
-                <div className="mt-3 text-xs text-[#F5F0E8]/50">
-                  (972) 965-6901 &nbsp;&middot;&nbsp;{" "}
-                  <a
-                    href="#request-a-quote"
-                    className="text-[#D4A853]/80 hover:text-[#D4A853] transition-colors underline underline-offset-4"
-                  >
-                    request online
-                  </a>
-                </div>
-                <p className="mt-5 text-xs text-[#F5F0E8]/45 leading-relaxed">
-                  Race weekend books out by August. 14 units.
-                </p>
-              </motion.div>
+        <div className="mb-10 grid gap-4 md:grid-cols-3">
+          {FLEET_CATEGORIES.map((cat) => (
+            <div key={cat.name} className="rounded-md border border-line bg-white p-5">
+              <h3 className="type-h3 text-ink">{cat.name}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate">{cat.fitNote}</p>
             </div>
-          </div>
-        </section>
+          ))}
+        </div>
 
-        {/* ─── TESTIMONIALS ─── */}
-        <Reviews />
+        {UNITS.length > 0 ? (
+          <UnitCards />
+        ) : (
+          <>
+            <PremiumImageGallery items={GALLERY_ITEMS} />
+            <div className="mx-auto mt-8 max-w-2xl rounded-md border border-line bg-white p-5 text-center">
+              <p className="text-sm leading-relaxed text-slate">
+                Exact 2026 race-weekend unit cards (floor plans, bed maps and per-unit
+                specs) are being finalized with this year&apos;s inventory. Tell us your site
+                and group and we&apos;ll send the exact units that fit, with photos and real
+                sleeping layouts.
+              </p>
+              <TrackedCtaLink
+                href="#check-availability"
+                eventName="fleet_cta_click"
+                className="btn-primary mt-4"
+              >
+                See Which Units Fit My Site
+              </TrackedCtaLink>
+            </div>
+          </>
+        )}
+      </div>
+    </section>
+  );
+}
 
-        {/* ─── INQUIRY FORM ─── */}
-        <section className="relative bg-[#0D0B09] py-20 md:py-28 px-6 overflow-hidden texture-grain">
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 opacity-50"
-            style={{ background: "var(--gradient-charcoal-warm)" }}
-          />
-          <div
-            aria-hidden="true"
-            className="glow-spot"
-            style={{
-              width: "700px",
-              height: "400px",
-              top: "10%",
-              left: "50%",
-              transform: "translateX(-50%)",
-              background: "radial-gradient(ellipse, #D4A853 0%, transparent 70%)",
-              opacity: 0.1,
-            }}
-          />
-          <div className="relative z-[1]">
-            <BookingInquiryForm variant="primary" source={src} />
-          </div>
-        </section>
+/* ─── 9. INCLUSIONS + PRICING POSTURE ─── */
 
-        {/* ─── TRUST STATS STRIP ─── */}
-        <section className="relative bg-[#0D0B09] py-12 md:py-16 px-6 border-t border-[#D4A853]/10 overflow-hidden">
-          <div
-            aria-hidden="true"
-            className="absolute inset-0 opacity-50"
-            style={{
-              background:
-                "radial-gradient(ellipse at 50% 50%, rgba(212,168,83,0.08) 0%, transparent 70%)",
-            }}
-          />
-          <div className="relative z-[1] max-w-5xl mx-auto">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-              {trustPoints.map((tp, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.4, ease, delay: i * 0.07 }}
-                  className="text-center"
-                >
-                  <div className="font-[var(--font-cormorant)] text-3xl md:text-4xl text-[#D4A853] leading-none">
-                    {tp.value}
-                  </div>
-                  <div className="mt-2 text-xs uppercase tracking-[0.15em] text-[#F5F0E8]/60">{tp.label}</div>
-                </motion.div>
+function Inclusions() {
+  return (
+    <section className="bg-navy px-4 py-16 md:px-6 md:py-24">
+      <div className="mx-auto max-w-6xl">
+        <SectionHeading
+          light
+          eyebrow="What you're actually buying"
+          title="A solved weekend, priced in one itemized quote."
+          sub={
+            PRICING.mode === "custom-quote"
+              ? "Every group, site and unit combination is different, so we quote the weekend as one itemized package instead of hiding behind a teaser rate."
+              : undefined
+          }
+        />
+
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="rounded-md border border-white/10 bg-navy-soft p-6">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
+              Every rental includes
+            </h3>
+            <ul className="mt-4 space-y-3">
+              {INCLUSIONS.map((item) => (
+                <li key={item} className="flex gap-3 text-sm leading-relaxed text-white/80">
+                  <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-action" />
+                  {item}
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
-        </section>
 
-        {/* ─── FINAL CTA ─── */}
-        <section className="relative bg-[#0D0B09] py-20 md:py-28 px-6 overflow-hidden texture-grain">
-          <div
-            aria-hidden="true"
-            className="absolute inset-0"
-            style={{ background: "var(--gradient-gold-glow-strong)" }}
-          />
-          <div
-            aria-hidden="true"
-            className="glow-spot"
-            style={{
-              width: "600px",
-              height: "500px",
-              top: "20%",
-              left: "50%",
-              transform: "translateX(-50%)",
-              background: "radial-gradient(ellipse, #D4A853 0%, transparent 65%)",
-              opacity: 0.22,
-            }}
-          />
-          <div
-            aria-hidden="true"
-            className="glow-spot"
-            style={{
-              width: "400px",
-              height: "300px",
-              bottom: "-50px",
-              right: "-100px",
-              background: "radial-gradient(circle, #A85A28 0%, transparent 70%)",
-              opacity: 0.2,
-            }}
-          />
-          <div className="relative z-[1] max-w-3xl mx-auto text-center">
-            <motion.span
-              {...fadeUp}
-              animate={{ opacity: [0.7, 1, 0.7] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="inline-block type-eyebrow text-[#D4A853] border border-[#D4A853]/30 rounded-full px-4 py-1.5 mb-8"
-            >
-              Only 14 Units &middot; Books Out by August
-            </motion.span>
-
-            <motion.h2 {...fadeUpDelay(0.1)} className="type-h2 text-[#F5F0E8]">
-              Race weekend is closer than it looks.
-              <br />
-              <span className="text-[#D4A853]">Reserve your unit now.</span>
-            </motion.h2>
-            <motion.p {...fadeUpDelay(0.15)} className="mt-6 type-body-sm text-[#F5F0E8]/70 max-w-xl mx-auto">
-              One call locks your RV. We deliver it to your COTA site, level it, hook it up, and walk your group through every system.
-              <span className="text-[#F5F0E8]/95 font-medium"> Starting at $200/night.</span>
-            </motion.p>
-
-            <motion.div
-              {...fadeUpDelay(0.2)}
-              className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
-            >
-              <PhoneLink
-                className="w-full sm:w-auto bg-[#D4A853] text-[#0D0B09] font-semibold uppercase tracking-wider px-8 py-4 rounded-sm hover:brightness-105 active:scale-[0.98] transition-all text-sm shadow-[0_10px_40px_rgba(212,168,83,0.25)] text-center"
-              >
-                Call the Team &middot; (972) 965-6901
-              </PhoneLink>
-              <a
-                href="#request-a-quote"
-                className="text-sm text-[#D4A853]/80 hover:text-[#D4A853] transition-colors underline underline-offset-4"
-              >
-                Request a callback &rarr;
-              </a>
-            </motion.div>
-
-            <motion.p
-              {...fadeUpDelay(0.25)}
-              className="mt-8 text-xs text-[#F5F0E8]/50 max-w-md mx-auto leading-relaxed"
-            >
-              Owned and operated by Weston and the Triple W team - based in Tyler, Texas.
-            </motion.p>
+          <div className="rounded-md border border-white/10 bg-navy-soft p-6">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
+              Your quote itemizes
+            </h3>
+            <ul className="mt-4 space-y-3">
+              {PRICING.quoteLineItems.map((item) => (
+                <li key={item} className="flex gap-3 text-sm leading-relaxed text-white/80">
+                  <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-action" />
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
-        </section>
 
-        {/* ─── FOOTER ─── */}
-        <footer className="bg-[#0D0B09] border-t border-[#D4A853]/15 py-8 px-6">
-          <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-[#F5F0E8]/45 tracking-wide">
-            <span>&copy; 2026 Triple W Rentals &middot; Tyler, Texas</span>
-            <span className="flex gap-3">
-              <PhoneLink className="hover:text-[#D4A853] transition-colors">(972) 965-6901</PhoneLink>
-              <span>&middot;</span>
-              <a href="mailto:triplewrentals@gmail.com" className="hover:text-[#D4A853] transition-colors">triplewrentals@gmail.com</a>
-            </span>
+          <div className="rounded-md border border-action/40 bg-navy-soft p-6">
+            <h3 className="text-sm font-semibold uppercase tracking-wider text-white">
+              Separate purchases, not included
+            </h3>
+            <ul className="mt-4 space-y-3">
+              {PRICING.separatePurchases.map((item) => (
+                <li key={item} className="flex gap-3 text-sm leading-relaxed text-white/80">
+                  <span aria-hidden className="mt-2 h-1 w-1 shrink-0 rounded-full bg-white/40" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <p className="mt-5 border-t border-white/10 pt-4 text-xs leading-relaxed text-white/60">
+              Every attendee needs valid circuit admission. The RV is your accommodation.
+              The campsite and tickets stay with COTA.
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-8 flex flex-col items-start gap-4 rounded-md border border-white/10 bg-navy-soft p-6 md:flex-row md:items-center md:justify-between">
+          <p className="type-body-sm max-w-xl text-white/80">
+            Want the number for your exact weekend? Two minutes in the form, or one call,
+            gets you an itemized quote with nothing hidden.
+          </p>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <TrackedCtaLink
+              href="#check-availability"
+              eventName="pricing_cta_click"
+              className="btn-primary"
+            >
+              Get My Weekend Quote
+            </TrackedCtaLink>
+            <PhoneLink location="pricing" className="btn-secondary text-white">
+              {BUSINESS.phoneDisplay}
+            </PhoneLink>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── 10. REVIEWS ─── */
+
+function Reviews() {
+  return (
+    <section className="bg-paper px-4 py-16 md:px-6 md:py-24">
+      <div className="mx-auto max-w-6xl">
+        <SectionHeading
+          eyebrow="What renters say"
+          title="Delivered, set up, and clean. In their words."
+          sub="From Triple W's Google reviews across Texas deliveries: the same crew and the same units that run race weekend."
+        />
+        <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {REVIEWS.map((r) => (
+            <figure key={r.name} className="flex flex-col rounded-md border border-line bg-white p-6">
+              <blockquote className="type-body-sm flex-1 text-slate">
+                &ldquo;{r.text}&rdquo;
+              </blockquote>
+              <figcaption className="mt-4 border-t border-line pt-3 text-sm font-semibold text-ink">
+                {r.name}
+                <span className="ml-2 font-normal text-slate">Google review</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+
+        {TRUST_STATS.items.length > 0 ? (
+          <dl className="mt-10 grid grid-cols-2 gap-6 border-t border-line pt-8 md:grid-cols-4">
+            {TRUST_STATS.items.map((tp) => (
+              <div key={tp.label} className="text-center">
+                <dd className="font-[var(--font-barlow)] text-3xl font-semibold text-ink md:text-4xl">
+                  {tp.value}
+                  {tp.suffix}
+                </dd>
+                <dt className="mt-1.5 text-xs uppercase tracking-[0.15em] text-slate">
+                  {tp.label}
+                </dt>
+              </div>
+            ))}
+          </dl>
+        ) : null}
+      </div>
+    </section>
+  );
+}
+
+/* ─── 11. GROUP VALUE ─── */
+
+function GroupValue() {
+  return (
+    <section className="bg-paper-warm px-4 py-16 md:px-6 md:py-24">
+      <div className="mx-auto max-w-6xl">
+        <SectionHeading
+          eyebrow="Do the group math"
+          title="One basecamp, split by the whole crew."
+        />
+        <div className="grid gap-5 md:grid-cols-2">
+          <div className="rounded-md border border-line bg-white p-6 md:p-8">
+            <h3 className="type-h3 text-ink">The hotel version</h3>
+            <ul className="mt-4 space-y-3 text-sm leading-relaxed text-slate">
+              <li>Multiple rooms at race-weekend rates, usually with minimum-night stays</li>
+              <li>The group split across floors, buildings or towns</li>
+              <li>Rides or parking for every single track day</li>
+              <li>Nowhere to regroup between sessions or after the concerts</li>
+            </ul>
+          </div>
+          <div className="rounded-md border border-navy/20 bg-navy p-6 md:p-8">
+            <h3 className="type-h3 text-white">The basecamp version</h3>
+            <ul className="mt-4 space-y-3 text-sm leading-relaxed text-white/80">
+              <li>One itemized quote, split across everyone staying</li>
+              <li>Beds, bathroom, kitchen and A/C in one private spot</li>
+              <li>At COTA&apos;s RV areas: walk to the gates instead of commuting</li>
+              <li>The RV is the meeting point before, between and after sessions</li>
+            </ul>
+            <p className="mt-5 border-t border-white/15 pt-4 text-xs leading-relaxed text-white/60">
+              Run your own numbers: take your group size, price the rooms and rides for
+              four nights, then ask us for the itemized weekend quote and compare.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── 13. FINAL CTA + FORM ─── */
+
+function FinalCta() {
+  return (
+    <section className="bg-paper px-4 py-16 md:px-6 md:py-24">
+      <div className="mx-auto max-w-6xl">
+        <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
+          <p className="type-eyebrow text-action">Final step</p>
+          <h2 className="type-h2 mt-3 text-ink">
+            Your tickets are the exciting part.
+            <br />
+            Your lodging should be the easy part.
+          </h2>
+          <p className="type-body mt-4 text-slate">
+            Tell us where you&apos;re staying, how many people are coming and what comfort
+            matters most. We&apos;ll confirm availability, campsite compatibility and the best
+            Triple W option for your Austin race weekend.
+          </p>
+        </div>
+
+        <AvailabilityForm />
+
+        <p className="mt-8 text-center text-sm text-slate">
+          Rather talk it through?{" "}
+          <PhoneLink
+            location="final_cta"
+            className="font-semibold text-ink underline underline-offset-4 hover:text-action"
+          >
+            Call {BUSINESS.phoneDisplay}
+          </PhoneLink>{" "}
+          or{" "}
+          <SmsLink
+            location="final_cta"
+            className="font-semibold text-ink underline underline-offset-4 hover:text-action"
+          >
+            send a text
+          </SmsLink>
+          . {BUSINESS.ownerLine}, {BUSINESS.base}.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* ─── 14. FOOTER ─── */
+
+function SiteFooter() {
+  return (
+    <footer className="bg-navy-deep px-4 py-12 md:px-6">
+      <div className="mx-auto max-w-6xl">
+        <div className="flex flex-col gap-4 border-b border-white/10 pb-8 md:flex-row md:items-start md:justify-between">
+          <div>
+            <p className="font-[var(--font-barlow)] text-2xl font-semibold text-white">
+              Triple W Rentals
+            </p>
+            <p className="mt-1 text-sm text-white/60">
+              {BUSINESS.base} &middot; RV rentals, delivered and set up
+            </p>
+          </div>
+          <div className="flex flex-col gap-2 text-sm md:items-end">
+            <PhoneLink location="footer" className="text-white/80 transition-colors hover:text-white">
+              {BUSINESS.phoneDisplay}
+            </PhoneLink>
             <a
-              href="https://triple-w-rentals.vercel.app"
+              href={`mailto:${BUSINESS.email}`}
+              className="text-white/80 transition-colors hover:text-white"
+            >
+              {BUSINESS.email}
+            </a>
+            <a
+              href={BUSINESS.mainSiteUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="hover:text-[#D4A853] transition-colors"
+              className="text-white/80 transition-colors hover:text-white"
             >
-              TripleWRentals.com
+              Main site &amp; full fleet
             </a>
           </div>
-        </footer>
-      </main>
-
-      <StickyMobileCTA />
-    </>
+        </div>
+        <p className="mt-6 max-w-4xl text-xs leading-relaxed text-white/50">{DISCLAIMER}</p>
+        <p className="mt-4 text-xs text-white/40">
+          &copy; 2026 Triple W Rentals &middot; {BUSINESS.base} &middot; Deposit, cancellation
+          and rental terms are provided in writing with every quote, before any payment.
+        </p>
+      </div>
+    </footer>
   );
 }
 
@@ -703,8 +724,54 @@ function HomeBody() {
 
 export default function Home() {
   return (
-    <Suspense fallback={null}>
-      <HomeBody />
-    </Suspense>
+    <>
+      <SiteHeader />
+      <main className="bg-paper text-ink">
+        <Hero />
+        <ProofStrip />
+
+        {/* 3. Campsite compatibility check */}
+        <section id="site-check" className="scroll-mt-24 bg-paper-warm px-4 py-16 md:px-6 md:py-24">
+          <div className="mx-auto max-w-6xl">
+            <SectionHeading
+              eyebrow="First things first"
+              title="Where are you staying? Start there."
+              sub="An RV rental doesn't come with a legal place to park it. Your campsite decides which units fit, how power works and how delivery happens, so it's the first question we ask, not the last."
+            />
+            <SiteCheck />
+            <p className="mt-5 text-xs leading-relaxed text-slate">
+              {EVENT.name} &middot; {EVENT.venue}, {EVENT.city} &middot; Race days{" "}
+              {EVENT.raceDaysLabel} &middot; RV areas open {EVENT.stayWindowLabel}. Campsites
+              are reserved directly with COTA or your campground, never through us.
+            </p>
+          </div>
+        </section>
+
+        <Problem />
+        <Outcome />
+        <Fleet />
+        <HowItWorks />
+        <PremiumVsLotN />
+        <Inclusions />
+        <Reviews />
+        <GroupValue />
+
+        {/* 12. FAQ */}
+        <section id="faq" className="scroll-mt-24 bg-paper px-4 py-16 md:px-6 md:py-24">
+          <div className="mx-auto max-w-6xl">
+            <SectionHeading
+              eyebrow="Answers before you ask"
+              title="The questions that actually decide this booking."
+            />
+            <Faq />
+          </div>
+        </section>
+
+        <FinalCta />
+        <SiteFooter />
+      </main>
+
+      <StickyMobileCTA />
+    </>
   );
 }

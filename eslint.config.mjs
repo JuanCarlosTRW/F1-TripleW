@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Stale agent worktrees - not part of the app.
+    ".claude/**",
   ]),
 ]);
 

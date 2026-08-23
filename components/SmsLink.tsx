@@ -1,21 +1,21 @@
 "use client";
 
 import type { ComponentPropsWithoutRef } from "react";
-import { trackPhoneClick } from "@/lib/analytics";
+import { trackSmsClick } from "@/lib/analytics";
 import { BUSINESS } from "@/content/site";
 
-type PhoneLinkProps = Omit<ComponentPropsWithoutRef<"a">, "href"> & {
+type SmsLinkProps = Omit<ComponentPropsWithoutRef<"a">, "href"> & {
   /** Where on the page the link lives - reported to analytics. */
   location?: string;
 };
 
-export default function PhoneLink({ onClick, location = "page", ...props }: PhoneLinkProps) {
+export default function SmsLink({ onClick, location = "page", ...props }: SmsLinkProps) {
   return (
     <a
-      href={BUSINESS.phoneHref}
+      href={BUSINESS.smsHref}
       {...props}
       onClick={(e) => {
-        trackPhoneClick(location);
+        trackSmsClick(location);
         onClick?.(e);
       }}
     />

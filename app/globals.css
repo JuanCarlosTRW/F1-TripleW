@@ -1,16 +1,30 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #0D0B09;
-  --color-foreground: #F5F0E8;
+  --color-background: #FAF8F4;
+  --color-foreground: #182236;
   --font-sans: var(--font-outfit);
-  --font-display: var(--font-cormorant);
+  --font-display: var(--font-barlow);
 
-  --color-charcoal: #0D0B09;
-  --color-charcoal-warm: #1A1510;
-  --color-gold: #D4A853;
-  --color-cream: #F5F0E8;
-  --color-text-secondary: #A8A29E;
+  /* Foundation */
+  --color-navy: #101B2D;
+  --color-navy-deep: #0A1220;
+  --color-navy-soft: #1A2740;
+
+  /* Light surfaces */
+  --color-paper: #FAF8F4;
+  --color-paper-warm: #F2EEE7;
+
+  /* Text */
+  --color-ink: #182236;
+  --color-slate: #56606E;
+
+  /* Lines */
+  --color-line: #E3DED4;
+
+  /* Single controlled action accent */
+  --color-action: #B42B23;
+  --color-action-deep: #9A241D;
 }
 
 html {
@@ -20,102 +34,117 @@ html {
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #FAF8F4;
+  color: #182236;
 }
 
 ::selection {
-  background: #D4A853;
-  color: #0D0B09;
+  background: #182236;
+  color: #FAF8F4;
 }
 
-/* ─── DESIGN TOKENS ─── */
-
-:root {
-  /* Accessible gold for use on light backgrounds (small text) */
-  --gold-accessible: #8B6B1F;
-
-  /* Gradient treatments — richer, more atmospheric */
-  --gradient-charcoal-warm: radial-gradient(ellipse at top, #1A1510 0%, #0D0B09 60%);
-  --gradient-gold-glow: radial-gradient(ellipse at center, rgba(212, 168, 83, 0.18) 0%, rgba(212, 168, 83, 0) 70%);
-  --gradient-gold-glow-strong: radial-gradient(ellipse at 50% 30%, rgba(212, 168, 83, 0.22) 0%, rgba(168, 90, 40, 0.08) 40%, rgba(13, 11, 9, 0) 70%);
-  --gradient-section-fade: linear-gradient(180deg, #0D0B09 0%, #1A1510 100%);
-  --gradient-ember: radial-gradient(ellipse at bottom, rgba(212, 90, 40, 0.08) 0%, transparent 60%);
-
-  /* Elevation — shadows for card layouts */
-  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 32px rgba(0, 0, 0, 0.2);
-  --shadow-card-gold: 0 0 0 1px rgba(212, 168, 83, 0.15), 0 20px 60px rgba(212, 168, 83, 0.12);
-  --shadow-card-glow: 0 0 0 1px rgba(212, 168, 83, 0.2), 0 30px 80px rgba(212, 168, 83, 0.15);
-}
-
-/* Subtle noise texture — adds tactile depth to flat dark sections */
-.texture-grain::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.035;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-  background-size: 160px 160px;
-  z-index: 0;
-}
-
-/* Ambient floating gold spots — used as decorative depth elements */
-.glow-spot {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  pointer-events: none;
-  opacity: 0.25;
-}
-
-/* ─── TYPOGRAPHY — STRIPE-INSPIRED RHYTHM ─── */
+/* ─── TYPOGRAPHY ─── */
 
 @layer components {
   .type-display {
-    font-family: var(--font-cormorant);
-    font-weight: 400;
-    font-size: clamp(2.5rem, 7vw, 5.5rem);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
+    font-family: var(--font-barlow);
+    font-weight: 600;
+    font-size: clamp(2.75rem, 7.5vw, 5rem);
+    line-height: 0.98;
+    letter-spacing: 0.005em;
+    text-wrap: balance;
   }
 
   .type-h2 {
-    font-family: var(--font-cormorant);
-    font-weight: 400;
-    font-size: clamp(1.875rem, 4vw, 3rem);
-    line-height: 1.1;
-    letter-spacing: -0.015em;
+    font-family: var(--font-barlow);
+    font-weight: 600;
+    font-size: clamp(2rem, 4.5vw, 3.25rem);
+    line-height: 1.02;
+    letter-spacing: 0.005em;
+    text-wrap: balance;
   }
 
   .type-h3 {
-    font-family: var(--font-cormorant);
-    font-weight: 500;
-    font-size: clamp(1.25rem, 2.2vw, 1.5rem);
-    line-height: 1.25;
-    letter-spacing: -0.01em;
+    font-family: var(--font-barlow);
+    font-weight: 600;
+    font-size: clamp(1.35rem, 2.4vw, 1.7rem);
+    line-height: 1.1;
+    letter-spacing: 0.01em;
   }
 
   .type-body {
     font-size: clamp(1rem, 1.2vw, 1.125rem);
-    line-height: 1.6;
-    font-weight: 300;
+    line-height: 1.65;
+    font-weight: 400;
   }
 
   .type-body-sm {
     font-size: 0.9375rem;
-    line-height: 1.55;
-    font-weight: 300;
+    line-height: 1.6;
+    font-weight: 400;
   }
 
   .type-eyebrow {
     font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
-    font-weight: 500;
+    letter-spacing: 0.22em;
+    font-weight: 600;
+  }
+
+  /* The single primary CTA style used across the page. */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: var(--color-action);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 1rem 2rem;
+    border-radius: 0.25rem;
+    transition: background-color 150ms ease, transform 100ms ease;
+    text-align: center;
+  }
+  .btn-primary:hover {
+    background: var(--color-action-deep);
+  }
+  .btn-primary:active {
+    transform: scale(0.985);
+  }
+
+  /* Low-emphasis secondary action. */
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 1px solid currentColor;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 1rem 2rem;
+    border-radius: 0.25rem;
+    transition: opacity 150ms ease, transform 100ms ease;
+    text-align: center;
+  }
+  .btn-secondary:hover {
+    opacity: 0.75;
+  }
+  .btn-secondary:active {
+    transform: scale(0.985);
   }
 }
 
 /* ─── ACCESSIBILITY ─── */
+
+:focus-visible {
+  outline: 2px solid #B42B23;
+  outline-offset: 2px;
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,

@@ -1,32 +1,36 @@
-import type { Metadata } from "next";
-import { Cormorant_Garamond, Outfit } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Barlow_Condensed, Outfit } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
-const cormorant = Cormorant_Garamond({
+const barlow = Barlow_Condensed({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-cormorant",
+  weight: ["500", "600"],
+  variable: "--font-barlow",
   display: "swap",
 });
 
 const outfit = Outfit({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
   variable: "--font-outfit",
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "RV Rental for F1 Austin 2026 | Triple W Rentals - Delivered to COTA",
+  title: "RV Basecamp Near COTA for F1 Austin 2026 | Triple W Rentals",
   description:
-    "Premium RV rentals delivered and set up at Circuit of The Americas for the 2026 United States Grand Prix. Skip the hotels. Wake up trackside. Call (972) 965-6901.",
+    "Private, air-conditioned RV accommodations for the 2026 United States Grand Prix at Circuit of The Americas, Oct 22-26. Tell us your campsite and group size. We verify fit, deliver, set up and pick up. Call or text (972) 965-6901.",
   openGraph: {
-    title: "RV Rental for F1 Austin 2026 | Triple W Rentals",
+    title: "Your Private RV Basecamp Near COTA for F1 Austin 2026",
     description:
-      "Premium RVs delivered to COTA for F1 race weekend. Skip the hotel chaos.",
+      "Tell us your approved campsite and group size. Triple W matches the RV, verifies delivery feasibility, sets it up and collects it after the weekend.",
     type: "website",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#101B2D",
 };
 
 export default function RootLayout({
@@ -35,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${cormorant.variable} ${outfit.variable}`}>
+    <html lang="en" className={`${barlow.variable} ${outfit.variable}`}>
       <body>
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-10835426783"

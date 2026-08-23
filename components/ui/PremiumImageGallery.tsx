@@ -1,10 +1,9 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { motion, AnimatePresence, PanInfo } from "framer-motion";
+import { motion, AnimatePresence, PanInfo, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight, X, ZoomIn, Maximize2, Play } from "lucide-react";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 
 export type GalleryItem =
   | { type: "image"; src: string }
@@ -31,6 +30,7 @@ export default function PremiumImageGallery({
   enableFullscreen = true,
 }: Props) {
   const media = toItems({ items, images });
+  const prefersReducedMotion = useReducedMotion();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [direction, setDirection] = useState(0);
@@ -67,7 +67,7 @@ export default function PremiumImageGallery({
   const isVideoSlide = currentItem?.type === "video";
 
   useEffect(() => {
-    if (!isAutoPlaying || isFullscreen || isVideoSlide) return;
+    if (prefersReducedMotion || !isAutoPlaying || isFullscreen || isVideoSlide) return;
     autoPlayRef.current = setInterval(() => {
       setDirection(1);
       setCurrentIndex((prev) => (prev + 1) % media.length);
@@ -75,7 +75,7 @@ export default function PremiumImageGallery({
     return () => {
       if (autoPlayRef.current) clearInterval(autoPlayRef.current);
     };
-  }, [isAutoPlaying, media.length, autoPlayInterval, isFullscreen, isVideoSlide]);
+  }, [isAutoPlaying, media.length, autoPlayInterval, isFullscreen, isVideoSlide, prefersReducedMotion]);
 
   const handleDragEnd = (
     _event: MouseEvent | TouchEvent | PointerEvent,
@@ -106,8 +106,8 @@ export default function PremiumImageGallery({
   return (
     <>
       <div className="relative w-full">
-        <div className="relative bg-charcoal-warm/60 rounded-2xl overflow-hidden border border-gold/15 shadow-[0_10px_60px_rgba(0,0,0,0.4)]">
-          <div className="relative aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] overflow-hidden bg-charcoal">
+        <div className="relative bg-navy rounded-md overflow-hidden border border-line shadow-[0_10px_40px_rgba(16,27,45,0.15)]">
+          <div className="relative aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] overflow-hidden bg-navy-deep">
             <AnimatePresence initial={false} custom={direction} mode="wait">
               <motion.div
                 key={currentIndex}
@@ -116,11 +116,15 @@ export default function PremiumImageGallery({
                 initial="enter"
                 animate="center"
                 exit="exit"
-                transition={{
-                  x: { type: "spring", stiffness: 280, damping: 32 },
-                  opacity: { duration: 0.3 },
-                  scale: { duration: 0.3 },
-                }}
+                transition={
+                  prefersReducedMotion
+                    ? { duration: 0 }
+                    : {
+                        x: { type: "spring", stiffness: 280, damping: 32 },
+                        opacity: { duration: 0.3 },
+                        scale: { duration: 0.3 },
+                      }
+                }
                 drag="x"
                 dragConstraints={{ left: 0, right: 0 }}
                 dragElastic={0.2}
@@ -150,7 +154,7 @@ export default function PremiumImageGallery({
                     draggable={false}
                   />
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/50 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/40 via-transparent to-transparent" />
               </motion.div>
             </AnimatePresence>
 
@@ -160,7 +164,7 @@ export default function PremiumImageGallery({
                   whileHover={{ scale: 1.08 }}
                   whileTap={{ scale: 0.94 }}
                   onClick={toggleFullscreen}
-                  className="p-2 md:p-2.5 rounded-full bg-charcoal/80 backdrop-blur-sm hover:bg-charcoal text-gold transition-colors"
+                  className="p-2 md:p-2.5 rounded-full bg-navy-deep/80 backdrop-blur-sm hover:bg-navy-deep text-white transition-colors"
                   aria-label="Fullscreen"
                 >
                   <Maximize2 size={isMobile ? 16 : 18} />
@@ -173,7 +177,7 @@ export default function PremiumImageGallery({
                 whileHover={{ scale: 1.1, x: -3 }}
                 whileTap={{ scale: 0.94 }}
                 onClick={goPrev}
-                className="pointer-events-auto p-2 md:p-3 rounded-full bg-charcoal/80 backdrop-blur-sm hover:bg-charcoal text-gold transition-colors"
+                className="pointer-events-auto p-2 md:p-3 rounded-full bg-navy-deep/80 backdrop-blur-sm hover:bg-navy-deep text-white transition-colors"
                 aria-label="Previous"
               >
                 <ChevronLeft size={isMobile ? 20 : 24} />
@@ -182,7 +186,7 @@ export default function PremiumImageGallery({
                 whileHover={{ scale: 1.1, x: 3 }}
                 whileTap={{ scale: 0.94 }}
                 onClick={goNext}
-                className="pointer-events-auto p-2 md:p-3 rounded-full bg-charcoal/80 backdrop-blur-sm hover:bg-charcoal text-gold transition-colors"
+                className="pointer-events-auto p-2 md:p-3 rounded-full bg-navy-deep/80 backdrop-blur-sm hover:bg-navy-deep text-white transition-colors"
                 aria-label="Next"
               >
                 <ChevronRight size={isMobile ? 20 : 24} />
@@ -200,7 +204,7 @@ export default function PremiumImageGallery({
                   <div
                     className={`w-2 h-2 rounded-full transition-all ${
                       index === currentIndex
-                        ? "bg-gold w-6"
+                        ? "bg-white w-6"
                         : "bg-white/40 hover:bg-white/70"
                     }`}
                   />
@@ -210,16 +214,16 @@ export default function PremiumImageGallery({
           </div>
 
           {showThumbnails && (
-            <div className="p-4 md:p-5 bg-charcoal-warm/80 border-t border-gold/10">
+            <div className="p-4 md:p-5 bg-navy-deep/70 border-t border-white/10">
               <div className="flex gap-2 md:gap-3 overflow-x-auto pb-1">
                 {media.map((item, index) => (
                   <motion.button
                     key={index}
                     onClick={() => goToSlide(index)}
-                    className={`relative flex-shrink-0 w-16 h-14 md:w-20 md:h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                    className={`relative flex-shrink-0 w-16 h-14 md:w-20 md:h-16 rounded-md overflow-hidden border-2 transition-all ${
                       index === currentIndex
-                        ? "border-gold shadow-[0_0_16px_rgba(212,168,83,0.3)]"
-                        : "border-white/10 hover:border-gold/50 opacity-70 hover:opacity-100"
+                        ? "border-white"
+                        : "border-white/10 hover:border-white/50 opacity-70 hover:opacity-100"
                     }`}
                     whileHover={{ scale: 1.04, y: -2 }}
                     whileTap={{ scale: 0.96 }}
@@ -243,8 +247,8 @@ export default function PremiumImageGallery({
                             className="absolute inset-0 w-full h-full object-cover"
                           />
                         )}
-                        <div className="absolute inset-0 flex items-center justify-center bg-charcoal/40">
-                          <Play size={14} className="text-gold drop-shadow" fill="currentColor" />
+                        <div className="absolute inset-0 flex items-center justify-center bg-navy-deep/40">
+                          <Play size={14} className="text-white drop-shadow" fill="currentColor" />
                         </div>
                       </>
                     ) : (
@@ -263,7 +267,7 @@ export default function PremiumImageGallery({
           )}
         </div>
 
-        <p className="text-center mt-5 text-xs md:text-sm text-text-secondary tabular-nums">
+        <p className="text-center mt-5 text-xs md:text-sm text-slate tabular-nums">
           {currentIndex + 1} / {media.length}
         </p>
       </div>
@@ -274,7 +278,7 @@ export default function PremiumImageGallery({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-charcoal/95 backdrop-blur-lg"
+            className="fixed inset-0 z-[100] bg-navy-deep/95 backdrop-blur-lg"
             onClick={() => !isZoomed && toggleFullscreen()}
           >
             <div className="relative w-full h-full flex items-center justify-center p-4">
@@ -282,7 +286,7 @@ export default function PremiumImageGallery({
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={toggleFullscreen}
-                className="absolute top-4 right-4 p-3 rounded-full bg-charcoal/80 hover:bg-charcoal text-gold z-10"
+                className="absolute top-4 right-4 p-3 rounded-full bg-navy/80 hover:bg-navy text-white z-10"
                 aria-label="Close fullscreen"
               >
                 <X size={24} />
@@ -295,7 +299,7 @@ export default function PremiumImageGallery({
                     e.stopPropagation();
                     setIsZoomed(!isZoomed);
                   }}
-                  className="absolute top-4 right-20 p-3 rounded-full bg-charcoal/80 hover:bg-charcoal text-gold z-10"
+                  className="absolute top-4 right-20 p-3 rounded-full bg-navy/80 hover:bg-navy text-white z-10"
                   aria-label="Zoom"
                 >
                   <ZoomIn size={24} />
@@ -303,28 +307,28 @@ export default function PremiumImageGallery({
               )}
 
               <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-between px-4 z-10">
-                <Button
+                <button
+                  type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     goPrev();
                   }}
-                  size="lg"
-                  variant="secondary"
-                  className="rounded-full size-12 p-0"
+                  aria-label="Previous"
+                  className="flex size-12 items-center justify-center rounded-full bg-navy/80 text-white hover:bg-navy transition-colors"
                 >
                   <ChevronLeft size={24} />
-                </Button>
-                <Button
+                </button>
+                <button
+                  type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     goNext();
                   }}
-                  size="lg"
-                  variant="secondary"
-                  className="rounded-full size-12 p-0"
+                  aria-label="Next"
+                  className="flex size-12 items-center justify-center rounded-full bg-navy/80 text-white hover:bg-navy transition-colors"
                 >
                   <ChevronRight size={24} />
-                </Button>
+                </button>
               </div>
 
               <motion.div
