@@ -67,7 +67,7 @@ export default function FleetCarousel() {
   }, [index, autoplay, goTo]);
 
   const navBtn =
-    "flex h-11 w-11 items-center justify-center border border-line bg-white text-ink transition-colors hover:border-navy";
+    "flex h-11 w-11 items-center justify-center border border-line bg-transparent text-ink transition-colors hover:border-ink";
 
   return (
     <div
@@ -84,7 +84,7 @@ export default function FleetCarousel() {
         role="region"
         aria-roledescription="carousel"
         aria-label="Photos of Triple W rental RVs"
-        className="clip-tr flex snap-x snap-mandatory overflow-x-auto scroll-smooth border border-line bg-navy [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory overflow-x-auto scroll-smooth border border-line bg-navy [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {GALLERY.map((img, i) => (
           <figure
@@ -98,12 +98,16 @@ export default function FleetCarousel() {
               src={img.src}
               alt={img.alt}
               fill
-              sizes="(min-width: 1280px) 1172px, 100vw"
+              sizes="(min-width: 1280px) 1312px, 100vw"
               loading={i === 0 ? "eager" : "lazy"}
-              className="object-cover"
+              className="object-cover [filter:saturate(0.9)_contrast(1.04)]"
               draggable={false}
             />
-            <figcaption className="absolute bottom-0 left-0 bg-navy/85 px-4 py-2 text-sm font-semibold uppercase tracking-wider text-white">
+            <div
+              aria-hidden
+              className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-navy/85 to-transparent"
+            />
+            <figcaption className="absolute bottom-4 left-5 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/90">
               {img.caption}
             </figcaption>
           </figure>
@@ -132,8 +136,9 @@ export default function FleetCarousel() {
             <button
               type="button"
               onClick={() => setPlaying((p) => !p)}
-              aria-pressed={!playing}
-              aria-label={playing ? "Pause automatic rotation" : "Resume automatic rotation"}
+              aria-pressed={playing}
+              aria-label="Automatic rotation"
+              title={playing ? "Pause automatic rotation" : "Resume automatic rotation"}
               className={navBtn}
             >
               {playing ? (
@@ -158,8 +163,8 @@ export default function FleetCarousel() {
                 >
                   <span
                     aria-hidden
-                    className={`block h-2 transition-all ${
-                      i === index ? "w-6 bg-action" : "w-3 bg-line"
+                    className={`block transition-all ${
+                      i === index ? "h-0.5 w-6 bg-ink" : "h-0.5 w-3 bg-slate"
                     }`}
                   />
                 </button>

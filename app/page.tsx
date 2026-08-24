@@ -42,7 +42,7 @@ function SectionHeading({
 }) {
   return (
     <div className={`mb-8 max-w-2xl md:mb-10 ${center ? "mx-auto text-center" : ""}`}>
-      <p className={`type-eyebrow ${light ? "text-white/75" : "eyebrow-chip"}`}>{eyebrow}</p>
+      <p className={`type-eyebrow ${light ? "eyebrow-on-dark" : "eyebrow-on-light"}`}>{eyebrow}</p>
       <h2 className={`type-h2 mt-4 uppercase ${light ? "text-white" : "text-ink"}`}>{title}</h2>
       {sub ? (
         <p className={`type-body mt-4 ${center ? "mx-auto" : ""} ${light ? "text-white/85" : "text-slate"}`}>
@@ -57,14 +57,14 @@ function SectionHeading({
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden bg-navy">
+    <section className="relative overflow-hidden bg-navy-section">
       <Image
         src={HERO_IMAGE}
         alt="Kitchen and living area inside a Triple W rental RV"
         fill
         priority
         sizes="100vw"
-        className="object-cover opacity-35"
+        className="object-cover opacity-45 [filter:saturate(0.85)_contrast(1.05)]"
       />
       <div
         aria-hidden
@@ -73,7 +73,7 @@ function Hero() {
 
       <div className="container-x relative z-[1] grid items-center gap-10 pb-14 pt-36 md:pt-40 lg:grid-cols-[3fr_2fr] lg:gap-14 lg:pb-20 lg:pt-44">
         <div>
-          <p className="type-eyebrow text-white/75">
+          <p className="type-eyebrow eyebrow-on-dark">
             {EVENT.kickerParts.map((part, i, all) => (
               <span key={part} className="inline-block whitespace-nowrap">
                 {part}
@@ -101,7 +101,10 @@ function Hero() {
             <PhoneLink location="hero" className="btn-secondary text-white">
               {HERO.secondaryCta}
             </PhoneLink>
-            <SmsLink location="hero" className="btn-secondary text-white">
+            <SmsLink
+              location="hero"
+              className="inline-flex min-h-11 items-center justify-center text-sm font-semibold uppercase tracking-[0.14em] text-white/85 underline underline-offset-4 transition-colors hover:text-white"
+            >
               {HERO.secondaryCtaSms}
             </SmsLink>
           </div>
@@ -112,9 +115,9 @@ function Hero() {
         {/* Compact package summary card */}
         <aside
           aria-label="Your race-weekend package"
-          className="clip-tr border border-white/15 bg-paper p-6 text-ink md:p-7"
+          className="border border-[rgba(201,174,124,0.35)] bg-paper p-7 text-ink shadow-[var(--shadow-float)] md:p-8"
         >
-          <p className="type-eyebrow eyebrow-chip">{HERO.packageTitle}</p>
+          <p className="type-eyebrow eyebrow-on-light">{HERO.packageTitle}</p>
           <ul className="mt-5 space-y-3.5">
             {HERO.packageItems.map((item) => (
               <li key={item} className="flex items-start gap-3">
@@ -122,7 +125,7 @@ function Hero() {
                   aria-hidden
                   className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center bg-navy text-white"
                 >
-                  <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                  <Check className="h-3.5 w-3.5" strokeWidth={2.5} />
                 </span>
                 <span className="text-base font-medium leading-snug">{item}</span>
               </li>
@@ -147,9 +150,9 @@ function TrustStrip() {
         {TRUST_STRIP.map((item, i) => (
           <li key={item} className="flex items-center justify-center gap-4 md:justify-start">
             {i > 0 ? (
-              <span aria-hidden className="hidden h-5 w-px rotate-[20deg] bg-white/30 md:block" />
+              <span aria-hidden className="hidden h-4 w-px bg-[rgba(201,174,124,0.4)] md:block" />
             ) : null}
-            <span className="text-center text-xs font-bold uppercase tracking-[0.16em] text-white/90 md:text-[13px]">
+            <span className="text-center text-[11px] font-medium uppercase tracking-[0.24em] text-white/80">
               {item}
             </span>
           </li>
@@ -163,22 +166,22 @@ function TrustStrip() {
 
 function CampsiteCoordination() {
   return (
-    <section id="campsite" className="section texture-diag scroll-mt-32 bg-paper">
+    <section id="campsite" className="section scroll-mt-32 bg-paper">
       <div className="container-x grid items-start gap-8 lg:grid-cols-[1.2fr_1fr] lg:gap-14">
         <div>
           <SectionHeading eyebrow={CAMPSITE.eyebrow} title={CAMPSITE.headline} />
           <p className="type-body text-ink/90">{CAMPSITE.body}</p>
           <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-3">
             {CAMPSITE.proof.map((p) => (
-              <li key={p} className="flex items-center gap-2 text-base font-semibold text-ink">
-                <span aria-hidden className="h-2.5 w-2.5 bg-action" />
+              <li key={p} className="flex items-center gap-2 text-base font-medium text-ink">
+                <span aria-hidden className="h-1.5 w-1.5 bg-ink" />
                 {p}
               </li>
             ))}
           </ul>
         </div>
-        <div className="clip-tr border border-line bg-white p-6 md:p-7">
-          <p className="type-eyebrow text-action">Next step</p>
+        <div className="border border-line bg-white p-7 shadow-[var(--shadow-card)]">
+          <p className="type-eyebrow eyebrow-on-light">Next step</p>
           <p className="type-h3 mt-3 text-ink">Tell us your group size and dates.</p>
           <TrackedCtaLink
             href="#check-availability"
@@ -198,21 +201,24 @@ function CampsiteCoordination() {
 
 function WhyBasecamp() {
   return (
-    <section className="section diag-top bg-navy pt-[calc(3.5rem+2.5vw)] md:pt-[calc(5rem+2.5vw)]">
+    <section className="section bg-navy-section">
       <div className="container-x">
         <SectionHeading
           light
           eyebrow="Why not a hotel"
           title="Everything else costs you race hours."
         />
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-px border border-white/10 bg-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] md:grid-cols-2">
           {PAIN_POINTS.map((p, i) => (
-            <div key={p.title} className="relative overflow-hidden border border-white/10 bg-navy-soft p-6">
-              <span aria-hidden className="big-num absolute -right-2 -top-4 !text-white/5">
+            <div key={p.title} className="bg-[#0B1728] p-7">
+              <p
+                aria-hidden
+                className="font-(family-name:--font-barlow) text-[0.9375rem] font-medium tracking-[0.08em] text-champagne"
+              >
                 0{i + 1}
-              </span>
-              <h3 className="relative text-xl font-bold leading-snug text-white">{p.title}</h3>
-              <p className="relative mt-2 text-base leading-relaxed text-white/80">{p.desc}</p>
+              </p>
+              <h3 className="mt-3 text-lg font-semibold leading-snug text-white">{p.title}</h3>
+              <p className="mt-2 text-[15px] leading-relaxed text-white/75">{p.desc}</p>
             </div>
           ))}
         </div>
@@ -232,14 +238,17 @@ function Fleet() {
           title="The RV your group actually fits in."
           sub="Fourteen units we own, maintain and deliver ourselves, from premium group setups to family-friendly layouts and smaller rigs for couples or solo travelers. Tell us your group size and how many actually need a bed; the exact unit for your weekend is confirmed in your written quote."
         />
+      </div>
+      <div className="container-wide">
         <FleetCarousel />
-
+      </div>
+      <div className="container-x">
         <div className="mt-6 grid gap-4 md:grid-cols-[1fr_auto] md:items-center">
           <ul className="flex flex-wrap gap-2">
             {FLEET_FIT.map((label) => (
               <li
                 key={label}
-                className="border border-line bg-white px-3.5 py-2 text-sm font-bold uppercase tracking-wider text-ink"
+                className="border border-line bg-transparent px-3.5 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-ink/80"
               >
                 {label}
               </li>
@@ -269,14 +278,17 @@ function HowItWorks() {
     <section id="how-it-works" className="section scroll-mt-32 bg-paper-warm">
       <div className="container-x">
         <SectionHeading eyebrow="How it works" title="Three steps between you and a ready basecamp." />
-        <ol className="grid gap-5 md:grid-cols-3">
+        <ol className="grid gap-y-8 md:grid-cols-3 md:gap-x-12">
           {STEPS.map((s, i) => (
-            <li key={s.title} className="relative overflow-hidden border border-line bg-white p-6 pt-8">
-              <span aria-hidden className="big-num absolute -right-3 -top-6">
-                {i + 1}
-              </span>
-              <h3 className="relative type-h3 uppercase text-ink">{s.title}</h3>
-              <p className="relative mt-3 text-base leading-relaxed text-slate">{s.desc}</p>
+            <li key={s.title} className="border-l border-line-strong pl-6">
+              <p
+                aria-hidden
+                className="font-(family-name:--font-barlow) text-[0.9375rem] font-medium tracking-[0.08em] text-slate"
+              >
+                0{i + 1}
+              </p>
+              <h3 className="type-h3 mt-3 uppercase text-ink">{s.title}</h3>
+              <p className="mt-3 text-[15px] leading-relaxed text-slate">{s.desc}</p>
             </li>
           ))}
         </ol>
@@ -291,7 +303,7 @@ function Timeline() {
   return (
     <section
       id="weekend-guide"
-      className="section diag-bottom scroll-mt-32 bg-navy pb-[calc(3.5rem+2.5vw)] md:pb-[calc(5rem+2.5vw)]"
+      className="section scroll-mt-32 bg-navy-section"
     >
       <div className="container-x">
         <SectionHeading
@@ -300,19 +312,24 @@ function Timeline() {
           title="You show up. The work is already done."
           sub={`Race days are ${EVENT.raceDaysLabel}. The RV stay runs ${EVENT.stayWindowLabel}: ${EVENT.arrivalNote} Monday is departure and pickup day, not a race day.`}
         />
-        <ol className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-          {TIMELINE.map((t) => (
-            <li key={t.date} className="border border-white/10 bg-navy-soft p-5">
-              <p className="font-[var(--font-barlow)] text-sm font-bold uppercase tracking-[0.16em] text-white/70">
+        <ol className="grid gap-px border border-white/10 bg-white/10 sm:grid-cols-2 lg:grid-cols-5">
+          {TIMELINE.map((t, i) => (
+            <li
+              key={t.date}
+              className={`bg-[#0B1728] p-5 ${
+                i === TIMELINE.length - 1 ? "sm:col-span-2 lg:col-span-1" : ""
+              }`}
+            >
+              <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-white/70">
                 {t.day}
               </p>
-              <p className="font-[var(--font-barlow)] text-5xl font-bold leading-none text-white">
+              <p className="font-(family-name:--font-barlow) text-[2.75rem] font-medium leading-none text-white tabular-nums">
                 {t.date}
               </p>
-              <p className="mt-3 text-sm font-bold uppercase tracking-wider text-action">
+              <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-champagne">
                 {t.label}
               </p>
-              <p className="mt-1.5 text-sm leading-relaxed text-white/80">{t.desc}</p>
+              <p className="mt-1.5 text-sm leading-relaxed text-white/75">{t.desc}</p>
             </li>
           ))}
         </ol>
@@ -325,7 +342,7 @@ function Timeline() {
 
 function Included() {
   return (
-    <section className="section texture-diag bg-paper">
+    <section className="section bg-paper">
       <div className="container-x">
         <SectionHeading
           eyebrow="What is included"
@@ -333,21 +350,21 @@ function Included() {
           sub="Every group and unit combination is different, so we quote the weekend as one written package and confirm it before payment."
         />
         <div className="grid gap-5 lg:grid-cols-2">
-          <div className="clip-tr border border-line bg-white p-6">
-            <h3 className="text-sm font-bold uppercase tracking-[0.16em] text-ink">
+          <div className="border border-line bg-white p-6">
+            <h3 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-ink/70">
               The quote confirms
             </h3>
             <ul className="mt-4 space-y-2.5">
               {QUOTE.confirms.map((item) => (
                 <li key={item} className="flex gap-3 text-base leading-relaxed text-ink/90">
-                  <Check className="mt-1 h-4 w-4 shrink-0 text-action" strokeWidth={3} aria-hidden />
+                  <Check className="mt-1 h-4 w-4 shrink-0 text-ink" strokeWidth={2} aria-hidden />
                   {item}
                 </li>
               ))}
             </ul>
           </div>
-          <div className="border border-line bg-paper-warm/60 p-6">
-            <h3 className="text-sm font-bold uppercase tracking-[0.16em] text-ink">
+          <div className="border border-line bg-transparent p-6">
+            <h3 className="text-[11px] font-semibold uppercase tracking-[0.24em] text-ink/70">
               Always separate
             </h3>
             <ul className="mt-4 space-y-2.5">
@@ -392,11 +409,11 @@ function Proof() {
         />
         <div className="grid gap-4 md:grid-cols-3">
           {visible.map((r) => (
-            <figure key={r.name} className="card-lift flex flex-col border border-line bg-white p-5">
-              <blockquote className="flex-1 text-base leading-relaxed text-ink/90">
+            <figure key={r.name} className="card-lift flex flex-col border border-line bg-white p-6">
+              <blockquote className="flex-1 text-[15px] leading-[1.65] text-ink/85">
                 &ldquo;{r.text}&rdquo;
               </blockquote>
-              <figcaption className="mt-4 border-t border-line pt-3 text-sm font-bold text-ink">
+              <figcaption className="mt-4 border-t border-line pt-3 text-sm font-semibold text-ink">
                 {r.name}
                 <span className="ml-2 font-medium text-slate">Google review</span>
               </figcaption>
@@ -407,12 +424,12 @@ function Proof() {
         {more.length > 0 ? (
           <details className="group mt-4 border border-line bg-white">
             <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 px-5 py-3 marker:content-none [&::-webkit-details-marker]:hidden">
-              <span className="text-[15px] font-bold uppercase tracking-wider text-ink">
+              <span className="text-[15px] font-semibold uppercase tracking-wider text-ink">
                 More reviews ({more.length})
               </span>
               <span
                 aria-hidden
-                className="shrink-0 text-2xl leading-none text-action transition-transform group-open:rotate-45"
+                className="shrink-0 text-2xl leading-none text-ink transition-transform group-open:rotate-45"
               >
                 +
               </span>
@@ -423,7 +440,7 @@ function Proof() {
                   <blockquote className="flex-1 text-base leading-relaxed text-ink/90">
                     &ldquo;{r.text}&rdquo;
                   </blockquote>
-                  <figcaption className="mt-4 border-t border-line pt-3 text-sm font-bold text-ink">
+                  <figcaption className="mt-4 border-t border-line pt-3 text-sm font-semibold text-ink">
                     {r.name}
                     <span className="ml-2 font-medium text-slate">Google review</span>
                   </figcaption>
@@ -433,14 +450,14 @@ function Proof() {
           </details>
         ) : null}
 
-        <dl className="mt-6 grid grid-cols-2 gap-4 border border-line bg-navy px-4 py-6 md:grid-cols-4">
+        <dl className="mt-6 grid grid-cols-2 gap-4 border-y border-[rgba(201,174,124,0.45)] bg-navy px-4 py-7 md:grid-cols-4">
           {TRUST_STATS.map((tp) => (
             <div key={tp.label} className="text-center">
-              <dd className="font-[var(--font-barlow)] text-4xl font-bold text-white">
+              <dd className="font-(family-name:--font-barlow) text-[2.5rem] font-medium text-white tabular-nums">
                 {tp.value}
                 {tp.suffix}
               </dd>
-              <dt className="mt-1 text-xs font-bold uppercase tracking-[0.16em] text-white/70">
+              <dt className="mt-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-white/65">
                 {tp.label}
               </dt>
             </div>
@@ -455,10 +472,10 @@ function Proof() {
 
 function FinalCta() {
   return (
-    <section className="section texture-diag bg-paper">
+    <section className="section bg-paper">
       <div className="container-x">
         <div className="mx-auto mb-8 max-w-2xl text-center md:mb-10">
-          <p className="type-eyebrow eyebrow-chip">Final step</p>
+          <p className="type-eyebrow eyebrow-on-light">Final step</p>
           <h2 className="type-h2 mt-4 uppercase text-ink">
             Your Tickets Are the Exciting Part. Your Lodging Should Be the Easy Part.
           </h2>
@@ -474,14 +491,14 @@ function FinalCta() {
           Rather talk it through?{" "}
           <PhoneLink
             location="final_cta"
-            className="font-semibold text-ink underline underline-offset-4 hover:text-action"
+            className="font-semibold text-ink underline underline-offset-4 hover:text-ink/70"
           >
             Call {BUSINESS.phoneDisplay}
           </PhoneLink>{" "}
           or{" "}
           <SmsLink
             location="final_cta"
-            className="font-semibold text-ink underline underline-offset-4 hover:text-action"
+            className="font-semibold text-ink underline underline-offset-4 hover:text-ink/70"
           >
             send a text
           </SmsLink>
@@ -498,9 +515,9 @@ function SiteFooter() {
   return (
     <footer className="bg-navy-deep py-10">
       <div className="container-x">
-        <div className="flex flex-col gap-5 border-b border-white/10 pb-6 md:flex-row md:items-start md:justify-between">
+        <div className="flex flex-col gap-5 border-b border-[rgba(201,174,124,0.3)] pb-6 md:flex-row md:items-start md:justify-between">
           <div>
-            <p className="font-[var(--font-barlow)] text-2xl font-bold uppercase text-white">
+            <p className="font-(family-name:--font-barlow) text-2xl font-medium uppercase tracking-[0.06em] text-white">
               Triple W Rentals
             </p>
             <p className="mt-1 text-sm text-white/70">
@@ -513,7 +530,7 @@ function SiteFooter() {
             </p>
           </div>
           <div className="flex flex-col gap-2 text-sm md:items-end">
-            <PhoneLink location="footer" className="font-semibold text-white transition-colors hover:text-action">
+            <PhoneLink location="footer" className="font-semibold text-white transition-colors hover:text-white/75">
               {BUSINESS.phoneDisplay}
             </PhoneLink>
             <a

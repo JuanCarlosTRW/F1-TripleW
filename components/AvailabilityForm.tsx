@@ -96,9 +96,9 @@ function InquirySuccess({
     <div
       role="status"
       aria-live="polite"
-      className="clip-tr mx-auto max-w-2xl border border-line bg-white p-6 md:p-9"
+      className="mx-auto max-w-2xl border border-line bg-white p-6 shadow-[var(--shadow-card)] md:p-9"
     >
-      <p className="type-eyebrow eyebrow-chip">Request received</p>
+      <p className="type-eyebrow eyebrow-on-light">Request received</p>
       <h3 className="type-h3 mt-4 text-ink">
         Done. Here&apos;s exactly what happens next.
       </h3>
@@ -114,7 +114,7 @@ function InquirySuccess({
           <li key={i} className="flex gap-3">
             <span
               aria-hidden
-              className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center bg-navy text-xs font-bold text-white"
+              className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center bg-navy text-xs font-semibold text-white"
             >
               {i + 1}
             </span>
@@ -147,9 +147,9 @@ function ErrorText({ id, children }: { id?: string; children?: string }) {
 }
 
 const inputCls =
-  "w-full min-h-14 border bg-white px-4 py-3 text-base text-ink placeholder:text-slate/60 transition-colors focus:outline-none focus:border-navy focus:shadow-[0_0_0_3px_rgba(11,23,40,0.12)]";
+  "w-full min-h-14 border border-line-strong bg-white px-4 py-3 text-base text-ink placeholder:text-slate transition-colors focus:outline-none focus:border-navy focus:shadow-[0_0_0_3px_rgba(11,23,40,0.10)]";
 
-const labelCls = "mb-2 block text-xs font-bold uppercase tracking-[0.16em] text-ink";
+const labelCls = "mb-2 block text-[11px] font-semibold uppercase tracking-[0.18em] text-ink";
 
 function TextField({
   label,
@@ -195,7 +195,7 @@ function TextField({
         placeholder={placeholder}
         aria-invalid={error ? true : undefined}
         aria-describedby={error ? errId : undefined}
-        className={`${inputCls} ${error ? "border-action" : "border-line"}`}
+        className={`${inputCls} ${error ? "border-action" : ""}`}
       />
       <ErrorText id={errId}>{error}</ErrorText>
     </div>
@@ -239,7 +239,7 @@ function ChipGroup({
               key={opt.value}
               className={`inline-flex min-h-11 cursor-pointer items-center gap-1.5 border px-3.5 py-2 text-sm font-medium transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-action ${
                 selected
-                  ? "border-action bg-action-tint text-ink"
+                  ? "border-navy bg-paper-warm/50 text-ink"
                   : "border-line bg-white text-slate hover:border-navy/50"
               }`}
             >
@@ -252,7 +252,7 @@ function ChipGroup({
                 className="sr-only"
               />
               {selected ? (
-                <Check className="h-4 w-4 text-action" strokeWidth={3} aria-hidden />
+                <Check className="h-4 w-4 text-navy" strokeWidth={2.5} aria-hidden />
               ) : null}
               {opt.label}
             </label>
@@ -280,7 +280,7 @@ function AddOnCheckbox({
   return (
     <label
       className={`flex min-h-14 cursor-pointer items-start gap-3 border p-3.5 transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-action ${
-        checked ? "border-action bg-action-tint" : "border-line bg-white hover:border-navy/50"
+        checked ? "border-navy bg-paper-warm/50" : "border-line bg-white hover:border-navy/50"
       }`}
     >
       {/* State-driven mirror: survives React 19's post-action form reset. */}
@@ -296,7 +296,7 @@ function AddOnCheckbox({
       <span
         aria-hidden
         className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border ${
-          checked ? "border-action bg-action text-white" : "border-line bg-white"
+          checked ? "border-navy bg-navy text-white" : "border-line-strong bg-white"
         }`}
       >
         {checked ? <Check className="h-3.5 w-3.5" strokeWidth={3} /> : null}
@@ -357,7 +357,7 @@ function Stepper({
             if (Number.isNaN(v)) return;
             onChange(Math.min(max, Math.max(min, v)));
           }}
-          className="min-h-14 min-w-0 flex-1 border border-line bg-white px-1 text-center text-base font-semibold text-ink transition-colors focus:border-navy focus:shadow-[0_0_0_3px_rgba(11,23,40,0.12)] focus:outline-none"
+          className="min-h-14 min-w-0 flex-1 border border-line-strong bg-white px-1 text-center text-base font-semibold text-ink transition-colors focus:border-navy focus:shadow-[0_0_0_3px_rgba(11,23,40,0.12)] focus:outline-none"
         />
         <button
           type="button"
@@ -409,6 +409,7 @@ export default function AvailabilityForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const startedRef = useRef(false);
   const conversionFired = useRef(false);
+  const pendingFocus = useRef(false);
 
   // Analytics: conversion + funnel events on success.
   useEffect(() => {
@@ -424,6 +425,21 @@ export default function AvailabilityForm() {
       trackEvent("qualified_lead", {});
     }
   }, [state.ok, state.qualified]);
+
+  // Server errors that land on another step also need the focus move below.
+  useEffect(() => {
+    if (state.errors) pendingFocus.current = true;
+  }, [state.errors]);
+
+  // Hiding the fieldset that holds the clicked button would otherwise drop
+  // keyboard focus to <body>; after each step change we move focus to the
+  // newly visible step (fieldsets carry tabIndex={-1}).
+  useEffect(() => {
+    if (!pendingFocus.current) return;
+    pendingFocus.current = false;
+    const active = formRef.current?.querySelector<HTMLElement>("fieldset:not([hidden])");
+    active?.focus({ preventScroll: true });
+  }, [step]);
 
   // Jump to the step that holds the first server-side error. State is
   // adjusted during render (with a guard) instead of in an effect, per
@@ -474,6 +490,11 @@ export default function AvailabilityForm() {
     return Object.keys(errs).length === 0;
   };
 
+  const scrollToForm = () => {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    formRef.current?.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" });
+  };
+
   const goNext = () => {
     if (step === 1) {
       if (!validateStep1()) return;
@@ -482,13 +503,15 @@ export default function AvailabilityForm() {
     if (step === 2) {
       trackEvent("form_step_complete", { step: 2, adults, kids });
     }
+    pendingFocus.current = true;
     setStep((s) => Math.min(3, s + 1));
-    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollToForm();
   };
 
   const goBack = () => {
+    pendingFocus.current = true;
     setStep((s) => Math.max(1, s - 1));
-    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    scrollToForm();
   };
 
   const stepVisible = (n: number) => !enhanced || step === n;
@@ -496,11 +519,10 @@ export default function AvailabilityForm() {
   return (
     <div id="check-availability" data-form-container className="scroll-mt-32">
     <div
-      className="clip-tr mx-auto max-w-2xl border border-line bg-white p-4 sm:p-6 md:p-9"
-      style={{ boxShadow: "0 12px 40px rgba(11, 23, 40, 0.08)" }}
+      className="mx-auto max-w-2xl border border-line border-t-[#C9AE7C] bg-white p-4 shadow-[var(--shadow-float)] sm:p-6 md:p-9"
     >
       <div className="mb-6 text-center">
-        <p className="type-eyebrow eyebrow-chip">Get My Weekend Quote</p>
+        <p className="type-eyebrow eyebrow-on-light">Get My Weekend Quote</p>
         <h3 className="type-h3 mt-4 text-ink">
           Tell us your group size and dates. We&apos;ll confirm the RV-and-campsite plan
           before you pay.
@@ -509,14 +531,14 @@ export default function AvailabilityForm() {
           {BUSINESS.responsePromise} Prefer to talk?{" "}
           <PhoneLink
             location="form_header"
-            className="font-semibold text-ink underline underline-offset-4 hover:text-action"
+            className="font-semibold text-ink underline underline-offset-4 hover:text-ink/70"
           >
             Call {BUSINESS.phoneDisplay}
           </PhoneLink>{" "}
           or{" "}
           <SmsLink
             location="form_header"
-            className="font-semibold text-ink underline underline-offset-4 hover:text-action"
+            className="font-semibold text-ink underline underline-offset-4 hover:text-ink/70"
           >
             text us
           </SmsLink>
@@ -530,11 +552,11 @@ export default function AvailabilityForm() {
             return (
               <li key={n} className="flex items-center gap-2" aria-current={status === "current" ? "step" : undefined}>
                 <span
-                  className={`flex h-8 w-8 items-center justify-center text-xs font-bold ${
+                  className={`flex h-8 w-8 items-center justify-center text-xs font-semibold ${
                     status === "current"
-                      ? "bg-action text-white"
+                      ? "bg-navy text-white"
                       : status === "done"
-                        ? "bg-navy text-white"
+                        ? "border border-navy bg-white text-navy"
                         : "bg-paper-warm text-slate"
                   }`}
                 >
@@ -545,7 +567,7 @@ export default function AvailabilityForm() {
                   )}
                 </span>
                 <span
-                  className={`hidden text-xs font-bold uppercase tracking-[0.16em] sm:inline ${
+                  className={`hidden text-xs font-semibold uppercase tracking-[0.16em] sm:inline ${
                     status === "current" ? "text-ink" : "text-slate"
                   }`}
                 >
@@ -597,8 +619,8 @@ export default function AvailabilityForm() {
         ) : null}
 
         {/* ─── STEP 1: STAY ─── */}
-        <fieldset hidden={!stepVisible(1)} className="space-y-5">
-          <legend className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-slate">
+        <fieldset hidden={!stepVisible(1)} tabIndex={-1} className="space-y-5 focus:outline-none">
+          <legend className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate">
             Step 1 of 3: Your stay
           </legend>
 
@@ -624,7 +646,7 @@ export default function AvailabilityForm() {
                     key={opt.value}
                     className={`relative flex min-h-14 cursor-pointer items-start gap-3 border p-3.5 transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-action ${
                       selected
-                        ? "border-action bg-action-tint"
+                        ? "border-navy bg-paper-warm/50"
                         : "border-line bg-white hover:border-navy/50"
                     }`}
                   >
@@ -639,7 +661,7 @@ export default function AvailabilityForm() {
                     <span
                       aria-hidden
                       className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border ${
-                        selected ? "border-action bg-action text-white" : "border-line bg-white"
+                        selected ? "border-navy bg-navy text-white" : "border-line-strong bg-white"
                       }`}
                     >
                       {selected ? <Check className="h-3.5 w-3.5" strokeWidth={3} /> : null}
@@ -672,8 +694,8 @@ export default function AvailabilityForm() {
         </fieldset>
 
         {/* ─── STEP 2: GROUP ─── */}
-        <fieldset hidden={!stepVisible(2)} className="mt-2 space-y-5">
-          <legend className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-slate">
+        <fieldset hidden={!stepVisible(2)} tabIndex={-1} className="mt-2 space-y-5 focus:outline-none">
+          <legend className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate">
             Step 2 of 3: Your group
           </legend>
 
@@ -726,7 +748,7 @@ export default function AvailabilityForm() {
               id="field-budget"
               name="budget"
               defaultValue={getStr(vals, "budget")}
-              className={`${inputCls} border-line appearance-none`}
+              className={inputCls}
             >
               <option value="">Select a range</option>
               <option value="under-1000">Under $1,000 total</option>
@@ -774,8 +796,8 @@ export default function AvailabilityForm() {
         </fieldset>
 
         {/* ─── STEP 3: CONTACT ─── */}
-        <fieldset hidden={!stepVisible(3)} className="mt-2 space-y-5">
-          <legend className="mb-3 text-xs font-bold uppercase tracking-[0.16em] text-slate">
+        <fieldset hidden={!stepVisible(3)} tabIndex={-1} className="mt-2 space-y-5 focus:outline-none">
+          <legend className="mb-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate">
             Step 3 of 3: How to reach you
           </legend>
 
@@ -836,7 +858,7 @@ export default function AvailabilityForm() {
               maxLength={2000}
               defaultValue={getStr(vals, "message")}
               placeholder="Multiple RVs, accessibility needs, pets, flexible dates..."
-              className={`${inputCls} border-line resize-none`}
+              className={`${inputCls} resize-none`}
             />
           </div>
 

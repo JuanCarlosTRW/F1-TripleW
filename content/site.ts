@@ -282,29 +282,32 @@ export const TRUST_STATS = [
 
 /** Real Google review excerpts collected from the Triple W profile (Apr 2026). */
 export const REVIEWS: ReadonlyArray<{ text: string; name: string }> = [
+  // The first three render above the fold of the proof section; the rest sit
+  // behind "More reviews". Order is strategic: repeat business, delivery
+  // before arrival, cleanliness + punctuality + communication.
   {
-    text: "The camper was delivered and set up before I even arrived, completely stocked. All I had to do was bring my family and food. The customer service was outstanding.",
+    text: "Once again a flawless experience. We rented two units this time since everything went so well last year.",
+    name: "Jeff Gaden",
+  },
+  {
+    text: "The camper was delivered to my destination at Muddy Bottoms and set up before I even arrived.",
     name: "Amy Walker",
   },
   {
-    text: "The RV was set up and delivered for us. Clean and roomy. Westin and his company were a pleasure to do business with. Couldn't ask for a better experience!",
+    text: "Very clean RV, on-time delivery, very good communication and answering the phone. I will be renting again from this place!",
+    name: "Jarrod Ramsey",
+  },
+  {
+    text: "The RV was set up and delivered for us. The RV was clean and roomy. Couldn't ask for a better experience!",
     name: "Grant Walker",
   },
   {
-    text: "As an RV novice, Wayne was very polite, patient and accommodating. The RV was in great condition and fully loaded with strong A/C. Will definitely use them again.",
-    name: "Sandy McKinney",
+    text: "RV was extremely clean with everything we needed. Highly recommend for all your RV rental needs!",
+    name: "Aaron Henderson",
   },
   {
-    text: "This was the easiest rental I have ever done. Quick to answer any questions, very professional, and so convenient. The unit was super clean and perfect size for the family.",
-    name: "Jennifer Crumley",
-  },
-  {
-    text: "We've used Triple W Rentals twice now. Their trailers are exceptionally clean and exactly as they are described on their website. Triple W goes out of their way to give you the best experience.",
-    name: "Mylissa Messer",
-  },
-  {
-    text: "Have rented from this company many times. Excellent customer service and the RV has always been in great shape. They deliver the RV to wherever you're at and you don't have to touch a thing.",
-    name: "Daniel Henson",
+    text: "Great place to rent from. Westin met all our needs in a very short time period and communicated with us very well.",
+    name: "jazmine cashmere",
   },
 ];
 

@@ -26,15 +26,15 @@ export default function SiteHeader() {
   return (
     <header className="fixed left-0 right-0 top-0 z-40 [padding-top:env(safe-area-inset-top)]">
       {/* Event bar */}
-      <div className="bg-navy text-white">
-        <p className="container-x flex h-8 items-center justify-center gap-2 overflow-hidden whitespace-nowrap text-[11px] font-bold uppercase tracking-[0.18em] md:h-9 md:text-xs">
+      <div className="border-b border-[rgba(201,174,124,0.45)] bg-navy-deep text-white">
+        <p className="container-x flex h-8 items-center justify-center gap-2 overflow-hidden whitespace-nowrap text-[10px] font-semibold uppercase tracking-[0.24em] text-white/75 md:h-9 md:text-[11px]">
           {EVENT.eventBarParts.map((part, i) => (
             <span
               key={part}
               className={`items-center gap-2 ${i === 1 || i === 2 ? "hidden sm:flex" : "flex"}`}
             >
               {i > 0 ? (
-                <span aria-hidden className="h-3 w-px rotate-[20deg] bg-white/40" />
+                <span aria-hidden className="h-3 w-px bg-[rgba(201,174,124,0.4)]" />
               ) : null}
               <span>{part}</span>
             </span>
@@ -61,7 +61,7 @@ export default function SiteHeader() {
               <a
                 key={item.href}
                 href={item.href}
-                className="text-sm font-semibold tracking-wide text-ink/80 transition-colors hover:text-action"
+                className="text-[13px] font-medium tracking-[0.06em] text-ink/70 transition-colors hover:text-ink"
               >
                 {item.label}
               </a>
@@ -71,7 +71,7 @@ export default function SiteHeader() {
           <div className="flex items-center gap-2 md:gap-4">
             <PhoneLink
               location="header"
-              className="hidden items-center gap-2 text-sm font-bold text-ink transition-colors hover:text-action md:inline-flex"
+              className="hidden items-center gap-2 text-sm font-semibold text-ink transition-colors hover:text-ink/70 md:inline-flex"
             >
               <Phone className="h-4 w-4" strokeWidth={2.5} aria-hidden />
               <span>{BUSINESS.phoneDisplay}</span>

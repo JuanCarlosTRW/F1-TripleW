@@ -47,7 +47,7 @@ const minDate = new CalendarDate(2026, 1, 1);
 const maxDate = new CalendarDate(2027, 12, 31);
 
 const chip =
-  "min-h-11 px-3.5 py-2 text-xs font-bold uppercase tracking-wider border transition-colors";
+  "min-h-11 px-3.5 py-2 text-xs font-semibold uppercase tracking-wider border transition-colors";
 
 export default function F1QuoteDateRange({
   value,
@@ -77,7 +77,7 @@ export default function F1QuoteDateRange({
             aria-pressed={preset === p.key}
             className={`${chip} ${
               preset === p.key
-                ? "border-action bg-action-tint text-ink"
+                ? "border-navy bg-paper-warm/50 text-ink"
                 : "border-line text-slate hover:border-navy/50"
             }`}
             onClick={() => setFromPreset(p.key, p.range ?? range ?? F1_WEEKEND_RANGE)}
@@ -111,7 +111,7 @@ export default function F1QuoteDateRange({
               >
                 <ChevronLeft className="w-5 h-5" aria-hidden />
               </Button>
-              <Heading className="flex-1 text-center font-[var(--font-barlow)] font-semibold text-lg text-ink" />
+              <Heading className="flex-1 text-center font-(family-name:--font-barlow) font-semibold text-lg text-ink" />
               <Button
                 slot="next"
                 className="h-10 w-10 flex items-center justify-center border border-line text-ink hover:bg-paper-warm outline-none focus-visible:ring-2 focus-visible:ring-action"
@@ -122,7 +122,7 @@ export default function F1QuoteDateRange({
             <CalendarGrid className="w-full table-fixed border-separate border-spacing-0.5">
               <CalendarGridHeader>
                 {(day) => (
-                  <CalendarHeaderCell className="p-1 text-center text-[10px] uppercase tracking-wider text-slate/70">
+                  <CalendarHeaderCell className="p-1 text-center text-[10px] uppercase tracking-wider text-slate">
                     {day}
                   </CalendarHeaderCell>
                 )}
@@ -136,7 +136,7 @@ export default function F1QuoteDateRange({
                     {({ formattedDate, isSelected, isSelectionStart, isSelectionEnd }) => (
                       <span
                         className={[
-                          "mx-auto flex aspect-square w-full max-w-11 items-center justify-center rounded-full text-sm",
+                          "mx-auto flex aspect-square w-full max-w-11 items-center justify-center text-sm",
                           isSelected && (isSelectionStart || isSelectionEnd)
                             ? "bg-navy text-white font-semibold"
                             : isSelected

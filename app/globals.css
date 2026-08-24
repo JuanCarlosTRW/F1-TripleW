@@ -1,8 +1,11 @@
 @import "tailwindcss";
 
 /*
-  Design tokens (UI brief §5). One display family (Barlow Condensed) and one
-  body family (Outfit); no third family.
+  Design tokens: "Machined Navy" luxury pass. One display family
+  (Barlow Condensed 500/600) and one body family (Outfit 400/500/600).
+  Only true loaded weights are used: no font-weight 700 anywhere.
+  Champagne is a detail tone only: 1px hairlines and rules anywhere,
+  text ONLY on navy. Red stays the only action/CTA color.
 */
 @theme inline {
   --color-background: #F5F1E8;
@@ -12,8 +15,8 @@
 
   /* Foundation */
   --color-navy: #0B1728;
-  --color-navy-deep: #081120;
-  --color-navy-soft: #14233A;
+  --color-navy-deep: #060F1C;
+  --color-navy-soft: #13223A;
 
   /* Light surfaces */
   --color-paper: #F5F1E8;
@@ -21,15 +24,27 @@
 
   /* Text */
   --color-ink: #151922;
-  --color-slate: #626A78;
+  --color-slate: #59616F;
+  --color-eyebrow-ink: #4A5160;
 
   /* Lines */
-  --color-line: #D7D2C8;
+  --color-line: #E7E1D4;
+  --color-line-strong: #9A9484;
 
-  /* Single controlled action accent */
-  --color-action: #C62B23;
-  --color-action-deep: #A8231C;
+  /* Single metallic detail tone: hairlines/rules anywhere, text only on navy. */
+  --color-champagne: #C9AE7C;
+  --color-champagne-line: rgba(201, 174, 124, 0.45);
+
+  /* Single controlled action accent (garnet). */
+  --color-action: #B3251E;
+  --color-action-deep: #9C1F19;
   --color-action-tint: #FBEDEB;
+}
+
+:root {
+  --shadow-card: 0 1px 2px rgba(11, 23, 40, 0.05), 0 10px 28px rgba(11, 23, 40, 0.07);
+  --shadow-float: 0 2px 4px rgba(11, 23, 40, 0.05), 0 20px 48px rgba(11, 23, 40, 0.10);
+  --gradient-navy-section: linear-gradient(180deg, #0D1B30 0%, #0B1728 55%, #091422 100%);
 }
 
 html {
@@ -53,56 +68,59 @@ body {
 @layer components {
   .type-display {
     font-family: var(--font-barlow);
-    font-weight: 700;
-    font-size: clamp(2.75rem, 7vw, 4.75rem);
-    line-height: 0.96;
-    letter-spacing: 0.005em;
+    font-weight: 600;
+    font-size: clamp(2.6rem, 6vw, 4.25rem);
+    line-height: 1.02;
+    letter-spacing: 0.015em;
     text-wrap: balance;
   }
 
   .type-h2 {
     font-family: var(--font-barlow);
-    font-weight: 700;
-    font-size: clamp(2rem, 4.2vw, 3.1rem);
-    line-height: 1;
-    letter-spacing: 0.005em;
+    font-weight: 600;
+    font-size: clamp(1.9rem, 3.6vw, 2.75rem);
+    line-height: 1.06;
+    letter-spacing: 0.02em;
     text-wrap: balance;
   }
 
   .type-h3 {
     font-family: var(--font-barlow);
-    font-weight: 700;
-    font-size: clamp(1.35rem, 2.2vw, 1.65rem);
-    line-height: 1.08;
-    letter-spacing: 0.01em;
+    font-weight: 600;
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+    line-height: 1.12;
+    letter-spacing: 0.03em;
   }
 
   .type-body {
-    font-size: clamp(1rem, 1.15vw, 1.125rem);
-    line-height: 1.6;
+    font-size: clamp(1rem, 1.15vw, 1.0625rem);
+    line-height: 1.65;
     font-weight: 400;
-    max-width: 65ch;
+    max-width: 62ch;
   }
 
   .type-body-sm {
-    font-size: 1rem;
-    line-height: 1.55;
+    font-size: 0.9375rem;
+    line-height: 1.6;
     font-weight: 400;
   }
 
-  /* Small uppercase eyebrow: red text by default, .eyebrow-chip for red background. */
+  /*
+    Eyebrow: quiet tracked micro-label. Color via .eyebrow-on-light (ink-gray)
+    or .eyebrow-on-dark (champagne, navy surfaces only: champagne text fails
+    contrast on ivory).
+  */
   .type-eyebrow {
-    font-size: 0.75rem;
+    font-size: 0.6875rem;
     text-transform: uppercase;
-    letter-spacing: 0.2em;
-    font-weight: 700;
+    letter-spacing: 0.28em;
+    font-weight: 600;
   }
-  .eyebrow-chip {
-    display: inline-block;
-    background: var(--color-action);
-    color: #fff;
-    padding: 0.35rem 0.7rem;
-    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+  .eyebrow-on-light {
+    color: var(--color-eyebrow-ink);
+  }
+  .eyebrow-on-dark {
+    color: var(--color-champagne);
   }
 
   /* Shared vertical rhythm (8 px system). */
@@ -117,7 +135,7 @@ body {
     }
   }
 
-  /* 1220 px content width (brief: 1180-1240). */
+  /* 1220 px content width. */
   .container-x {
     width: 100%;
     max-width: 1220px;
@@ -126,51 +144,32 @@ body {
     padding-left: 1rem;
     padding-right: 1rem;
   }
+  /* Wider frame for the single full-width imagery moment. */
+  .container-wide {
+    width: 100%;
+    max-width: 1360px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
   @media (min-width: 768px) {
-    .container-x {
+    .container-x,
+    .container-wide {
       padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
   }
 
-  /* Clipped upper-right corner: CTAs and selected product cards only. */
-  .clip-tr {
-    clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  /* Deep navy sections get a barely-there vertical gradient instead of flat fill. */
+  .bg-navy-section {
+    background: var(--gradient-navy-section);
   }
 
-  /* Diagonal section edges, used sparingly (one every two or three sections). */
-  .diag-bottom {
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 2.5vw), 0 100%);
-  }
-  .diag-top {
-    clip-path: polygon(0 2.5vw, 100% 0, 100% 100%, 0 100%);
-  }
-
-  /* Very subtle diagonal line texture on ivory sections (about 4% opacity). */
-  .texture-diag {
-    background-image: repeating-linear-gradient(
-      -45deg,
-      rgba(21, 25, 34, 0.04) 0,
-      rgba(21, 25, 34, 0.04) 1px,
-      transparent 1px,
-      transparent 14px
-    );
-  }
-
-  /* Oversized pale step numbers (background element, no animation). */
-  .big-num {
-    font-family: var(--font-barlow);
-    font-weight: 700;
-    font-size: clamp(6rem, 12vw, 9.5rem);
-    line-height: 0.8;
-    letter-spacing: -0.02em;
-    color: var(--color-line);
-    opacity: 0.9;
-    user-select: none;
-    pointer-events: none;
-  }
-
-  /* The single primary CTA style used across the page. */
+  /*
+    The single primary CTA style. The clipped corner survives ONLY here,
+    as the brand signature.
+  */
   .btn-primary {
     display: inline-flex;
     align-items: center;
@@ -179,40 +178,42 @@ body {
     min-height: 52px;
     background: var(--color-action);
     color: #ffffff;
-    font-weight: 700;
-    font-size: 0.9375rem;
+    font-weight: 600;
+    font-size: 0.875rem;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.14em;
     padding: 0.9rem 1.75rem;
     clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
-    transition: background-color 180ms ease, transform 120ms ease;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 6px 16px rgba(156, 31, 25, 0.22);
+    transition: background-color 180ms ease, box-shadow 180ms ease, transform 120ms ease;
     text-align: center;
   }
   .btn-primary:hover {
     background: var(--color-action-deep);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 10px 24px rgba(156, 31, 25, 0.28);
   }
   .btn-primary:active {
     transform: scale(0.985);
   }
 
-  /* Low-emphasis secondary action. */
+  /* Low-emphasis secondary action: 1px hairline, quiet wash on hover. */
   .btn-secondary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     min-height: 52px;
-    border: 2px solid currentColor;
-    font-weight: 700;
-    font-size: 0.9375rem;
+    border: 1px solid currentColor;
+    font-weight: 600;
+    font-size: 0.875rem;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.14em;
     padding: 0.8rem 1.6rem;
-    transition: opacity 180ms ease, transform 120ms ease;
+    transition: background-color 180ms ease, transform 120ms ease;
     text-align: center;
   }
   .btn-secondary:hover {
-    opacity: 0.75;
+    background: color-mix(in srgb, currentColor 8%, transparent);
   }
   .btn-secondary:active {
     transform: scale(0.985);
@@ -224,15 +225,22 @@ body {
   }
   .card-lift:hover {
     transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(11, 23, 40, 0.08);
+    box-shadow: var(--shadow-float);
   }
 }
 
 /* ─── ACCESSIBILITY ─── */
 
 :focus-visible {
-  outline: 2px solid #C62B23;
-  outline-offset: 2px;
+  outline: 2px solid #B3251E;
+  outline-offset: 3px;
+}
+
+/* Red fails 3:1 on navy; dark sections get a champagne focus ring instead. */
+.bg-navy :focus-visible,
+.bg-navy-deep :focus-visible,
+.bg-navy-section :focus-visible {
+  outline-color: var(--color-champagne);
 }
 
 @media (prefers-reduced-motion: reduce) {
