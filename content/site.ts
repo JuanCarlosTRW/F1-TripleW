@@ -275,7 +275,7 @@ export const CANCELLATION_POLICY = {
  */
 export const TRUST_STATS = [
   { value: "4.7", suffix: "★", label: "Google rating" },
-  { value: "200+", suffix: "", label: "Deliveries across Texas" },
+  { value: "200+", suffix: "", label: "Satisfied clients" },
   { value: "14", suffix: "", label: "Units owned and maintained" },
   { value: "Tyler, TX", suffix: "", label: "Owner-operated" },
 ] as const;
@@ -387,7 +387,7 @@ export const LAUNCH_CHECKLIST: ReadonlyArray<string> = [
   "Exact partner campsite location or lot type",
   "Whether campsite fees are included in the Triple W quote or billed separately",
   "Utilities and services available at the partner campsites (drives the power/water/waste FAQ answer)",
-  "Current Google rating, review count and the 200+ deliveries claim; link to the source review profile",
+  "Current Google rating, review count and the 200+ satisfied-clients claim; link to the source review profile",
   "Response-time promise and weekend support availability",
   "Deposit amount, cancellation and event-change terms for race weekend",
   "Wi-Fi (Starlink) add-on: price and which units it is available on",
