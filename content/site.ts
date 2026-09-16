@@ -41,6 +41,8 @@ export const EVENT = {
   /** Arrival is flexible; Thursday is only the first setup day, not a requirement. */
   arrivalNote:
     "Arrive Thursday, Friday or whenever your weekend starts. Setup is done before you get there.",
+  /** Published weekend package price, shown next to the inquiry form. */
+  packagePriceLine: "Starting at $3,000 for the complete F1 weekend.",
 } as const;
 
 /** Hero copy (approved, brief §7.2). */

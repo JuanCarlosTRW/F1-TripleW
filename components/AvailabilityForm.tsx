@@ -13,7 +13,7 @@ import { submitInquiry, type InquiryState } from "@/app/actions/inquiry";
 import F1QuoteDateRange, { F1_WEEKEND_RANGE } from "@/components/F1QuoteDateRange";
 import PhoneLink from "@/components/PhoneLink";
 import SmsLink from "@/components/SmsLink";
-import { ADD_ONS, BUSINESS, HERO } from "@/content/site";
+import { ADD_ONS, BUSINESS, EVENT, HERO } from "@/content/site";
 import { trackEvent, trackFormSubmitConversion } from "@/lib/analytics";
 
 /*
@@ -527,6 +527,9 @@ export default function AvailabilityForm() {
           Tell us your group size and dates. We&apos;ll confirm the RV-and-campsite plan
           before you pay.
         </h3>
+        <p className="mt-3 text-base font-semibold text-ink">
+          {EVENT.packagePriceLine}
+        </p>
         <p className="mt-3 text-sm text-slate">
           {BUSINESS.responsePromise} Prefer to talk?{" "}
           <PhoneLink
