@@ -754,9 +754,7 @@ export default function AvailabilityForm() {
               className={inputCls}
             >
               <option value="">Select a range</option>
-              <option value="under-1000">Under $1,000 total</option>
-              <option value="1000-2500">$1,000 to $2,500 total</option>
-              <option value="2500-5000">$2,500 to $5,000 total</option>
+              <option value="3000-5000">Starting at $3,000</option>
               <option value="5000-plus">$5,000+ total</option>
               <option value="not-sure">Not sure yet</option>
             </select>

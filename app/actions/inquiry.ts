@@ -43,11 +43,13 @@ const BEDS_LABELS: Record<string, string> = {
 };
 
 const BUDGET_LABELS: Record<string, string> = {
+  "3000-5000": "Starting at $3,000",
+  "5000-plus": "$5,000+ total",
+  "not-sure": "Budget not set yet",
+  // Legacy values from the previous form version (no longer emitted by the UI).
   "under-1000": "Under $1,000 total",
   "1000-2500": "$1,000 to $2,500 total",
   "2500-5000": "$2,500 to $5,000 total",
-  "5000-plus": "$5,000+ total",
-  "not-sure": "Budget not set yet",
 };
 
 const ADD_ON_LABELS: Record<string, string> = {

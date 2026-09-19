@@ -19,11 +19,13 @@ export type CampsiteValue = (typeof CAMPSITE_VALUES)[number];
 
 export const BEDS_VALUES = ["1", "2", "3", "4", "5", "6-plus", "not-sure"] as const;
 export const BUDGET_VALUES = [
+  "3000-5000",
+  "5000-plus",
+  "not-sure",
+  // Legacy values from the previous form version (no longer emitted by the UI).
   "under-1000",
   "1000-2500",
   "2500-5000",
-  "5000-plus",
-  "not-sure",
 ] as const;
 export const CONTACT_METHOD_VALUES = ["call", "text", "email"] as const;
 export const ADD_ON_VALUES = ["wifi-starlink"] as const;
