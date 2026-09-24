@@ -17,6 +17,7 @@ import {
   HERO,
   HERO_IMAGE,
   PAIN_POINTS,
+  GOLF_CARTS,
   QUOTE,
   REVIEWS,
   STEPS,
@@ -266,6 +267,53 @@ function Fleet() {
           Bed counts in your quote are the real permanent sleeping arrangements, not a
           manufacturer&apos;s maximum. Cold A/C, a private bathroom and a kitchen come standard.
         </p>
+      </div>
+    </section>
+  );
+}
+
+/* ─── 06b. GOLF CARTS: secondary offer after the RV, before the process ─── */
+
+function GolfCarts() {
+  return (
+    <section id="golf-carts" className="section scroll-mt-32 bg-paper-warm">
+      <div className="container-x grid items-center gap-8 lg:grid-cols-2 lg:gap-14">
+        <div>
+          <SectionHeading eyebrow={GOLF_CARTS.eyebrow} title={GOLF_CARTS.headline} />
+          <p className="type-body text-ink/90">{GOLF_CARTS.body}</p>
+          <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-3">
+            {GOLF_CARTS.proof.map((p) => (
+              <li key={p} className="flex items-center gap-2 text-base font-medium text-ink">
+                <span aria-hidden className="h-1.5 w-1.5 bg-ink" />
+                {p}
+              </li>
+            ))}
+          </ul>
+          <TrackedCtaLink
+            href="#check-availability"
+            eventName="golf_cart_cta_click"
+            className="btn-primary mt-7"
+          >
+            {GOLF_CARTS.cta}
+          </TrackedCtaLink>
+        </div>
+        <div className="order-first grid gap-3 sm:grid-cols-2 lg:order-last">
+          {GOLF_CARTS.photos.map((photo) => (
+            <figure key={photo.src} className="overflow-hidden border border-line bg-white">
+              <Image
+                src={photo.src}
+                alt={photo.alt}
+                width={1024}
+                height={682}
+                sizes="(min-width: 1024px) 22vw, (min-width: 640px) 45vw, 100vw"
+                className="aspect-[3/2] h-auto w-full object-cover"
+              />
+              <figcaption className="border-t border-line px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-ink/70">
+                {photo.caption}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -571,6 +619,7 @@ export default function Home() {
         <CampsiteCoordination />
         <WhyBasecamp />
         <Fleet />
+        <GolfCarts />
         <HowItWorks />
         <Timeline />
         <Included />

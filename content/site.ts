@@ -180,7 +180,35 @@ export const ADD_ONS: ReadonlyArray<{ value: string; label: string; note: string
     label: "Wi-Fi (Starlink)",
     note: "Paid add-on. Price confirmed in your quote.",
   },
+  {
+    value: "golf-cart",
+    label: "Golf cart",
+    note: "Sold separately. Price confirmed in your quote.",
+  },
 ];
+
+/**
+ * Golf carts for sale. Separate from the RV weekend package; no on-page price.
+ */
+export const GOLF_CARTS = {
+  eyebrow: "Golf carts",
+  headline: "We also sell golf carts.",
+  body: "A cart makes race weekend easier once you're on site. Triple W sells golf carts separately from the RV package. Ask in the form and we'll confirm what's available in your written quote.",
+  proof: ["Sold separately from the RV", "Ask with your weekend quote"],
+  cta: "Ask About a Golf Cart",
+  photos: [
+    {
+      src: "/golf-carts/triple-w-golf-cart-side.jpg",
+      alt: "Red Triple W golf cart with a white roof and seats, photographed from the side",
+      caption: "Side view",
+    },
+    {
+      src: "/golf-carts/triple-w-golf-cart-rear.jpg",
+      alt: "Red Triple W golf cart with rear seats and a white roof, photographed from behind",
+      caption: "Rear seats",
+    },
+  ],
+} as const;
 
 export const HERO_IMAGE =
   "https://static.wixstatic.com/media/62f926_c393c781146e46d6938c11efb3f377d6~mv2.webp";
@@ -248,12 +276,13 @@ export const QUOTE = {
     "Taxes and fees",
     "Deposit, with the refund schedule in writing",
     "Your confirmed campsite arrangement",
-    "Optional add-ons you choose, such as Wi-Fi (Starlink)",
+    "Optional add-ons you choose, such as Wi-Fi (Starlink) or a golf cart",
   ],
   alwaysSeparate: [
     "Race admission (every guest needs valid circuit admission)",
     "Your travel to Austin",
     "Food and drinks",
+    "Golf carts, unless named in your written quote",
     "Any campsite amenity or fee not explicitly included in the written quote",
   ],
 } as const;
@@ -353,6 +382,10 @@ export const FAQ_CORE: ReadonlyArray<{ q: string; a: string }> = [
 
 /** Expanded list, behind "View all questions". */
 export const FAQ_MORE: ReadonlyArray<{ q: string; a: string }> = [
+  {
+    q: "Do you sell golf carts?",
+    a: "Yes. Triple W sells golf carts separately from the RV weekend package. If your group wants one, select Golf cart in the form and we'll confirm availability and price in your written quote.",
+  },
   {
     q: "What should we bring?",
     a: "Your quote lists exactly what's stocked in your unit. Bring food, drinks, sunscreen, earplugs and personal items, and stock up before you arrive, because race-weekend traffic makes errand runs slow.",

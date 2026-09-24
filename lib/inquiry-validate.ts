@@ -28,7 +28,7 @@ export const BUDGET_VALUES = [
   "2500-5000",
 ] as const;
 export const CONTACT_METHOD_VALUES = ["call", "text", "email"] as const;
-export const ADD_ON_VALUES = ["wifi-starlink"] as const;
+export const ADD_ON_VALUES = ["wifi-starlink", "golf-cart"] as const;
 
 function oneOf<T extends readonly string[]>(
   list: T,

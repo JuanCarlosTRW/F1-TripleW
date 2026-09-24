@@ -54,6 +54,7 @@ const BUDGET_LABELS: Record<string, string> = {
 
 const ADD_ON_LABELS: Record<string, string> = {
   "wifi-starlink": "Wi-Fi Starlink (paid add-on, quote the price)",
+  "golf-cart": "Golf cart (sold separately, quote the price)",
 };
 
 const CONTACT_LABELS: Record<string, string> = {
@@ -220,7 +221,17 @@ Hi ${data.fullName.split(" ")[0]},
 
 Got your request for race weekend. ${staySummary}.
 
-${data.addOns.includes("wifi-starlink") ? "Noted: you asked about Wi-Fi (Starlink). It's a paid add-on and the price will be in your quote.\n\n" : ""}Here's what happens next:
+${[
+  data.addOns.includes("wifi-starlink")
+    ? "Noted: you asked about Wi-Fi (Starlink). It's a paid add-on and the price will be in your quote."
+    : "",
+  data.addOns.includes("golf-cart")
+    ? "Noted: you asked about a golf cart. Golf carts are sold separately and we'll confirm availability in your quote."
+    : "",
+]
+  .filter(Boolean)
+  .map((line) => `${line}\n\n`)
+  .join("")}Here's what happens next:
 1. We check which units fit your group and confirm your campsite.
 2. We confirm we can get the rig on your site and lock the setup and pickup windows.
 3. We ${data.contactMethod === "email" ? "email" : data.contactMethod === "text" ? "text" : "call"} you back with an itemized weekend quote, usually within two hours during business hours or first thing the next morning.
